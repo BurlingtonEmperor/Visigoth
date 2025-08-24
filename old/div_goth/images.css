@@ -1,0 +1,26 @@
+.container-image {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.grass {
+  height: 14%;
+  z-index: 1;
+}
+
+/*
+Pinehurst START
+*/
+
+#pinehurst-houses, #pinehurst-houses2 {
+  z-index: 2;
+}
+
+#pinehurst-grass {
+  background-color: #164725;
+}
+
+/*
+Pinehurst END
+*/
