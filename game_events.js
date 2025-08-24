@@ -41,6 +41,7 @@ function secondLoadingScreen () {
   }, 2000);
 }
 
+let titleMusicVariable;
 function flickerStartFrames () {
   let flickerStartFramePosition = 0;
   const flickerInterval = setInterval(function () {
@@ -57,7 +58,7 @@ function flickerStartFrames () {
         break;
     }
   }, 50);
-
+  
   setTimeout(function () {
     clearInterval(flickerInterval);
     clearWindow();
@@ -70,6 +71,7 @@ function flickerStartFrames () {
       gameEventLocation = 1;
 
       $(gameWindow).fadeIn(1000);
+      titleMusicVariable = playAudio("../Visigoth/assets/audio/title_menu.mp3");
 
       setTimeout(function () {
         loadMenuItems(0);
@@ -116,6 +118,7 @@ $(document).on("keydown", function (event) {
               clearWindow();
               userTitleMenuSelectPosition = 1;
               loadMenuItems(1);
+              playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
               break;
           }
           break;
@@ -126,8 +129,20 @@ $(document).on("keydown", function (event) {
               clearWindow();
               userTitleMenuSelectPosition = 0;
               loadMenuItems(0);
+              playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
               break;
           }
+          break;
+      }
+
+      switch (event.which) {
+        case 13:
+        case 88:
+          playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          fadeOutAudio(titleMusicVariable, 1000);
+          gameEventLocation = 0;
+
+          $(gameWindow).fadeOut(1000);
           break;
       }
       break;
