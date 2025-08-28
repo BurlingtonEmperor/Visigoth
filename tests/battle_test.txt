@@ -1,0 +1,1 @@
+panCamera("../Visigoth/battle/backdrops/cemetery.webp", "left", 10, 500, 0, 0);

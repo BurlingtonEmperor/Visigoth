@@ -1,0 +1,1 @@
+let gameEventLocation = "disabled";

@@ -1,5 +1,3 @@
-let gameEventLocation = 0;
-
 /*
 disabled: denies user interaction
 0 is the very, very beginning of the game. (Loading screen)
@@ -11,6 +9,7 @@ writeCenterText("Loading assets", "white", "FSEX300", 25);
 setTimeout(function () {
   clearWindow();
   writeCenterText("Press any key to continue", "powderblue", "FSEX300", 25);
+  gameEventLocation = 0;
 }, 3000);
 
 function secondLoadingScreen () {
@@ -140,7 +139,7 @@ $(document).on("keydown", function (event) {
         case 88:
           playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
           fadeOutAudio(titleMusicVariable, 1000);
-          gameEventLocation = 0;
+          gameEventLocation = "disabled";
 
           $(gameWindow).fadeOut(1000);
           break;

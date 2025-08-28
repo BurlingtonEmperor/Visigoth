@@ -52,6 +52,30 @@ function writeManualCenterParagraph(ctx, text, lineHeight, font, color) {
 
 // image functions start
 
+function renderImage (imgSrc, targetX, targetY, targetWidth, targetHeight) {
+  const newImage = new Image();
+  newImage.src = imgSrc;
+
+  newImage.onload = () => {
+    const width = targetWidth || newImage.width;
+    const height = targetHeight || newImage.height;
+
+    const x = targetX;
+    const y = targetY;
+
+    windowContext.drawImage(newImage, x, y, width, height);
+  }
+}
+
+function renderPreloadedImage(img, targetX, targetY, targetWidth, targetHeight) {
+  if (!img.complete) return; 
+
+  const width = targetWidth || img.width;
+  const height = targetHeight || img.height;
+
+  windowContext.drawImage(img, targetX, targetY, width, height);
+}
+
 function drawCenterImage (imgSrc, targetWidth, targetHeight) {
   const newImage = new Image();
   newImage.src = imgSrc;
@@ -65,6 +89,64 @@ function drawCenterImage (imgSrc, targetWidth, targetHeight) {
 
     windowContext.drawImage(newImage, x, y, width, height);
   }
+}
+
+function drawImageLeft (imgSrc, targetWidth, targetHeight) {
+  const newImage = new Image();
+  newImage.src = imgSrc;
+
+  newImage.onload = () => {
+    const width = targetWidth || newImage.width;
+    const height = targetHeight || newImage.height;
+
+    windowContext.drawImage(newImage, 0, 0, width, height);
+  }
+}
+
+function panCamera (imgSrc, imgDirection, cameraSpeed, panDuration, currentX, currentY) {
+  let currentXChange = currentX;
+  let currentYChange = currentY;
+
+  const cameraPanInterval = setInterval(function () {
+    switch (imgDirection) {
+      case "left":
+        currentXChange -= 1;
+        break;
+      case "right":
+        currentXChange += 1;
+        break;
+    }
+    renderImage(imgSrc, currentXChange, currentYChange);
+  }, cameraSpeed);
+
+  setTimeout(function () {
+    clearInterval(cameraPanInterval);
+  }, panDuration);
+
+  let changedX = (1 * cameraSpeed) * (panDuration / cameraSpeed);
+  return changedX;
+}
+
+function panPreloadedCamera (preloadedImage, imgDirection, cameraSpeed, panDuration, currentX, currentY) {
+  let currentXChange = currentX;
+  let currentYChange = currentY;
+
+  const cameraPanInterval = setInterval(function () {
+    switch (imgDirection) {
+      case "left":
+        currentXChange -= 1;
+        break;
+      case "right":
+        currentXChange += 1;
+        break;
+    }
+    // renderImage(imgSrc, currentXChange, currentYChange);
+    renderPreloadedImage(preloadedImage, currentXChange, currentYChange)
+  }, cameraSpeed);
+
+  setTimeout(function () {
+    clearInterval(cameraPanInterval);
+  }, panDuration);
 }
 
 // image functions end

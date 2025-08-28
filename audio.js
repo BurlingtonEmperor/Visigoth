@@ -17,6 +17,14 @@ function playAudio (audioSource) {
   return audioSourceFinal;
 }
 
+function playLoopedAudio (audioSource) {
+  const audioSourceFinal = new Audio(audioSource);
+  audioSourceFinal.loop = true;
+  audioSourceFinal.play();
+
+  return audioSourceFinal;
+}
+
 function playClonedAudio (audioSource) {
   const clonedAudioSource = new Audio(audioSource);
   clonedAudioSource.cloneNode(true).play();
