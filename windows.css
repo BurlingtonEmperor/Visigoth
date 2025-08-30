@@ -1,0 +1,84 @@
+.window {
+  font-family: "FSEX300";
+  font-size: 20px;
+  position: absolute;
+  border: 5px solid white;
+  border-radius: 2px;
+  background-color: rgb(235, 158, 158);
+  color: black;
+  padding: 10px;
+}
+
+.dialogue {
+  max-width: 300px;
+}
+
+.character-container-one {
+  position: absolute;
+  display: flex;
+  gap: 0;
+  left: 0;
+  bottom: 0;
+}
+
+/* .character-container-two {
+  position: absolute;
+  display: flex;
+  gap: 0;
+  right: 0;
+  bottom: 0;
+} */
+
+.character-window {
+  text-align: center;
+  width: 100px;
+  height: 200px;
+  padding: 3px;
+}
+
+.battle-row {
+  display: flex;
+  gap: 30px;
+  justify-content: center;     
+  align-items: center; 
+}
+
+.cursor {
+  color: white;
+}
+
+#character-roster {
+  width: 350px;
+  height: 190px;
+  padding: 2px;
+  font-family: "FSEX300";
+  font-size: 20px;
+  position: absolute;
+  background-color: rgb(107, 54, 54);
+  color: rgb(233, 207, 207);
+  border-radius: 2px;
+  bottom: 0;
+  left: 0;
+  border: 5px solid white;
+}
+
+#battle-roster {
+  width: 350px;
+  height: 190px;
+  padding: 2px;
+  font-family: "FSEX300";
+  font-size: 20px;
+  position: absolute;
+  background-color: rgb(107, 54, 54);
+  color: black;
+  border-radius: 2px;
+  bottom: 0;
+  right: 0;
+  border: 5px solid white;
+  text-align: center;
+  display: none;
+}
+
+#cw1, #cw2, #cw3, #cw4 {
+  display: none;
+}

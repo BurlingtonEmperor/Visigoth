@@ -28,7 +28,7 @@ function secondLoadingScreen () {
       setTimeout(function () {
         clearWindow();
         // writeCenterText("Test", "white", "FSEX300", 25);
-        drawCenterImage("../Visigoth/assets/start/frame1.webp");
+        writeCenterText("Pinewood Chapel: A Burlington Story", "white", "FSEX300", 25);
 
         $(gameWindow).fadeIn(2000);
 
@@ -47,12 +47,12 @@ function flickerStartFrames () {
     switch (flickerStartFramePosition) {
       case 0:
         clearWindow();
-        drawCenterImage("../Visigoth/assets/start/frame2.webp");
+        writeCenterText("Pinewood Chapel: A Burlington Story", "white", "FSEX300", 25);
         flickerStartFramePosition = 1;
         break;
       case 1:
         clearWindow();
-        drawCenterImage("../Visigoth/assets/start/frame1.webp");
+        writeCenterText("Pinewood Chapel: A Burlington Story", "red", "FSEX300", 25);
         flickerStartFramePosition = 0;
         break;
     }
@@ -61,7 +61,7 @@ function flickerStartFrames () {
   setTimeout(function () {
     clearInterval(flickerInterval);
     clearWindow();
-    drawCenterImage("../Visigoth/assets/start/frame1.webp");
+    writeCenterText("Pinewood Chapel: A Burlington Story", "white", "FSEX300", 25);
 
     $(gameWindow).fadeOut(1000);
 

@@ -116,6 +116,7 @@ function panCamera (imgSrc, imgDirection, cameraSpeed, panDuration, currentX, cu
         currentXChange += 1;
         break;
     }
+    // clearWindow();
     renderImage(imgSrc, currentXChange, currentYChange);
   }, cameraSpeed);
 

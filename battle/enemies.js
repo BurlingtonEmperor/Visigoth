@@ -9,3 +9,15 @@ const jaydenData = {
   specialY : 62,
   status : "boss"
 }
+
+const rohitData = {
+  enemyName : "Rohit",
+  maxHealth : 550,
+  attackForce : 33,
+  defenseForce : 25,
+  mentalEnergy : 50,
+  summonArr : ["bateman", "oldai"],
+  sprite : "../Visigoth/battle/enemy_sprites/rohit/rohit.png",
+  specialY : 65,
+  status : "boss"
+}

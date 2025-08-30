@@ -8,10 +8,34 @@
 
     <link href="index.css" rel="stylesheet" type="text/css" /> 
     <link href="fonts.css" rel="stylesheet" type="text/css" /> <!-- Fonts -->
+
+    <link href="windows.css" rel="stylesheet" type="text/css" /> <!-- Windows -->
   </head>
   <body>
     <div class="center-container">
       <canvas id="game-window"></canvas>
+      <div id="battle-window">
+        <div id="character-roster">
+          <p id="cw1"><b>Name:</b> <a id="cw1-name"></a> <b>HP:</b> <a id="cw1-hp"></a> <b>ME:</b> <a id="cw1-pp"></a></p>
+          <p id="cw2"><b>Name:</b> <a id="cw2-name"></a> <b>HP:</b> <a id="cw2-hp"></a> <b>ME:</b> <a id="cw2-pp"></a></p>
+          <p id="cw3"><b>Name:</b> <a id="cw3-name"></a> <b>HP:</b> <a id="cw3-hp"></a> <b>ME:</b> <a id="cw3-pp"></a></p>
+          <p id="cw4"><b>Name:</b> <a id="cw4-name"></a> <b>HP:</b> <a id="cw4-hp"></a> <b>ME:</b> <a id="cw4-pp"></a></p>
+        </div>
+        <div id="battle-roster">
+          <div class="battle-row">
+            <p id="attack-option"><a id="attack-cursor" class="cursor">►</a>Attack</p>
+            <p id="defend-option"><a id="defend-cursor" class="cursor"></a>Defend</p>
+          </div>
+          <div class="battle-row">
+            <p id="item-option"><a id="item-cursor" class="cursor"></a>Item</p>
+            <p id="power-option"><a id="power-cursor" class="cursor"></a>Power</p>
+          </div>
+          <div class="battle-row">
+            <p id="retreat-option"><a id="retreat-cursor" class="cursor"></a>Retreat</p>
+          </div>
+        </div>
+      </div>
+      <div id="text-window"></div>
     </div>
 
     <!-- Libraries -->
@@ -23,8 +47,12 @@
     <script src="game_event_location.js"></script>
     <script src="game_events.js"></script>
 
+    <!-- Windows -->
+    <script src="windows.js"></script>
+
     <!-- Battle -->
     <script src="../Visigoth/battle/enemies.js"></script>
+    <script src="../Visigoth/battle/heroes.js"></script>
     <script src="../Visigoth/battle/battle.js"></script>
   </body>
 </html>
