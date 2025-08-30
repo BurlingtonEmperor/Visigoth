@@ -1,5 +1,6 @@
 const gameWindow = document.getElementById("game-window");
 const windowContext = gameWindow.getContext("2d");
+const outerShell = document.getElementById("jerry-lee-lewis");
 
 // fix resolution issues
 const dpr = window.devicePixelRatio || 1;
@@ -151,3 +152,18 @@ function panPreloadedCamera (preloadedImage, imgDirection, cameraSpeed, panDurat
 }
 
 // image functions end
+
+// travel rendering
+const bufferCanvas = document.createElement("canvas");
+const bufferContext = bufferCanvas.getContext("2d");
+
+bufferCanvas.width = rect.width;
+bufferCanvas.height = rect.height;
+
+let sidewalkSrc;
+let sidewalkX_one;
+let sidewalkX_two;
+
+function renderTravelImage (imageSrc) {
+  
+}

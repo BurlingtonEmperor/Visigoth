@@ -4,6 +4,11 @@ let battleMessage;
 
 let playerTurn = 0;
 
+let heroPartyOneHP;
+let heroPartyTwoHP;
+let heroPartyThreeHP;
+let heroPartyFourHP;
+
 function initiateBattle (backdrop, enemyData) {
   $(gameWindow).fadeOut(1000);
   gameEventLocation = "disabled";
@@ -47,10 +52,70 @@ function initiateBattle (backdrop, enemyData) {
 
         setTimeout(function () {
           battleMessage.style.display = "none";
+          clearAllWindows();
         }, 2000);
       }, 700);
     }, 800);
   }, 1000);
+}
+
+function takeDamage (dmgAmount, targetHero) {
+  gameWindow.classList.add("shake");
+  battleWindow.classList.add("shake");
+  textWindow.classList.add("shake");
+
+  document.getElementById("cw" + String(targetHero + 1) + "-hp").style.backgroundColor = "red";
+  let redDmgBGPos = 1;
+  
+  const animationRedInterval = setInterval(function () {
+    switch (redDmgBGPos) {
+      case 0:
+        document.getElementById("cw" + String(targetHero + 1) + "-hp").style.backgroundColor = "none";
+        redDmgBGPos = 1;
+        break;
+      case 1:
+        document.getElementById("cw" + String(targetHero + 1) + "-hp").style.backgroundColor = "red";
+        redDmgBGPos = 0;
+        break;
+    }
+  }, 25);
+
+  setTimeout(function () {
+    gameWindow.classList.remove("shake");
+    battleWindow.classList.remove("shake");
+    textWindow.classList.remove("shake");
+
+    clearInterval(animationRedInterval);
+    document.getElementById("cw" + String(targetHero + 1) + "-hp").style.backgroundColor = "none";
+  }, 300);
+  
+  let selectedHero;
+  switch (targetHero) {
+    case 0:
+      selectedHero = heroPartyOneHP;
+      break;
+    case 1:
+      selectedHero = heroPartyTwoHP;
+      break;
+    case 2:
+      selectedHero = heroPartyThreeHP;
+      break;
+    case 3:
+      selectedHero = heroPartyFourHP;
+      break;
+  }
+
+  selectedHero -= dmgAmount;
+  document.getElementById("cw" + String(targetHero + 1) + "-hp").innerText = selectedHero;
+
+  if (selectedHero < 1) {
+    document.getElementById("cw" + String(targetHero + 1)).style.backgroundColor = "black";
+    createWindow("battleMessage", heroParty[targetHero].heroName + " was slain!", 0, 0);
+
+    setTimeout(function () {
+      clearAllWindows();
+    }, 2000);
+  }
 }
 
 $(document).on("keydown", function (event) {
