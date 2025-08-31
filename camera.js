@@ -31,7 +31,7 @@ function writeCenterText (textContent, textColor, textFont, textSize) {
   });
 }
 
-function writeManualCenterParagraph(ctx, text, lineHeight, font, color) {
+function writeManualCenterParagraph (ctx, text, lineHeight, font, color) {
   const rect = ctx.canvas.getBoundingClientRect();
 
   ctx.font = font;
@@ -47,6 +47,96 @@ function writeManualCenterParagraph(ctx, text, lineHeight, font, color) {
     ctx.fillText(line, rect.width / 2, y);
     y += lineHeight;
   });
+}
+
+// function writeDelayedCenterParagraph (ctx, text, lineHeight, font, color) {
+//   const rect = ctx.canvas.getBoundingClientRect();
+
+//   ctx.font = font;
+//   ctx.fillStyle = color;
+//   ctx.textAlign = "center";
+//   ctx.textBaseline = "top";
+
+//   const lines = text.split("\n");
+//   const blockHeight = lines.length * lineHeight;
+//   let y = (rect.height - blockHeight) / 2;
+  
+//   let storedLine;
+//   let isStored = 0;
+//   lines.forEach((line) => {
+//     let i = 0;
+//     let storedChars = "";
+    
+//     function typeChar () {
+//       if (i < line.length) {
+//         switch (isStored) {
+//           case 0:
+//             ctx.fillText(storedChars + line.charAt(i), rect.width / 2, y);
+//             storedChars = line.substring(0, i);
+//             break;
+//           case 1:
+//             ctx.fillText(storedLine + "\n" + storedChars + line.charAt(i), rect.width / 2, y);
+//             storedChars = line.substring(0, i);
+//             break;
+//         }
+
+//         i++;
+//         if (i === line.length && isStored === 0) {
+//           storedLine = line;
+//           isStored = 1;
+//           storedChars = "";
+//         }
+//         setTimeout(typeChar, 25);
+//       }
+//     }
+
+//     typeChar();
+//   });
+// }
+
+function writeDelayedCenterParagraph(ctx, text, lineHeight, font, color) {
+  const canvas = ctx.canvas;
+  const rect = canvas.getBoundingClientRect();
+
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+
+  const lines = text.split("\n");
+  const blockHeight = lines.length * lineHeight;
+  const startY = (rect.height - blockHeight) / 2;
+  const centerX = rect.width / 2;
+
+  let lineIndex = 0;
+  let charIndex = 0; 
+
+  function typeChar () {
+    if (lineIndex >= lines.length) {
+      return ((lines[0].length + lines[1].length) * 25);
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < lineIndex; i++) {
+      const y = startY + i * lineHeight;
+      ctx.fillText(lines[i], centerX, y);
+    }
+
+    const currentLine = lines[lineIndex];
+    const typedPortion = currentLine.substring(0, charIndex + 1);
+    const currentY = startY + lineIndex * lineHeight;
+    ctx.fillText(typedPortion, centerX, currentY);
+    charIndex++;
+
+    if (charIndex >= currentLine.length) {
+      charIndex = 0;
+      lineIndex++;
+    }
+
+    setTimeout(typeChar, 25);
+  }
+  typeChar();
 }
 
 // text functions end

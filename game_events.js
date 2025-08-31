@@ -2,6 +2,7 @@
 disabled: denies user interaction
 0 is the very, very beginning of the game. (Loading screen)
 1 is the title screen select menu
+2 is pre-blackout dialogue
 */
 
 // the very start
@@ -102,6 +103,48 @@ function loadMenuItems (arrowWhich) {
   }
 }
 
+// Pre-blackout dialogue begin
+let currentBlackoutDialogue = "disabled";
+let dialogueTimeout;
+
+const dialogueOne = [
+  windowContext,
+  `Beckett\n"I think it's time."`,
+  30,
+  "24px FSEX300",
+  "white"
+];
+
+const dialogueTwo = [
+  windowContext,
+  `Ann\n"You're too funny Beckett. Really?"`,
+  30,
+  "24px FSEX300",
+  "white"
+];
+
+const dialogueThree = [
+  windowContext,
+  `Jayden\n"It'll work. Beckett...MASTER Beckett, I mean...\nHe'll do it."`,
+  30,
+  "24px FSEX300",
+  "white"
+];
+
+const dialogueFour = [
+  windowContext, 
+  `Beckett\n"Enough talking."`,
+  30,
+  "24px FSEX300",
+  "white"
+];
+
+function preBlackoutDialogue (dialogueOptions) { // dialogue that happens before the blackout.
+  const delayedTextFunction = writeDelayedCenterParagraph(dialogueOptions[0], dialogueOptions[1], dialogueOptions[2], dialogueOptions[3], dialogueOptions[4]);
+  return delayedTextFunction;
+}
+// Pre-blackout dialogue end
+
 let userTitleMenuSelectPosition = 0; // Start new game
 $(document).on("keydown", function (event) {
   switch (gameEventLocation) {
@@ -142,6 +185,44 @@ $(document).on("keydown", function (event) {
           gameEventLocation = "disabled";
 
           $(gameWindow).fadeOut(1000);
+
+          setTimeout(function () {
+            clearWindow();
+
+            setTimeout(function () {
+              dialogueTimeout = preBlackoutDialogue(dialogueOne);
+
+              setTimeout(function () {
+                currentBlackoutDialogue = 0;
+              }, dialogueTimeout + 500);
+            }, 1000);
+          }, 1000);
+          break;
+      }
+      break;
+    case 2:
+      switch (event.which) {
+        case 13:
+          switch (currentBlackoutDialogue) {
+            case 0:
+              currentBlackoutDialogue = "disabled";
+              clearWindow();
+              dialogueTimeout = preBlackoutDialogue(dialogueTwo);
+
+              setTimeout(function () {
+                currentBlackoutDialogue = 1;
+              }, dialogueTimeout + 500);
+              break;
+            case 1:
+              currentBlackoutDialogue = "disabled";
+              clearWindow();
+              dialogueTimeout = preBlackoutDialogue(dialogueThree);
+
+              setTimeout(function () {
+                currentBlackoutDialogue = 2;
+              }, dialogueTimeout + 500);
+              break;
+          }
           break;
       }
       break;
