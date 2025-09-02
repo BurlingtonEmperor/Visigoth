@@ -22,7 +22,7 @@ function setStage (travelFrame) {
     //   drawImageLeft("../Visigoth/travel/frames/pinehurst/pinehurst.webp", 1601, 487);
       currentSrc = "../Visigoth/travel/frames/pinehurst/pinehurst.webp";
       travelFrameObject.src = currentSrc;
-      frameWidth = 1601;
+      frameWidth = 1701;
       frameHeight = 487;
       
       console.log("rendered image");
@@ -74,6 +74,7 @@ function drawFrame (whichDirection) {
     //   memoryDataBank = 1;
 
       if (frameX < -795) {
+        frameX += 2.5;
         switch (currentFrame) {
           case 0:
             currentFrame = 1;
@@ -88,6 +89,7 @@ function drawFrame (whichDirection) {
     //   memoryDataBank = 1;
 
       if (frameX > -5) {
+        frameX -= 2.5;
         switch (currentFrame) {
           case 1:
             currentFrame = 0;
