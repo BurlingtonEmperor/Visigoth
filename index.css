@@ -53,3 +53,19 @@ body {
   position: absolute;
   display: none;
 }
+
+#stickman {
+  width: 800px;
+  height: 500px;
+  position: absolute;
+  display: none;
+}
+
+/* Stickman */
+#stickman-right, #stickman-left {
+  display: none;
+  width: 10%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}

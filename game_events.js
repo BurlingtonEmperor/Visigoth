@@ -161,7 +161,7 @@ function preBlackoutDialogue (dialogueOptions) { // dialogue that happens before
 }
 
 function calculateBlackoutDialogue (dialogueOptions) {
-  return dialogueOptions[1].length * 30 + 500;
+  return dialogueOptions[1].length * 30 + 100;
 }
 
 // Pre-blackout dialogue end
@@ -312,6 +312,15 @@ $(document).on("keydown", function (event) {
             case 1:
               currentBlackoutDialogue = "disabled";
               clearWindow();
+              gameWindow.style.display = "none";
+              setStage(0);
+
+              $(gameWindow).fadeIn(2000);
+              gameEventLocation = "disabled";
+
+              setTimeout(function () {
+                isTraveling = 1;
+              }, 2000);
               break;
           }
           break;
