@@ -139,13 +139,35 @@ const dialogueFour = [
   "white"
 ];
 
+const selfDialogueOne = [
+  windowContext,
+  `The power went out.\n`,
+  30,
+  "24px FSEX300",
+  "white"
+];
+
+const selfDialogueTwo = [
+  windowContext,
+  `Maybe it was a fallen tree.\n`,
+  30,
+  "24px FSEX300",
+  "white"
+];
+
 function preBlackoutDialogue (dialogueOptions) { // dialogue that happens before the blackout.
   const delayedTextFunction = writeDelayedCenterParagraph(dialogueOptions[0], dialogueOptions[1], dialogueOptions[2], dialogueOptions[3], dialogueOptions[4]);
   return delayedTextFunction;
 }
+
+function calculateBlackoutDialogue (dialogueOptions) {
+  return dialogueOptions[1].length * 30 + 500;
+}
+
 // Pre-blackout dialogue end
 
 let userTitleMenuSelectPosition = 0; // Start new game
+let variableMusic;
 $(document).on("keydown", function (event) {
   switch (gameEventLocation) {
     case 0:
@@ -186,17 +208,24 @@ $(document).on("keydown", function (event) {
 
           $(gameWindow).fadeOut(1000);
 
-          setTimeout(function () {
-            clearWindow();
-
-            setTimeout(function () {
-              dialogueTimeout = preBlackoutDialogue(dialogueOne);
-
+          switch (userTitleMenuSelectPosition) {
+            case 0:
               setTimeout(function () {
-                currentBlackoutDialogue = 0;
-              }, dialogueTimeout + 500);
-            }, 1000);
-          }, 1000);
+                $(gameWindow).fadeIn(1000);
+                playLoopedAudio("../Visigoth/assets/audio/endless_void.mp3");
+                clearWindow();
+
+                setTimeout(function () {
+                  dialogueTimeout = preBlackoutDialogue(dialogueOne);
+
+                  setTimeout(function () {
+                    currentBlackoutDialogue = 0;
+                    gameEventLocation = 2;
+                  }, calculateBlackoutDialogue(dialogueOne));
+                }, 1000);
+              }, 1000);
+              break;
+          }
           break;
       }
       break;
@@ -204,6 +233,9 @@ $(document).on("keydown", function (event) {
       switch (event.which) {
         case 13:
           switch (currentBlackoutDialogue) {
+            case "disabled":
+              return false;
+              break;
             case 0:
               currentBlackoutDialogue = "disabled";
               clearWindow();
@@ -211,7 +243,7 @@ $(document).on("keydown", function (event) {
 
               setTimeout(function () {
                 currentBlackoutDialogue = 1;
-              }, dialogueTimeout + 500);
+              }, calculateBlackoutDialogue(dialogueTwo));
               break;
             case 1:
               currentBlackoutDialogue = "disabled";
@@ -220,7 +252,66 @@ $(document).on("keydown", function (event) {
 
               setTimeout(function () {
                 currentBlackoutDialogue = 2;
-              }, dialogueTimeout + 500);
+              }, calculateBlackoutDialogue(dialogueThree));
+              break;
+            case 2:
+              currentBlackoutDialogue = "disabled";
+              clearWindow();
+              dialogueTimeout = preBlackoutDialogue(dialogueFour);
+
+              setTimeout(function () {
+                currentBlackoutDialogue = 3;
+              }, calculateBlackoutDialogue(dialogueFour));
+              break;
+            case 3:
+              clearWindow();
+              currentBlackoutDialogue = "disabled";
+              cutScenes.style.display = "block";
+              gameEventLocation = "disabled";
+
+              const cutSceneTimeout = displayCutscene("../Visigoth/cutscenes/power_outage.mp4");
+              setTimeout(function () {
+                playAudio("../Visigoth/assets/audio/sfx/dsbarexp.wav");
+              }, 1000);
+
+              setTimeout(function () {
+                $(gameWindow).fadeOut(2000);
+
+                setTimeout(function () {
+                  $(gameWindow).fadeIn(2000);
+                  clearTheatre();
+                  cutScenes.style.display = "none";
+                  setTimeout(function () {
+                    preBlackoutDialogue(selfDialogueOne);
+
+                    setTimeout(function () {
+                      currentBlackoutDialogue = 0;
+                      gameEventLocation = 3;
+                    }, calculateBlackoutDialogue(selfDialogueOne));
+                  }, 1500);
+                }, 2000);
+              }, cutSceneTimeout + 1000);
+              break;
+          }
+          break;
+      }
+      break;
+    case 3:
+      switch (event.which) {
+        case 13:
+          switch (currentBlackoutDialogue) {
+            case 0:
+              currentBlackoutDialogue = "disabled";
+              clearWindow();
+              preBlackoutDialogue(selfDialogueTwo);
+
+              setTimeout(function () {
+                currentBlackoutDialogue = 1;
+              }, calculateBlackoutDialogue(selfDialogueTwo));
+              break;
+            case 1:
+              currentBlackoutDialogue = "disabled";
+              clearWindow();
               break;
           }
           break;

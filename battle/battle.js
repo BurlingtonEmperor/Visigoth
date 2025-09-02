@@ -9,10 +9,13 @@ let heroPartyTwoHP;
 let heroPartyThreeHP;
 let heroPartyFourHP;
 
+let currentBattleMusic;
+
 function initiateBattle (backdrop, enemyData) {
   $(gameWindow).fadeOut(1000);
   gameEventLocation = "disabled";
   playAudio("../Visigoth/battle/dstelept.wav");
+  gameWindow.style.filter = "none";
 
 //   const enemySprite = new Image();
 //   enemySprite.src = enemyData.sprite;
@@ -23,6 +26,7 @@ function initiateBattle (backdrop, enemyData) {
     case "boss":
       const bossMusic = playLoopedAudio("../Visigoth/battle/music/boss_fight.mp3");
       bossMusic.currentTime += 1.2;
+      currentBattleMusic = bossMusic;
       playerTurn = 1;
       break;
   }
@@ -116,6 +120,16 @@ function takeDamage (dmgAmount, targetHero) {
       clearAllWindows();
     }, 2000);
   }
+}
+
+function killEnemyAnimation () {
+  gameWindow.style.filter = "grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(300%) contrast(150%) brightness(50%)";
+  gameWindow.classList.add("shake");
+  let deathSound = playAudio("../Visigoth/battle/enemy_death.mp3");
+  deathSound.currentTime += 0.5;
+
+  $(gameWindow).fadeOut(3000);
+  fadeOutAudio(currentBattleMusic, 3000);
 }
 
 $(document).on("keydown", function (event) {

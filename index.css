@@ -46,3 +46,10 @@ body {
   display: none;
   overflow: hidden;
 }
+
+#cutscenes {
+  width: 800px;
+  height: 500px;
+  position: absolute;
+  display: none;
+}

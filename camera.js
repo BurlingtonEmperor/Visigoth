@@ -250,10 +250,67 @@ const bufferContext = bufferCanvas.getContext("2d");
 bufferCanvas.width = rect.width;
 bufferCanvas.height = rect.height;
 
-let sidewalkSrc;
-let sidewalkX_one;
-let sidewalkX_two;
+// let sidewalkSrc;
+// let sidewalkX_one;
+// let sidewalkX_two;
 
-function renderTravelImage (imageSrc) {
-  
+let travelWidth;
+let travelHeight;
+let travelSrc;
+let travelImage = new Image();
+
+let travelX;
+let travelY = 0;
+
+function renderTravelImage (imageSrc, whichFrame, whichDirection) {
+  switch (whichFrame) {
+    case 0:
+      travelWidth = 1501;
+      travelHeight = 487;
+      break;
+  }
+  travelImage.src = imageSrc;
+
+  bufferContext.clearRect(0, 0, bufferCanvas.width, bufferCanvas.height);
+  switch (whichDirection) {
+    case "right":
+      travelX -= 1;
+      break;
+    case "left":
+      travelX += 1;
+      break;
+  }
+
+  bufferContext.drawImage(travelImage, travelX, travelY, travelWidth, travelHeight);
+  clearWindow();
+  windowContext.drawImage(bufferCanvas, 0, 0);
+
+  requestAnimationFrame(renderTravelImage(imageSrc, whichFrame, whichDirection));
 }
+
+// function moveTravelFrame (imageSrc_mvf, whichFrame_mvf, whichDirection_mvf) {
+//   travelImage.onload = function () {
+//     renderTravelImage(imageSrc_mvf, whichFrame_mvf, whichDirection_mvf);
+//   }
+// }
+
+// end travel functions/rendering
+
+// begin cutscenes
+const cutScenes = document.getElementById("cutscenes");
+
+function clearTheatre () {
+  cutScenes.innerHTML = "";
+}
+
+function displayCutscene (cutsceneSrc) {
+  const cutsceneDisplay = document.createElement("video");
+
+  cutsceneDisplay.src = cutsceneSrc;
+  cutsceneDisplay.style.width = "100%";
+  cutScenes.appendChild(cutsceneDisplay);
+  cutsceneDisplay.play();
+
+  return cutsceneDisplay.duration;
+}
+// end
