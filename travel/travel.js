@@ -7,6 +7,7 @@ let frameHeight;
 let frameX = 0;
 
 let currentFrame = 0;
+let encounters = "OFF";
 
 const stickman = document.getElementById("stickman");
 let memoryDataBank = 0;
@@ -35,7 +36,7 @@ function setStage (travelFrame) {
       frameX = 0;
       currentSrc = "../Visigoth/travel/frames/pinehurst/pinehurst2.webp";
       travelFrameObject.src = currentSrc;
-      frameWidth = 1701;
+      frameWidth = 1801;
       frameHeight = 487;
 
       renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);

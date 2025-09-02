@@ -122,14 +122,26 @@ function takeDamage (dmgAmount, targetHero) {
   }
 }
 
-function killEnemyAnimation () {
+function killEnemyAnimation (backdropSrc) {
   gameWindow.style.filter = "grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(300%) contrast(150%) brightness(50%)";
   gameWindow.classList.add("shake");
   let deathSound = playAudio("../Visigoth/battle/enemy_death.mp3");
   deathSound.currentTime += 0.5;
+  battleOptionsEnabled = 0;
 
   $(gameWindow).fadeOut(3000);
-  fadeOutAudio(currentBattleMusic, 3000);
+  currentBattleMusic.pause();
+  currentBattleMusic = playLoopedAudio("../Visigoth/battle/music/victory.mp3");
+  battleRoster.style.display = "none";
+
+  setTimeout(function () {
+    clearWindow();
+    renderImage(backdropSrc, -100, 0);
+
+    $(gameWindow).fadeIn(3000);
+    gameWindow.style.filter = "none";
+    gameWindow.classList.remove("shake");
+  }, 3000);
 }
 
 $(document).on("keydown", function (event) {
