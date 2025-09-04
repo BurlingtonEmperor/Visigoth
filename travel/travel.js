@@ -14,12 +14,14 @@ let memoryDataBank = 0;
 
 const travelFrameObject = new Image();
 
+// sprites and dialogue
 const pinehurstCharData_1 = {
   sprite : "../Visigoth/travel/characters/douglas.webp",
   name : "Douglas",
   ogX : 400,
   ogY : 222,
-  specialCondition : 0
+  specialCondition : 0,
+  dialogue : douglasDialogue
 };
 
 const pinehurstCharData_2 = {
@@ -27,7 +29,8 @@ const pinehurstCharData_2 = {
   name : "Nick",
   ogX : 900,
   ogY : 222,
-  specialCondition : 0
+  specialCondition : 0,
+  dialogue : nickDialogue
 }
 
 // begin character functions
@@ -245,6 +248,10 @@ function checkForCharacterDialogue (dataArray) {
   }
 }
 
+let markedValueCHARD;
+let hasMarkedValueCHARD = 0;
+let isTalking = 0;
+
 function CHECK_CHAR_D (dataArray) {
   const arrayMaxValue = dataArray.length;
   
@@ -270,12 +277,15 @@ function CHECK_CHAR_D (dataArray) {
       case (usedX > 300 && usedX < 380):
         isAnyD_checked = 1;
         createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
+        hasMarkedValueCHARD = 1;
+        markedValueCHARD = i;
         break;
     }
 
     switch (isAnyD_checked) {
       case 0:
         clearAllWindows();
+        hasMarkedValueCHARD = 0;
         break;
     }
   }
@@ -286,6 +296,47 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 0:
       // checkForCharacterDialogue(pinehurstSprite_arr);
       CHECK_CHAR_D(pinehurstSprite_arr);
+      break;
+  }
+}
+
+let dialogueAmountDATA = 1;
+let current_DA = 0;
+let isFinishedTalking = 0;
+function resetDialogue () {
+  dialogueAmountDATA = 1;
+  current_DA = 0;
+  isFinishedTalking = 0;
+}
+
+function loadCharacterDialogue (whichFrame, whichData) {
+  let currDataBank;
+  switch (whichFrame) {
+    case 0:
+      currDataBank = pinehurstSprite_arr;
+      break;
+  }
+  
+  // current_DA++;
+  dialogueAmountDATA = currDataBank[whichData].dialogue.length;
+  clearAllWindows();
+  isFinishedTalking = 0;
+  isTraveling = 0;
+
+  switch (true) {
+    case (current_DA > dialogueAmountDATA || current_DA === dialogueAmountDATA):
+      resetDialogue();
+      isTraveling = 1;
+      cleanUpCharacterData(whichFrame);
+      isTalking = 0;
+      break;
+    default:
+      createWindow("dialogue", currDataBank[whichData].dialogue[current_DA], 0, 0);
+
+      setTimeout(function () {
+        isFinishedTalking = 1;
+        current_DA++;
+      }, (currDataBank[whichData].dialogue.length * 25) + 200);
       break;
   }
 }
@@ -454,6 +505,30 @@ $(document).on("keydown", function (event) {
         case 37:
           drawFrame("left");
           stickmanLeft.style.display = "block";
+          break;
+        case 69:
+          switch (hasMarkedValueCHARD) {
+            case 1:
+              isTraveling = 0;
+              resetDialogue();
+              isTalking = 1;
+              loadCharacterDialogue(currentFrame, markedValueCHARD);
+              break;
+          }
+          break;
+      }
+      break;
+  }
+
+  switch (isTalking) {
+    case 1:
+      switch (event.which) {
+        case 13:
+          switch (isFinishedTalking) {
+            case 1:
+              loadCharacterDialogue(currentFrame, markedValueCHARD);
+              break;
+          }
           break;
       }
       break;
