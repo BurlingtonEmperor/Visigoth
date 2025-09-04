@@ -30,10 +30,15 @@ const pinehurstCharData_2 = {
   specialCondition : 0
 }
 
-
+// begin character functions
 // are there better ways I could have done this without limiting the amount of 
 // characters on each frame to 4 at a time? Yes.
 // am I too lazy to do that? Also yes.
+let isUsingCharacters = 0;
+let hasSwitchedFrame = 0; // 0 is hasn't switched a frame.
+// 1 is has switched a frame (from the right. Ex: going from pinehurst 0 to pinehurst 2.)
+// 2 is has switched a frame (from the left. Ex: going from pinehurst 2 to pinehurst 0.)
+
 const travelCharacterObject_1 = new Image();
 const travelCharacterObject_2 = new Image();
 const travelCharacterObject_3 = new Image();
@@ -153,30 +158,127 @@ function checkCharacters (travelFrame, whichDirection) {
   }
 }
 
+function checkCharacterLastX (dataArray) {
+  for (let i = 0; i < dataArray.length; i++) {
+    switch (dataArray[i].specialCondition) {
+      case 0:
+        console.log("Character - LOADED!");
+        switch (i) {
+          case 0:
+            new_char_x = travelCharacterObject_1_x;
+            break;
+          case 1:
+            new_char_x = travelCharacterObject_2_x;
+            break;
+          case 2:
+            new_char_x = travelCharacterObject_3_x;
+            break;
+          case 3:
+            new_char_x = travelCharacterObject_4_x;
+            break;
+        }
+        new_char_y = dataArray[i].ogY;
+        renderImage(dataArray[i].sprite, new_char_x, new_char_y);
+        console.log("character rendered");
+        break;
+    }
+  }
+}
+
+function checkForCharacterDialogue (dataArray) {
+  for (let i = 0; i < dataArray.length; i++) {
+    let charDataX;
+    switch (dataArray[i].specialCondition) {
+      case 0:
+        switch (i) {
+          case 0:
+            charDataX = travelCharacterObject_1_x;
+            break;
+          case 1:
+            charDataX = travelCharacterObject_2_x;
+            break;
+          case 2:
+            charDataX = travelCharacterObject_3_x;
+            break;
+          case 3:
+            charDataX = travelCharacterObject_4_x;
+            break;
+        }
+        break;
+    }
+
+    if (charDataX > 300 && charDataX < 380) {
+      createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
+    }
+
+    else {
+      clearAllWindows();
+    }
+  }
+}
+
+function cleanUpCharacterData (whichFrame) { // only for dialogue!
+  switch (whichFrame) {
+    case 0:
+      checkForCharacterDialogue(pinehurstSprite_arr);
+      break;
+  }
+}
+
+// end character functions
+
 function setStage (travelFrame) {
   stickman.style.display = "block";
   switch (travelFrame) {
     case 0:
       currentTown = "pinehurst";
       frameX = 0;
+      isUsingCharacters = 1;
     //   drawImageLeft("../Visigoth/travel/frames/pinehurst/pinehurst.webp", 1601, 487);
       currentSrc = "../Visigoth/travel/frames/pinehurst/pinehurst.webp";
       travelFrameObject.src = currentSrc;
       frameWidth = 1701;
       frameHeight = 487;
       
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
       console.log("rendered image");
     //   renderPreloadedImage(travelFrameObject, frameX, 0, frameWidth, frameHeight);
     //   renderPreloadedImage(travelFrameObject, frameX, 0, frameWidth, frameHeight);
-      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
-      firstRenderCharacters(pinehurstSprite_arr);
-      loadCharacters(pinehurstSprite_arr); 
-      firstRenderCharacters(pinehurstSprite_arr);
-      loadCharacters(pinehurstSprite_arr); // double render -- sometimes the characters don't load at all!
+      switch (hasSwitchedFrame) {
+        case 0:
+          firstRenderCharacters(pinehurstSprite_arr);
+          loadCharacters(pinehurstSprite_arr); 
+          firstRenderCharacters(pinehurstSprite_arr);
+          loadCharacters(pinehurstSprite_arr); // double render -- sometimes the characters don't load at all!
+          break;
+        case 1:
+          checkCharacterLastX(pinehurstSprite_arr);
+          loadCharacters(pinehurstSprite_arr);
+          checkCharacterLastX(pinehurstSprite_arr);
+          // loadCharacters(pinehurstSprite_arr);
+          // loadCharacters(pinehurstSprite_arr);
+          // loadCharacters(pinehurstSprite_arr);
+          // drawFrame("left");
+
+          setTimeout(function () {
+            loadCharacters(pinehurstSprite_arr);
+          }, 0.1);
+          break;
+        case 2:
+          checkCharacterLastX(pinehurstSprite_arr);
+          loadCharacters(pinehurstSprite_arr);
+          checkCharacterLastX(pinehurstSprite_arr);
+          loadCharacters(pinehurstSprite_arr);
+          loadCharacters(pinehurstSprite_arr);
+          loadCharacters(pinehurstSprite_arr);
+          drawFrame("right");
+          break;
+      }
       break;
     case 1:
       currentTown = "pinehurst";
       frameX = 0;
+      isUsingCharacters = 0;
       currentSrc = "../Visigoth/travel/frames/pinehurst/pinehurst2.webp";
       travelFrameObject.src = currentSrc;
       frameWidth = 1801;
@@ -190,8 +292,10 @@ function setStage (travelFrame) {
 function switchFrame (travelFrame, whichDirection) {
   $(gameWindow).fadeOut(1000);
   isTraveling = 0;
+  hasSwitchedFrame = 1;
 
   setTimeout(function () {
+    clearWindow();
     setStage(travelFrame);
 
     switch (whichDirection) {
@@ -199,8 +303,15 @@ function switchFrame (travelFrame, whichDirection) {
         break;
       case "left":
         clearWindow();
+        clearWindow();
         frameX = -800;
         renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+
+        switch (travelFrame) {
+          case 0:
+            loadCharacters(pinehurstSprite_arr);
+            break;
+        }
         break;
     }
 
@@ -249,7 +360,12 @@ function drawFrame (whichDirection) {
   }
   
   clearWindow();
-  checkCharacters(currentFrame, whichDirection);
+  switch (isUsingCharacters) {
+    case 1:
+      checkCharacters(currentFrame, whichDirection);
+      cleanUpCharacterData(currentFrame);
+      break;
+  }
   renderPreloadedImage(travelFrameObject, frameX, 0, frameWidth, frameHeight);
 
   switch (currentFrame) {
