@@ -1,0 +1,3 @@
+gameEventLocation = "disabled";
+setStage(0);
+isTraveling = 1;
