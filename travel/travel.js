@@ -166,6 +166,7 @@ function checkCharacterLastX (dataArray) {
         switch (i) {
           case 0:
             new_char_x = travelCharacterObject_1_x;
+            // console.log(charDataX);
             break;
           case 1:
             new_char_x = travelCharacterObject_2_x;
@@ -186,33 +187,96 @@ function checkCharacterLastX (dataArray) {
 }
 
 function checkForCharacterDialogue (dataArray) {
+  let checkedAllData = 0;
   for (let i = 0; i < dataArray.length; i++) {
     let charDataX;
+    function checkCharDataX () {
+      if (charDataX > 300 && charDataX < 380) {
+        // console.log("Dialogue initiated");
+        switch (i) {
+          default:
+            createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
+            break;
+          // case 3:
+          //   checkedAllData = 1;
+          //   createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
+          //   break;
+        }
+      }
+
+      else {
+        switch (i) {
+          case (dataArray.length - 1):
+            checkedAllData = 1;
+            break;
+        }
+      }
+    }
+
     switch (dataArray[i].specialCondition) {
       case 0:
         switch (i) {
           case 0:
             charDataX = travelCharacterObject_1_x;
+            // console.log(charDataX);
+            checkCharDataX();
             break;
           case 1:
             charDataX = travelCharacterObject_2_x;
+            checkCharDataX();
             break;
           case 2:
             charDataX = travelCharacterObject_3_x;
+            checkCharDataX();
             break;
           case 3:
             charDataX = travelCharacterObject_4_x;
+            checkCharDataX();
             break;
         }
         break;
     }
 
-    if (charDataX > 300 && charDataX < 380) {
-      createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
+    switch (checkedAllData) {
+      case 1:
+        clearAllWindows();
+        break;
+    }
+  }
+}
+
+function CHECK_CHAR_D (dataArray) {
+  const arrayMaxValue = dataArray.length;
+  
+  let isAnyD_checked = 0;
+  for (let i = 0; i < arrayMaxValue; i++) {
+    let usedX;
+    switch (i) {
+      case 0:
+        usedX = travelCharacterObject_1_x;
+        break;
+      case 1:
+        usedX = travelCharacterObject_2_x;
+        break;
+      case 2:
+        usedX = travelCharacterObject_3_x;
+        break;
+      case 3:
+        usedX = travelCharacterObject_4_x;
+        break;
     }
 
-    else {
-      clearAllWindows();
+    switch (true) {
+      case (usedX > 300 && usedX < 380):
+        isAnyD_checked = 1;
+        createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
+        break;
+    }
+
+    switch (isAnyD_checked) {
+      case 0:
+        clearAllWindows();
+        break;
     }
   }
 }
@@ -220,7 +284,8 @@ function checkForCharacterDialogue (dataArray) {
 function cleanUpCharacterData (whichFrame) { // only for dialogue!
   switch (whichFrame) {
     case 0:
-      checkForCharacterDialogue(pinehurstSprite_arr);
+      // checkForCharacterDialogue(pinehurstSprite_arr);
+      CHECK_CHAR_D(pinehurstSprite_arr);
       break;
   }
 }
