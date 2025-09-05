@@ -331,17 +331,36 @@ function loadCharacterDialogue (whichFrame, whichData) {
       isTalking = 0;
       break;
     default:
-      createWindow("dialogue", currDataBank[whichData].dialogue[current_DA], 0, 0);
+      createWindow("dialogue", currDataBank[whichData].name + `: "` + currDataBank[whichData].dialogue[current_DA] + `"`, 0, 0);
 
       setTimeout(function () {
         isFinishedTalking = 1;
         current_DA++;
-      }, (currDataBank[whichData].dialogue.length * 25) + 200);
+      }, (currDataBank[whichData].dialogue[current_DA].length * 25) + 200);
       break;
   }
 }
 
 // end character functions
+
+// begin gateway checking functions
+
+function checkForGateways (whichFrame) {
+  switch (whichFrame) {
+    case 0:
+      switch (true) {
+        case (frameX < -700):
+          createWindow("battleWindow", "Press 'E' to enter the Park", 0, 0);
+          break;
+        default:
+          clearAllWindows();
+          break;
+      }
+      break;
+  }
+}
+
+// end gateway checking functions
 
 function setStage (travelFrame) {
   stickman.style.display = "block";
@@ -454,6 +473,15 @@ function drawFrame (whichDirection) {
         }
         return false;
       }
+
+      // switch (true) {
+      //   case (frameX < -700):
+      //     switch (currentFrame) {
+      //       case 0:
+      //         break;
+      //     }
+      //     break;
+      // }
       break;
     case "left":
       frameX += 2.5;
@@ -474,6 +502,7 @@ function drawFrame (whichDirection) {
       console.log("Chose to refresh.");
       break;
   }
+  checkForGateways(currentFrame);
   
   clearWindow();
   switch (isUsingCharacters) {
