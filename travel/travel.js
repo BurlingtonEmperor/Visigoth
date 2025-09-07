@@ -33,6 +33,24 @@ const pinehurstCharData_2 = {
   dialogue : nickDialogue
 }
 
+const pinehurstCharData_3 = { // park
+  sprite : "",
+  name : "Chance",
+  ogX : 900,
+  ogY : 222,
+  specialCondition : 0,
+  
+}
+
+const pinehurstCharData_4 = {
+  sprite : "../Visigoth/travel/characters/worker.webp",
+  name : "Construction Worker",
+  ogX : 600,
+  ogY : 222,
+  specialCondition : 0,
+  dialogue : workerDialogue_1
+}
+
 // begin character functions
 // are there better ways I could have done this without limiting the amount of 
 // characters on each frame to 4 at a time? Yes.
@@ -46,6 +64,9 @@ const travelCharacterObject_1 = new Image();
 const travelCharacterObject_2 = new Image();
 const travelCharacterObject_3 = new Image();
 const travelCharacterObject_4 = new Image();
+
+const pinehurst1_xDATA = [];
+const pinehurst2_xDATA = [];
 
 let travelCharacterObject_1_x = 0;
 let travelCharacterObject_2_x = 0;
@@ -124,12 +145,16 @@ function loadCharacters (dataArray) {
 }
 
 const pinehurstSprite_arr = [pinehurstCharData_1, pinehurstCharData_2]; // keep data for characters for each frame
+const pinehurstSprite_arr2 = [pinehurstCharData_4];
 
 function checkCharacters (travelFrame, whichDirection) {
   let arrToUse;
   switch (travelFrame) {
     case 0:
       arrToUse = pinehurstSprite_arr;
+      break;
+    case 1:
+      arrToUse = pinehurstSprite_arr2;
       break;
   }
   
@@ -159,6 +184,129 @@ function checkCharacters (travelFrame, whichDirection) {
         break;
     }
   }
+}
+
+function saveCharacterLastX (whichFrame) {
+  let dataArr_LOADCHARLASTX;
+  switch (whichFrame) {
+    case 0:
+      dataArr_LOADCHARLASTX = pinehurst1_xDATA;
+      break;
+    case 1:
+      dataArr_LOADCHARLASTX = pinehurst2_xDATA;
+      break;
+  }
+
+  function tackleDATACHARLASTX (numArrLength) {
+    switch (numArrLength) {
+      case 1:
+        switch (whichFrame) {
+          case 0:
+            pinehurst1_xDATA = [];
+            pinehurst1_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 1:
+            pinehurst2_xDATA = [];
+            pinehurst2_xDATA.push(travelCharacterObject_1_x);
+            break;
+        }
+        break;
+      case 2:
+        switch (whichFrame) {
+          case 0:
+            pinehurst1_xDATA = [];
+            pinehurst1_xDATA.push(travelCharacterObject_1_x);
+            pinehurst1_xDATA.push(travelCharacterObject_2_x);
+            break;
+          case 1:
+            pinehurst2_xDATA = [];
+            pinehurst2_xDATA.push(travelCharacterObject_1_x);
+            pinehurst2_xDATA.push(travelCharacterObject_2_x);
+            break;
+        }
+        break;
+      case 3:
+        switch (whichFrame) {
+          case 0:
+            pinehurst1_xDATA = [];
+            pinehurst1_xDATA.push(travelCharacterObject_1_x);
+            pinehurst1_xDATA.push(travelCharacterObject_2_x);
+            pinehurst1_xDATA.push(travelCharacterObject_3_x);
+            break;
+          case 1:
+            pinehurst2_xDATA = [];
+            pinehurst2_xDATA.push(travelCharacterObject_1_x);
+            pinehurst2_xDATA.push(travelCharacterObject_2_x);
+            pinehurst2_xDATA.push(travelCharacterObject_3_x);
+            break;
+        }
+        break;
+      case 4:
+        switch (whichFrame) {
+          case 0:
+            pinehurst1_xDATA = [];
+            pinehurst1_xDATA.push(travelCharacterObject_1_x);
+            pinehurst1_xDATA.push(travelCharacterObject_2_x);
+            pinehurst1_xDATA.push(travelCharacterObject_3_x);
+            pinehurst1_xDATA.push(travelCharacterObject_4_x);
+            break;
+          case 1:
+            pinehurst2_xDATA = [];
+            pinehurst2_xDATA.push(travelCharacterObject_1_x);
+            pinehurst2_xDATA.push(travelCharacterObject_2_x);
+            pinehurst2_xDATA.push(travelCharacterObject_3_x);
+            pinehurst2_xDATA.push(travelCharacterObject_4_x);
+            break;
+        }
+        break;
+    }
+  }
+
+  tackleDATACHARLASTX(dataArr_LOADCHARLASTX.length);
+}
+
+function loadCharacterLastX (whichFrame) { // take data from each last x array and set it to default
+  let dataArr_LOADCHARLASTX;
+  switch (whichFrame) {
+    case 0:
+      dataArr_LOADCHARLASTX = pinehurst1_xDATA;
+      break;
+    case 1:
+      dataArr_LOADCHARLASTX = pinehurst2_xDATA;
+      break;
+  }
+
+  function tackleDATACHARLASTX (numArrLength) {
+    switch (numArrLength) {
+      case 1:
+        travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
+        break;
+      case 2:
+        travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
+        travelCharacterObject_2_x = dataArr_LOADCHARLASTX[1];
+        break;
+      case 3:
+        travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
+        travelCharacterObject_2_x = dataArr_LOADCHARLASTX[1];
+        travelCharacterObject_3_x = dataArr_LOADCHARLASTX[2];
+        break;
+      case 4:
+        travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
+        travelCharacterObject_2_x = dataArr_LOADCHARLASTX[1];
+        travelCharacterObject_3_x = dataArr_LOADCHARLASTX[2];
+        travelCharacterObject_4_x = dataArr_LOADCHARLASTX[3];
+        break;
+    }
+  }
+
+  tackleDATACHARLASTX(dataArr_LOADCHARLASTX.length);
+}
+
+function RESET_X () {
+  travelCharacterObject_1_x = 0;
+  travelCharacterObject_2_x = 0;
+  travelCharacterObject_3_x = 0;
+  travelCharacterObject_4_x = 0;
 }
 
 function checkCharacterLastX (dataArray) {
@@ -297,6 +445,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
       // checkForCharacterDialogue(pinehurstSprite_arr);
       CHECK_CHAR_D(pinehurstSprite_arr);
       break;
+    case 1:
+      CHECK_CHAR_D(pinehurstSprite_arr2);
+      break;
   }
 }
 
@@ -314,6 +465,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
   switch (whichFrame) {
     case 0:
       currDataBank = pinehurstSprite_arr;
+      break;
+    case 1:
+      currDataBank = pinehurstSprite_arr2;
       break;
   }
   
@@ -387,6 +541,7 @@ function setStage (travelFrame) {
           loadCharacters(pinehurstSprite_arr); // double render -- sometimes the characters don't load at all!
           break;
         case 1:
+          loadCharacterLastX(travelFrame);
           checkCharacterLastX(pinehurstSprite_arr);
           loadCharacters(pinehurstSprite_arr);
           checkCharacterLastX(pinehurstSprite_arr);
@@ -400,6 +555,7 @@ function setStage (travelFrame) {
           }, 0.1);
           break;
         case 2:
+          loadCharacterLastX(travelFrame);
           checkCharacterLastX(pinehurstSprite_arr);
           loadCharacters(pinehurstSprite_arr);
           checkCharacterLastX(pinehurstSprite_arr);
@@ -413,13 +569,53 @@ function setStage (travelFrame) {
     case 1:
       currentTown = "pinehurst";
       frameX = 0;
-      isUsingCharacters = 0;
+      isUsingCharacters = 1;
       currentSrc = "../Visigoth/travel/frames/pinehurst/pinehurst2.webp";
       travelFrameObject.src = currentSrc;
       frameWidth = 1801;
       frameHeight = 487;
 
       renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+
+      switch (hasSwitchedFrame) {
+        case 1:
+          firstRenderCharacters(pinehurstSprite_arr2);
+          loadCharacters(pinehurstSprite_arr2);
+          saveCharacterLastX(currentFrame);
+          checkCharacterLastX(currentFrame);
+          break;
+      }
+
+      // switch (hasSwitchedFrame) {
+      //   case 0:
+      //     firstRenderCharacters(pinehurstSprite_arr2);
+      //     loadCharacters(pinehurstSprite_arr2); 
+      //     firstRenderCharacters(pinehurstSprite_arr2);
+      //     loadCharacters(pinehurstSprite_arr2); // double render -- sometimes the characters don't load at all!
+      //     break;
+      //   case 1:
+      //     checkCharacterLastX(pinehurstSprite_arr2);
+      //     loadCharacters(pinehurstSprite_arr2);
+      //     checkCharacterLastX(pinehurstSprite_arr2);
+      //     // loadCharacters(pinehurstSprite_arr);
+      //     // loadCharacters(pinehurstSprite_arr);
+      //     // loadCharacters(pinehurstSprite_arr);
+      //     // drawFrame("left");
+
+      //     setTimeout(function () {
+      //       loadCharacters(pinehurstSprite_arr2);
+      //     }, 0.1);
+      //     break;
+      //   case 2:
+      //     checkCharacterLastX(pinehurstSprite_arr2);
+      //     loadCharacters(pinehurstSprite_arr2);
+      //     checkCharacterLastX(pinehurstSprite_arr2);
+      //     loadCharacters(pinehurstSprite_arr2);
+      //     loadCharacters(pinehurstSprite_arr2);
+      //     loadCharacters(pinehurstSprite_arr2);
+      //     drawFrame("right");
+      //     break;
+      // }
       break;
   }
 }
@@ -428,9 +624,11 @@ function switchFrame (travelFrame, whichDirection) {
   $(gameWindow).fadeOut(1000);
   isTraveling = 0;
   hasSwitchedFrame = 1;
+  saveCharacterLastX(currentFrame);
 
   setTimeout(function () {
     clearWindow();
+    currentFrame = travelFrame;
     setStage(travelFrame);
 
     switch (whichDirection) {
@@ -502,7 +700,6 @@ function drawFrame (whichDirection) {
       console.log("Chose to refresh.");
       break;
   }
-  checkForGateways(currentFrame);
   
   clearWindow();
   switch (isUsingCharacters) {
@@ -517,7 +714,12 @@ function drawFrame (whichDirection) {
     case 0:
       loadCharacters(pinehurstSprite_arr);
       break;
+    case 1:
+      loadCharacters(pinehurstSprite_arr2);
+      break;
   }
+
+  // checkForGateways(currentFrame);
 }
 
 const stickmanRight = document.getElementById("stickman-right");
@@ -555,6 +757,7 @@ $(document).on("keydown", function (event) {
         case 13:
           switch (isFinishedTalking) {
             case 1:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               loadCharacterDialogue(currentFrame, markedValueCHARD);
               break;
           }
