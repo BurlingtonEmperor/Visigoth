@@ -4,7 +4,8 @@ let playerData = {
   attackForce : 5,
   defenseForce : 10,
   mentalEnergy : 5,
-  summonArr : []
+  summonArr : [],
+  largePic : ""
 }
 
 let colinData = {
@@ -13,7 +14,8 @@ let colinData = {
   attackForce : 8,
   defenseForce : 12,
   mentalEnergy : 3,
-  summonArr : []
+  summonArr : [],
+  largePic : ""
 }
 
 let connorData = {
@@ -22,7 +24,18 @@ let connorData = {
   attackForce : 12,
   defenseForce : 10,
   mentalEnergy : 10,
-  summonArr : []
+  summonArr : [],
+  largePic : ""
+}
+
+let testData = {
+  heroName : "Test",
+  heroHealth : 10,
+  attackForce : 1,
+  defenseForce : 1,
+  mentalEnergy : 1,
+  summonArr : [],
+  largePic : "../Visigoth/tests/100x100_logo.png"
 }
 
 let heroParty = [playerData];

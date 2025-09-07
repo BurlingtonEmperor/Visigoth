@@ -212,7 +212,7 @@ $(document).on("keydown", function (event) {
             case 0:
               setTimeout(function () {
                 $(gameWindow).fadeIn(1000);
-                playLoopedAudio("../Visigoth/assets/audio/endless_void.mp3");
+                variableMusic = playLoopedAudio("../Visigoth/assets/audio/endless_void.mp3");
                 clearWindow();
 
                 setTimeout(function () {
@@ -320,6 +320,8 @@ $(document).on("keydown", function (event) {
 
               setTimeout(function () {
                 isTraveling = 1;
+                fadeOutAudio(variableMusic, 1000);
+                variableMusic = playLoopedAudio("../Visigoth/assets/audio/step.mp3");
               }, 2000);
               break;
           }

@@ -1,0 +1,3 @@
+clearWindow();
+gameEventLocation = "disabled";
+bringUpCharacterNameChooser(testData);
