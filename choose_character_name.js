@@ -36,8 +36,8 @@ function returnSelectedCharacter (selectedValue_og, row_og) {
     ["A", "B", "C", "D", "E", "F"],
     ["G", "H", "I", "J", "K", "L"],
     ["M", "N", "O", "P", "Q", "R"],
-    ["R", "S", "T", "U", "V", "W"],
-    ["X", "Y", "Z", "'", ".", " "],
+    ["S", "T", "U", "V", "W", "X"],
+    ["Y", "Z", "/", "'", ".", "[SPACE]"],
     ["a", "b", "c", "d", "e", "f"],
     ["g", "h", "i", "j", "k", "l"],
     ["m", "n", "o", "p", "q", "r"],
@@ -60,9 +60,18 @@ function checkSelectedCharacter () {
   }
 }
 
+function setDefaultName (JSONPointer) {
+  let JSONPointer_nameLEN = JSONPointer.heroName.length;
+
+  for (let i = 0; i < JSONPointer_nameLEN; i++) {
+    nameMap[i] = JSONPointer.heroName.charAt(i);
+  }
+}
+
 function bringUpCharacterNameChooser (JSONPointer, selectedValue, row) {
   const maxCharAmount = 12; // max number of characters. 
-  clearWindow();
+//   clearWindow();
+  windowContext.clearRect(140, 50, 600, 600);
 
   renderImage(JSONPointer.largePic, 0, 0);
   characterLargePicCache = JSONPointer;
@@ -229,6 +238,7 @@ function checkIsNameSelected () {
   }
 }
 
+// is this a bad way of doing this? Yes. Do I care? Not really.
 function moveCursorForNaming (whichDirection) {
   let getCurrentCursor = checkSelectedCharacter();
   switch (whichDirection) {
@@ -259,6 +269,42 @@ function moveCursorForNaming (whichDirection) {
         bringUpCharacterNameChooser(characterLargePicCache, getCurrentCursor[1], downValueCursor);
       }
       break;
+    case "left":
+      if ((getCurrentCursor[0] == 1 && getCurrentCursor[1] == 0) || (getCurrentCursor[0] == 3 && getCurrentCursor[1] == 0) || (getCurrentCursor[0] == 5 && getCurrentCursor[1] == 0) || (getCurrentCursor[0] == 7 && getCurrentCursor[1] == 0) || (getCurrentCursor[0] == 9 && getCurrentCursor[1] == 0)) {
+        let leftValOne = getCurrentCursor[0] - 1;
+        bringUpCharacterNameChooser(characterLargePicCache, 5, leftValOne);
+      }
+
+      else {
+        if (getCurrentCursor[1] == 0) {
+          return false;
+        }
+
+        else {
+          // annnndd...here we switch to switch statements because I don't want to write out dozens of if else statements.
+          // never mind.
+          let leftValTwo = getCurrentCursor[1] - 1;
+          bringUpCharacterNameChooser(characterLargePicCache, leftValTwo, getCurrentCursor[0]);
+        }
+      }
+      break;
+    case "right":
+      if ((getCurrentCursor[0] == 0 && getCurrentCursor[1] == 5) || (getCurrentCursor[0] == 2 && getCurrentCursor[1] == 5) || (getCurrentCursor[0] == 4 && getCurrentCursor[1] == 5) || (getCurrentCursor[0] == 6 && getCurrentCursor[1] == 5) || (getCurrentCursor[0] == 8 && getCurrentCursor[1] == 5)) {
+        let rightValOne = getCurrentCursor[0] + 1;
+        bringUpCharacterNameChooser(characterLargePicCache, 0, rightValOne);
+      }
+
+      else {
+        if (getCurrentCursor[1] == 5) {
+          return false;
+        }
+
+        else {
+          let rightValTwo = getCurrentCursor[1] + 1;
+          bringUpCharacterNameChooser(characterLargePicCache, rightValTwo, getCurrentCursor[0]);
+        }
+      }
+      break;
   }
 }
 
@@ -276,8 +322,21 @@ $(document).on("keydown", function (event) {
           playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
           break;
       }
-      
-      let currentSelectedChar = checkSelectedCharacter();
+
+      switch (event.which) {
+        case 38:
+          moveCursorForNaming("up");
+          break;
+        case 40:
+          moveCursorForNaming("down");
+          break;
+        case 37:
+          moveCursorForNaming("left");
+          break;
+        case 39:
+          moveCursorForNaming("right");
+          break;
+      }
       break;
   }
 });

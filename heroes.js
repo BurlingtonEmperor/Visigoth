@@ -15,7 +15,7 @@ let colinData = {
   defenseForce : 12,
   mentalEnergy : 3,
   summonArr : [],
-  largePic : ""
+  largePic : "../Visigoth/assets/largepics/colin.jpg"
 }
 
 let connorData = {
