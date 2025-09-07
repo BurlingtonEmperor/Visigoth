@@ -11,6 +11,7 @@ let letterMap = [
   ["y", "z", "-", "[CLEAR]", "[BACK]", "[SELECT]"]
 ];
 let isChoosingCharacterName = 0;
+let characterLargePicCache;
 
 let nameMap = ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"];
 
@@ -61,8 +62,10 @@ function checkSelectedCharacter () {
 
 function bringUpCharacterNameChooser (JSONPointer, selectedValue, row) {
   const maxCharAmount = 12; // max number of characters. 
+  clearWindow();
 
   renderImage(JSONPointer.largePic, 0, 0);
+  characterLargePicCache = JSONPointer;
 
   const largePicImage = new Image();
   largePicImage.src = JSONPointer.largePic;
@@ -226,9 +229,55 @@ function checkIsNameSelected () {
   }
 }
 
+function moveCursorForNaming (whichDirection) {
+  let getCurrentCursor = checkSelectedCharacter();
+  switch (whichDirection) {
+    case "up":
+      if (getCurrentCursor[0] == 0 || getCurrentCursor[0] == 1) {
+        return false;
+      }
+
+      else {
+        // if (getCurrentCursor[0] == 2 || getCurrentCursor[0] == 4 || getCurrentCursor[0] == 6 || getCurrentCursor[0] == 8) {
+        //   let upValueCursor = getCurrentCursor[0] - 2;
+        //   bringUpCharacterNameChooser(characterLargePicCache, getCurrentCursor[1], upValueCursor);
+        // }
+
+        // else if (getCurrentCursor[0] == ) {}
+
+        let upValueCursor = getCurrentCursor[0] - 2;
+        bringUpCharacterNameChooser(characterLargePicCache, getCurrentCursor[1], upValueCursor);
+      }
+      break;
+    case "down":
+      if (getCurrentCursor[0] == 8 || getCurrentCursor[0] == 9) {
+        return false;
+      }
+
+      else {
+        let downValueCursor = getCurrentCursor[0] + 2;
+        bringUpCharacterNameChooser(characterLargePicCache, getCurrentCursor[1], downValueCursor);
+      }
+      break;
+  }
+}
+
 $(document).on("keydown", function (event) {
   switch (isChoosingCharacterName) {
     case 1:
+      switch (event.which) {
+        case 39:
+        case 38:
+        case 37:
+        case 40:
+          playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+          break;
+        case 13:
+          playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          break;
+      }
+      
+      let currentSelectedChar = checkSelectedCharacter();
       break;
   }
 });

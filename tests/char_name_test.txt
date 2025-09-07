@@ -1,3 +1,4 @@
 clearWindow();
 gameEventLocation = "disabled";
-bringUpCharacterNameChooser(testData);
+bringUpCharacterNameChooser(testData, 0, 0);
+isChoosingCharacterName = 1;
