@@ -51,7 +51,9 @@ const pinehurstCharData_4 = {
   dialogue : workerDialogue_1
 }
 
-// begin character functions
+// end sprites and dialogue
+
+// begin character setup functions
 // are there better ways I could have done this without limiting the amount of 
 // characters on each frame to 4 at a time? Yes.
 // am I too lazy to do that? Also yes.
@@ -65,8 +67,8 @@ const travelCharacterObject_2 = new Image();
 const travelCharacterObject_3 = new Image();
 const travelCharacterObject_4 = new Image();
 
-const pinehurst1_xDATA = [];
-const pinehurst2_xDATA = [];
+let pinehurst1_xDATA = [];
+let pinehurst2_xDATA = [];
 
 let travelCharacterObject_1_x = 0;
 let travelCharacterObject_2_x = 0;
@@ -106,6 +108,34 @@ function firstRenderCharacters (dataArray) {
         new_char_y = dataArray[i].ogY;
         renderImage(dataArray[i].sprite, new_char_x, new_char_y);
         console.log("character rendered");
+        break;
+    }
+  }
+}
+
+function reRenderCharacters (dataArray) {
+  for (let i = 0; i < dataArray.length; i++) {
+    let new_char_x;
+    let new_char_y;
+
+    switch (dataArray[i].specialCondition) {
+      case 0:
+        switch (i) {
+          case 0:
+            travelCharacterObject_1.src = dataArray[i].sprite;
+            break;
+          case 1:
+            travelCharacterObject_2.src = dataArray[i].sprite;
+            break;
+          case 2:
+            travelCharacterObject_3.src = dataArray[i].sprite;
+            break;
+          case 3:
+            travelCharacterObject_4.src = dataArray[i].sprite;
+            break;
+        }
+        new_char_y = dataArray[i].ogY;
+        renderImage(dataArray[i].sprite, new_char_x, new_char_y);
         break;
     }
   }
@@ -190,10 +220,10 @@ function saveCharacterLastX (whichFrame) {
   let dataArr_LOADCHARLASTX;
   switch (whichFrame) {
     case 0:
-      dataArr_LOADCHARLASTX = pinehurst1_xDATA;
+      dataArr_LOADCHARLASTX = pinehurstSprite_arr;
       break;
     case 1:
-      dataArr_LOADCHARLASTX = pinehurst2_xDATA;
+      dataArr_LOADCHARLASTX = pinehurstSprite_arr2;
       break;
   }
 
@@ -267,12 +297,16 @@ function saveCharacterLastX (whichFrame) {
 
 function loadCharacterLastX (whichFrame) { // take data from each last x array and set it to default
   let dataArr_LOADCHARLASTX;
+  let dataArray;
+
   switch (whichFrame) {
     case 0:
       dataArr_LOADCHARLASTX = pinehurst1_xDATA;
+      dataArray = pinehurstSprite_arr;
       break;
     case 1:
       dataArr_LOADCHARLASTX = pinehurst2_xDATA;
+      dataArray = pinehurstSprite_arr2;
       break;
   }
 
@@ -280,21 +314,35 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     switch (numArrLength) {
       case 1:
         travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
+
+        travelCharacterObject_1.src = dataArray[0].sprite;
         break;
       case 2:
         travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
         travelCharacterObject_2_x = dataArr_LOADCHARLASTX[1];
+
+        travelCharacterObject_1.src = dataArray[0].sprite;
+        travelCharacterObject_2.src = dataArray[1].sprite;
         break;
       case 3:
         travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
         travelCharacterObject_2_x = dataArr_LOADCHARLASTX[1];
         travelCharacterObject_3_x = dataArr_LOADCHARLASTX[2];
+
+        travelCharacterObject_1.src = dataArray[0].sprite;
+        travelCharacterObject_2.src = dataArray[1].sprite;
+        travelCharacterObject_3.src = dataArray[2].sprite;
         break;
       case 4:
         travelCharacterObject_1_x = dataArr_LOADCHARLASTX[0];
         travelCharacterObject_2_x = dataArr_LOADCHARLASTX[1];
         travelCharacterObject_3_x = dataArr_LOADCHARLASTX[2];
         travelCharacterObject_4_x = dataArr_LOADCHARLASTX[3];
+
+        travelCharacterObject_1.src = dataArray[0].sprite;
+        travelCharacterObject_2.src = dataArray[1].sprite;
+        travelCharacterObject_3.src = dataArray[2].sprite;
+        travelCharacterObject_4.src = dataArray[3].sprite;
         break;
     }
   }
@@ -307,6 +355,13 @@ function RESET_X () {
   travelCharacterObject_2_x = 0;
   travelCharacterObject_3_x = 0;
   travelCharacterObject_4_x = 0;
+}
+
+function RESET_IMG_DATA () {
+  travelCharacterObject_1.src = "";
+  travelCharacterObject_2.src = "";
+  travelCharacterObject_3.src = "";
+  travelCharacterObject_4.src = "";
 }
 
 function checkCharacterLastX (dataArray) {
@@ -336,6 +391,8 @@ function checkCharacterLastX (dataArray) {
     }
   }
 }
+
+// end character setup functions
 
 function checkForCharacterDialogue (dataArray) {
   let checkedAllData = 0;
@@ -541,6 +598,9 @@ function setStage (travelFrame) {
           loadCharacters(pinehurstSprite_arr); // double render -- sometimes the characters don't load at all!
           break;
         case 1:
+          RESET_X();
+          RESET_IMG_DATA();
+          reRenderCharacters(pinehurstSprite_arr);
           loadCharacterLastX(travelFrame);
           checkCharacterLastX(pinehurstSprite_arr);
           loadCharacters(pinehurstSprite_arr);
@@ -581,7 +641,7 @@ function setStage (travelFrame) {
         case 1:
           firstRenderCharacters(pinehurstSprite_arr2);
           loadCharacters(pinehurstSprite_arr2);
-          saveCharacterLastX(currentFrame);
+          // saveCharacterLastX(currentFrame);
           checkCharacterLastX(currentFrame);
           break;
       }
@@ -624,7 +684,7 @@ function switchFrame (travelFrame, whichDirection) {
   $(gameWindow).fadeOut(1000);
   isTraveling = 0;
   hasSwitchedFrame = 1;
-  saveCharacterLastX(currentFrame);
+  // saveCharacterLastX(currentFrame);
 
   setTimeout(function () {
     clearWindow();
@@ -718,6 +778,7 @@ function drawFrame (whichDirection) {
       loadCharacters(pinehurstSprite_arr2);
       break;
   }
+  saveCharacterLastX(currentFrame);
 
   // checkForGateways(currentFrame);
 }
