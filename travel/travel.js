@@ -394,6 +394,28 @@ function checkCharacterLastX (dataArray) {
 
 // end character setup functions
 
+// begin gateway checking functions
+
+function checkForGateways (whichFrame) {
+  switch (whichFrame) {
+    case 0:
+      switch (true) {
+        case (frameX < -700):
+          createWindow("battleMessage", "Press 'E' to enter the Park", 0, 0);
+          return true;
+      }
+      break;
+  }
+}
+
+function enterGateway (whichFrame) {
+  
+}
+
+// end gateway checking functions
+
+// begin character dialogue functions
+
 function checkForCharacterDialogue (dataArray) {
   let checkedAllData = 0;
   for (let i = 0; i < dataArray.length; i++) {
@@ -552,26 +574,8 @@ function loadCharacterDialogue (whichFrame, whichData) {
   }
 }
 
+// end character dialogue functions
 // end character functions
-
-// begin gateway checking functions
-
-function checkForGateways (whichFrame) {
-  switch (whichFrame) {
-    case 0:
-      switch (true) {
-        case (frameX < -700):
-          createWindow("battleWindow", "Press 'E' to enter the Park", 0, 0);
-          break;
-        default:
-          clearAllWindows();
-          break;
-      }
-      break;
-  }
-}
-
-// end gateway checking functions
 
 function setStage (travelFrame) {
   stickman.style.display = "block";
@@ -684,6 +688,7 @@ function switchFrame (travelFrame, whichDirection) {
   $(gameWindow).fadeOut(1000);
   isTraveling = 0;
   hasSwitchedFrame = 1;
+  clearAllWindows();
   // saveCharacterLastX(currentFrame);
 
   setTimeout(function () {
@@ -780,7 +785,7 @@ function drawFrame (whichDirection) {
   }
   saveCharacterLastX(currentFrame);
 
-  // checkForGateways(currentFrame);
+  checkForGateways(currentFrame);
 }
 
 const stickmanRight = document.getElementById("stickman-right");
@@ -805,6 +810,12 @@ $(document).on("keydown", function (event) {
               resetDialogue();
               isTalking = 1;
               loadCharacterDialogue(currentFrame, markedValueCHARD);
+              break;
+            default:
+              switch (true) {
+                case (checkForGateways(currentFrame)):
+                  break;
+              }
               break;
           }
           break;

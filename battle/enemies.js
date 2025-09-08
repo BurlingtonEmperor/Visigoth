@@ -21,3 +21,19 @@ const rohitData = {
   specialY : 65,
   status : "boss"
 }
+
+// end boss data
+// begin generic data
+
+// pinehurst
+const hauntedDoll = {
+  enemyName : "a Haunted Doll",
+  maxHealth : 12,
+  attackForce : 2,
+  defenseForce : 1,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/pinehurst/doll.png",
+  specialY : 125,
+  status : "generic"
+}

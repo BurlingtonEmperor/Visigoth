@@ -2,7 +2,7 @@ let battleBackdropX;
 let enemySpriteX;
 let battleMessage;
 
-let playerTurn = 0;
+let playerTurn = 1;
 
 let heroPartyOneHP;
 let heroPartyTwoHP;
@@ -27,7 +27,9 @@ function initiateBattle (backdrop, enemyData) {
       const bossMusic = playLoopedAudio("../Visigoth/battle/music/boss_fight.mp3");
       bossMusic.currentTime += 1.2;
       currentBattleMusic = bossMusic;
-      playerTurn = 1;
+      break;
+    case "generic":
+      currentBattleMusic = playLoopedAudio("../Visigoth/battle/music/generic.mp3");
       break;
   }
 
@@ -51,6 +53,7 @@ function initiateBattle (backdrop, enemyData) {
           case 1:
             battleRoster.style.display = "block";
             battleOptionsEnabled = 1;
+            playAudio("../Visigoth/assets/audio/sfx/coin7.wav");
             break;
         }
 
