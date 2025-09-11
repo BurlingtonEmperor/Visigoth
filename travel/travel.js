@@ -34,10 +34,10 @@ const pinehurstCharData_2 = {
 }
 
 const pinehurstCharData_3 = { // park
-  sprite : "",
+  sprite : "../Visigoth/travel/characters/chance.png",
   name : "Chance",
   ogX : 900,
-  ogY : 222,
+  ogY : 200,
   specialCondition : 0,
   
 }
@@ -69,6 +69,7 @@ const travelCharacterObject_4 = new Image();
 
 let pinehurst1_xDATA = [];
 let pinehurst2_xDATA = [];
+let pinehurst3_xDATA = [];
 
 let travelCharacterObject_1_x = 0;
 let travelCharacterObject_2_x = 0;
@@ -176,6 +177,7 @@ function loadCharacters (dataArray) {
 
 const pinehurstSprite_arr = [pinehurstCharData_1, pinehurstCharData_2]; // keep data for characters for each frame
 const pinehurstSprite_arr2 = [pinehurstCharData_4];
+const pinehurstSprite_arr3 = [pinehurstCharData_3];
 
 function checkCharacters (travelFrame, whichDirection) {
   let arrToUse;
@@ -185,6 +187,9 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 1:
       arrToUse = pinehurstSprite_arr2;
+      break;
+    case 2:
+      arrToUse = pinehurstSprite_arr3;
       break;
   }
   
@@ -396,11 +401,18 @@ function checkCharacterLastX (dataArray) {
 
 // begin gateway checking functions
 
+
+/*
+Gateway numbering
+0 - The Park (Pinehurst)
+*/
+let currentGateway;
 function checkForGateways (whichFrame) {
   switch (whichFrame) {
     case 0:
       switch (true) {
         case (frameX < -700):
+          currentGateway = 0;
           createWindow("battleMessage", "Press 'E' to enter the Park", 0, 0);
           return true;
       }
@@ -409,7 +421,15 @@ function checkForGateways (whichFrame) {
 }
 
 function enterGateway (whichFrame) {
-  
+  switch (whichFrame) {
+    case 0:
+      switch (currentGateway) {
+        case 0:
+          switchFrame(2, "right");
+          break;
+      }
+      break;
+  }
 }
 
 // end gateway checking functions
@@ -527,6 +547,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 1:
       CHECK_CHAR_D(pinehurstSprite_arr2);
       break;
+    case 2:
+      CHECK_CHAR_D(pinehurstSprite_arr3);
+      break;
   }
 }
 
@@ -547,6 +570,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 1:
       currDataBank = pinehurstSprite_arr2;
+      break;
+    case 2:
+      currDataBank = pinehurstSprite_arr3;
       break;
   }
   
@@ -681,6 +707,24 @@ function setStage (travelFrame) {
       //     break;
       // }
       break;
+    case 2:
+      currentTown = "pinehurst";
+      frameX = 0;
+      isUsingCharacters = 1;
+      currentSrc = "../Visigoth/travel/frames/pinehurst/park.webp";
+      travelFrameObject.src = currentSrc;
+      frameWidth = 1237;
+      frameHeight = 368;
+
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+
+      switch (hasSwitchedFrame) {
+        case 1:
+          firstRenderCharacters(pinehurstSprite_arr3);
+          loadCharacters(pinehurstSprite_arr3);
+          break;
+      }
+      break;
   }
 }
 
@@ -753,10 +797,15 @@ function drawFrame (whichDirection) {
       if (frameX > -5) {
         frameX -= 2.5;
         switch (currentFrame) {
+          case 2:
           case 1:
             currentFrame = 0;
             switchFrame(0, "left");
             break;
+          // case 2:
+          //   currentFrame = 0;
+          //   switchFrame(0, "left");
+          //   break;
         }
         return false;
       }
@@ -782,8 +831,17 @@ function drawFrame (whichDirection) {
     case 1:
       loadCharacters(pinehurstSprite_arr2);
       break;
+    case 2:
+      loadCharacters(pinehurstSprite_arr3);
+      break;
   }
   saveCharacterLastX(currentFrame);
+
+  // switch (true) {
+  //   case (checkForGateways(currentFrame)):
+  //     enterGateway(currentFrame);
+  //     break;
+  // }
 
   checkForGateways(currentFrame);
 }
@@ -814,6 +872,7 @@ $(document).on("keydown", function (event) {
             default:
               switch (true) {
                 case (checkForGateways(currentFrame)):
+                  enterGateway(currentFrame);
                   break;
               }
               break;
