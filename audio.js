@@ -46,3 +46,5 @@ function fadeOutAudio(audioElement, duration) {
     }
   }, fadeInterval);
 }
+
+let townieMusic;

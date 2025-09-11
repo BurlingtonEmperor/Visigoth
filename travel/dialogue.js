@@ -16,6 +16,11 @@ const chanceDialogue = [
   "Speaking of which, look behind you."
 ];
 
+const chanceDialogue2 = [
+  "Good job.",
+  "You need to travel to Chestnut Hill. It's where all of this began."
+];
+
 const workerDialogue_1 = [
   "The road's been blocked off. All the streetlights and traffic lights were affected by the power outage,",
   "so travel isn't safe right now."

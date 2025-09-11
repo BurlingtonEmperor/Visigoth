@@ -39,7 +39,8 @@ const pinehurstCharData_3 = { // park
   ogX : 900,
   ogY : 200,
   specialCondition : 0,
-  
+  dialogue: chanceDialogue,
+  altDialogue : chanceDialogue2
 }
 
 const pinehurstCharData_4 = {
@@ -229,6 +230,9 @@ function saveCharacterLastX (whichFrame) {
       break;
     case 1:
       dataArr_LOADCHARLASTX = pinehurstSprite_arr2;
+      break;
+    case 2:
+      dataArr_LOADCHARLASTX = pinehurstSprite_arr3;
       break;
   }
 
@@ -588,6 +592,17 @@ function loadCharacterDialogue (whichFrame, whichData) {
       isTraveling = 1;
       cleanUpCharacterData(whichFrame);
       isTalking = 0;
+
+      switch (currentFrame) {
+        case 2:
+          isTraveling = 0;
+          townieMusic.pause();
+          initiateBattle("../Visigoth/battle/backdrops/park.jpg", hauntedDoll);
+          clearAllWindows();
+          pinehurstCharData_3.dialogue = pinehurstCharData_3.altDialogue;
+          pinehurstSprite_arr3 = [pinehurstCharData_3];
+          break;
+      }
       break;
     default:
       createWindow("dialogue", currDataBank[whichData].name + `: "` + currDataBank[whichData].dialogue[current_DA] + `"`, 0, 0);
@@ -771,14 +786,22 @@ function drawFrame (whichDirection) {
     //   memoryDataBank = 1;
 
       if (frameX < -795) {
-        frameX += 2.5;
         switch (currentFrame) {
           case 0:
+            frameX += 2.5;
             currentFrame = 1;
             switchFrame(1, "right");
             break;
         }
         return false;
+      }
+
+      else if (frameX < -550) {
+        switch (currentFrame) {
+          case 2:
+            frameX += 2.5;
+            return false;
+        }
       }
 
       // switch (true) {

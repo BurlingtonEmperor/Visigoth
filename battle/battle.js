@@ -112,7 +112,7 @@ function takeDamage (dmgAmount, targetHero) {
       break;
   }
 
-  selectedHero -= dmgAmount;
+  selectedHero -= dmgAmount; // there's an issue here with NaN. Retarded 
   document.getElementById("cw" + String(targetHero + 1) + "-hp").innerText = selectedHero;
 
   if (selectedHero < 1) {

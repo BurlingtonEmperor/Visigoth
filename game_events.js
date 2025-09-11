@@ -321,7 +321,7 @@ $(document).on("keydown", function (event) {
               setTimeout(function () {
                 isTraveling = 1;
                 fadeOutAudio(variableMusic, 1000);
-                variableMusic = playLoopedAudio("../Visigoth/assets/audio/step.mp3");
+                townieMusic = playLoopedAudio("../Visigoth/assets/audio/step.mp3");
               }, 2000);
               break;
           }
