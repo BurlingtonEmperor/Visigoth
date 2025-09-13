@@ -1,5 +1,5 @@
 let playerData = {
-  heroName : "Player",
+  heroName : "Roy",
   heroHealth : 45,
   attackForce : 5,
   defenseForce : 10,

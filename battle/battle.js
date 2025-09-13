@@ -11,6 +11,9 @@ let heroPartyFourHP;
 
 let currentBattleMusic;
 
+let diceRollFactor = 5; // the higher the number, the more random the damage will be. could result in misses.
+let heroNumber = 1; // this is the hero whose turn it is. starts at 1. 
+
 function initiateBattle (backdrop, enemyData) {
   $(gameWindow).fadeOut(1000);
   gameEventLocation = "disabled";
@@ -27,6 +30,16 @@ function initiateBattle (backdrop, enemyData) {
       const bossMusic = playLoopedAudio("../Visigoth/battle/music/boss_fight.mp3");
       bossMusic.currentTime += 1.2;
       currentBattleMusic = bossMusic;
+      break;
+    case "final":
+      const finalMusic = playLoopedAudio("../Visigoth/battle/music/final.mp3");
+      finalMusic.currentTime += 1.2;
+      currentBattleMusic = finalMusic;
+      break;
+    case "jenova":
+      const jenovaMusic = playLoopedAudio("../Visigoth/battle/music/jenova.mp3");
+      jenovaMusic.currentTime += 1.2;
+      currentBattleMusic = jenovaMusic;
       break;
     case "generic":
       currentBattleMusic = playLoopedAudio("../Visigoth/battle/music/generic.mp3");
@@ -71,6 +84,8 @@ function takeDamage (dmgAmount, targetHero) {
   battleWindow.classList.add("shake");
   textWindow.classList.add("shake");
 
+  playClonedAudio("../Visigoth/battle/dsskepch.wav");
+
   document.getElementById("cw" + String(targetHero + 1) + "-hp").style.backgroundColor = "red";
   let redDmgBGPos = 1;
   
@@ -94,7 +109,7 @@ function takeDamage (dmgAmount, targetHero) {
 
     clearInterval(animationRedInterval);
     document.getElementById("cw" + String(targetHero + 1) + "-hp").style.backgroundColor = "none";
-  }, 300);
+  }, 100);
   
   let selectedHero;
   switch (targetHero) {
@@ -112,7 +127,7 @@ function takeDamage (dmgAmount, targetHero) {
       break;
   }
 
-  selectedHero -= dmgAmount; // there's an issue here with NaN. Retarded 
+  selectedHero -= dmgAmount; // there's an issue here with NaN. 
   document.getElementById("cw" + String(targetHero + 1) + "-hp").innerText = selectedHero;
 
   if (selectedHero < 1) {
@@ -124,6 +139,150 @@ function takeDamage (dmgAmount, targetHero) {
     }, 2000);
   }
 }
+
+// start damage functions 
+
+function calculateSpriteLocationForDamage (dmgAmount_gD) {
+  const dmgElement = document.createElement("p");
+  
+  dmgElement.style.left = String(enemySpriteX + 550) + "px";
+  dmgElement.style.top = String(100 + Math.floor(Math.random() * 100)) + "px";
+  dmgElement.classList.add("damage-number");
+  dmgElement.innerText = String(dmgAmount_gD);
+  dmgElement.style.zIndex = 20;
+  battleWindow.appendChild(dmgElement);
+
+  setTimeout(function () {
+    $(dmgElement).slideUp();
+    setTimeout(function () {
+      battleWindow.removeChild(dmgElement);
+    }, 200);
+  }, 100);
+}
+
+function giveDamage () {
+  gameWindow.style.filter = "saturate(0) brightness(1.5)";
+  playClonedAudio("../Visigoth/battle/dspistol.wav");
+  setTimeout(function () {
+    gameWindow.style.filter = "none";
+  }, 70);
+}
+
+function tryAttacking (hero_data) {
+  let attackRoll = Math.floor(Math.random() * diceRollFactor);
+
+  switch (attackRoll) {
+    case 0:
+      createWindow("battleMessage", hero_data.heroName + "'s attack missed!", 0, 0);
+      playClonedAudio("../Visigoth/battle/dsskeswg.wav");
+      break;
+    default:
+      attackRoll += hero_data.attackForce;
+      createWindow("battleMessage", hero_data.heroName + " dealt " + attackRoll + " damage!", 0, 0);
+      giveDamage(attackRoll);
+      calculateSpriteLocationForDamage(attackRoll);
+      break;
+  }
+
+  // setTimeout(function () {
+  //   clearAllWindows();
+  // }, 1000);
+}
+
+function tryDefending (hero_data) {
+  let defenseRoll = Math.floor(Math.random() * 5) + 1;
+  defenseRoll += hero_data.defenseForce;
+  defenseRoll = Math.floor(defenseRoll * 0.25);
+
+  createWindow("battleMessage", hero_data.heroName + " defends.", 0, 0);
+
+  // setTimeout(function () {
+  //   clearAllWindows();
+  // }, 1000);
+}
+
+// end damage functions
+
+// summons
+
+function summonBeing (summonName) {
+  // let summonDuration;
+  switch (summonName) {
+    case "enterprise":
+      displayCutscene("../Visigoth/battle/summons/enterprise.mp4");
+
+      setTimeout(function () {
+        clearTheatre();
+      }, 7000);
+      break;
+  }
+
+  // setTimeout(function () {
+  //   clearTheatre();
+  // }, summonDuration + 100);
+}
+
+// end summons
+
+// start turn functions
+
+let playerActionLog = [];
+function useTurn (playerAction) {
+  switch (playerAction) {
+    case "attack":
+      playerActionLog.push("attack");
+      break;
+    case "defend":
+      playerActionLog.push("defend");
+      break;
+  }
+
+  switch (heroNumber) {
+    case (heroParty.length):
+      heroNumber = 1;
+      battleOptionsEnabled = 0;
+      battleRoster.style.display = "none";
+      executePlayerActions(playerActionLog);
+      playerActionLog = [];
+      break;
+    default:
+      heroNumber += 1;
+      break;
+  }
+}
+
+function executePlayerActions (actionDATA) {
+  // a very bad way to do this.
+  // but i have no other choice 
+  // will this cause a memory leak? probably. Do I care? no.
+
+  playerACTION_LOG = actionDATA;
+
+  function executeNextAction (i) {
+    setTimeout(function () {
+      switch (playerACTION_LOG[i]) {
+        case "attack":
+          tryAttacking(heroParty[i]);
+          break;
+        case "defend":
+          tryDefending(heroParty[i]);
+          break;
+      }
+    }, i * 1000);
+  }
+
+  for (let i = 0; i < playerACTION_LOG.length; i++) {
+    executeNextAction(i);
+  }
+
+  setTimeout(function () {
+    clearAllWindows();
+  }, (1000 * playerACTION_LOG.length) + 1000);
+}
+
+function enemyTurn () {}
+
+// end turn functions
 
 function killEnemyAnimation (backdropSrc) {
   gameWindow.style.filter = "grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(300%) contrast(150%) brightness(50%)";
@@ -229,6 +388,7 @@ $(document).on("keydown", function (event) {
           break;
         // Select
         case 13:
+          useTurn(selectedBattleOption);
           playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
           break;
       }

@@ -54,7 +54,7 @@ function createWindow (windowType, windowText, x, y) {
     default:
       delayedWrite(windowText, newWindowElement, 25);
       setTimeout(function () {
-        newWindowElement.innerHTML += "<p>▼</p>";
+        // newWindowElement.innerHTML += "<p>▼</p>";
       }, (windowText.length * 25) + 200);
       break;
     case "battleMessage":

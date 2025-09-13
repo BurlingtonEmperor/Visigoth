@@ -305,6 +305,7 @@ function clearTheatre () {
 
 function displayCutscene (cutsceneSrc) {
   const cutsceneDisplay = document.createElement("video");
+  cutScenes.style.display = "block";
 
   cutsceneDisplay.src = cutsceneSrc;
   cutsceneDisplay.style.width = "100%";

@@ -10,6 +10,18 @@ const jaydenData = {
   status : "boss"
 }
 
+const jaydenFinalData = {
+  enemyName : "Awakened Jayden",
+  maxHealth : 100000,
+  attackForce : 200,
+  defenseForce : 25,
+  mentalEnergy : 100,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/jayden/jayden2.png",
+  specialY : 33,
+  status : "final"
+}
+
 const rohitData = {
   enemyName : "Rohit",
   maxHealth : 550,
@@ -20,6 +32,18 @@ const rohitData = {
   sprite : "../Visigoth/battle/enemy_sprites/rohit/rohit.png",
   specialY : 65,
   status : "boss"
+}
+
+const beckettData = {
+  enemyName : "Beckett",
+  maxHealth : 600,
+  attackForce : 50,
+  defenseForce : 12,
+  mentalEnergy : 50,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/beckett/beckett.webp",
+  specialY : 50,
+  status : "jenova"
 }
 
 // end boss data
