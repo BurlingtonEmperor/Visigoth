@@ -4,6 +4,7 @@ let battleMessage;
 
 let currentEnemyData;
 let currentEnemyData_currentHP;
+let currentBackdrop;
 
 let playerTurn = 1;
 
@@ -17,6 +18,8 @@ let currentBattleMusic;
 let diceRollFactor = 9; // the higher the number, the more random the damage will be. could result in misses.
 let heroNumber = 1; // this is the hero whose turn it is. starts at 1. 
 
+let enemyDefeated = 0;
+
 function initiateBattle (backdrop, enemyData) {
   $(gameWindow).fadeOut(1000);
   gameEventLocation = "disabled";
@@ -28,7 +31,9 @@ function initiateBattle (backdrop, enemyData) {
   const enemySprite = enemyData.sprite;
   const specialY = enemyData.specialY;
   currentEnemyData = enemyData;
-  currentEnemyData_currentHP = enemyData.enemyHealth;
+  currentEnemyData_currentHP = enemyData.maxHealth;
+
+  currentBackdrop = backdrop;
 
   switch (enemyData.status) {
     case "boss":
@@ -306,6 +311,10 @@ function useTurn (playerAction) {
       battleRoster.style.display = "none";
       executePlayerActions(playerActionLog);
       playerActionLog = [];
+      
+      setTimeout(function () {
+        enemyTurn();
+      }, 700);
       break;
     default:
       heroNumber += 1;
@@ -317,10 +326,11 @@ function useTurn (playerAction) {
 
 function checkForDeadEnemy () {
   if (currentEnemyData_currentHP < 1) {
-    killEnemyAnimation("../Visigoth/battle/backdrops/victory.png");
+    killEnemyAnimation(currentBackdrop);
     battleOptionsEnabled = 0;
     battleRoster.style.display = "none";
     createWindow("battleMessage", "Defeated " + currentEnemyData.enemyName + "!", 0, 0);
+    enemyDefeated = 1;
 
     return false;
   }
@@ -332,6 +342,11 @@ function executePlayerActions (actionDATA) {
   // a very bad way to do this.
   // but i have no other choice 
   // will this cause a memory leak? probably. Do I care? no.
+
+  switch (enemyDefeated) {
+    case 1:
+      return false;
+  }
 
   let playerACTION_LOG = actionDATA;
 
@@ -376,16 +391,21 @@ function executePlayerActions (actionDATA) {
 
 function enemyTurn () {
   let enemyDiceRoll = Math.floor(Math.random () * 5);
+  switch (enemyDefeated) {
+    case 1:
+      return false;
+  }
+
   /*
   Dice Roll Outcomes
   0 - Attack
   1 - Defend
-  2 - Summon (If available)
-  3 - Special Attack (If available)
-  4 - Power (If available)
+  3 - Summon (If available)
+  2 - Special Attack (If available)
+  4 - Power (If available) actually, i'm getting rid of this
   */
 
-  let isLowHealth = enemyData.enemyHealth * 0.5;
+  let isLowHealth = currentEnemyData.enemyHealth * 0.5;
   if (currentEnemyData_currentHP < isLowHealth) {
     retreatAttempt = Math.floor(Math.random() * 9);
     switch (enemyData.status) {
@@ -402,12 +422,12 @@ function enemyTurn () {
 
   switch (true) {
     case (currentEnemyData.summonArr.length < 1):
-      enemyDiceRoll = 3;
+      enemyDiceRoll = Math.floor(Math.random() * 3);
       break;
   }
   
   let hero_TARGET = Math.floor(Math.random() * heroParty.length);
-  let enemyAttackRoll = Math.floor(Math.random() * 2) + enemyData.attackForce;
+  let enemyAttackRoll = Math.floor(Math.random() * 2) + currentEnemyData.attackForce;
   switch (enemyDiceRoll) {
     case 0:
       createWindow("battleMessage", currentEnemyData.enemyName + " attacks!", 0, 0);
@@ -417,6 +437,8 @@ function enemyTurn () {
 
         setTimeout(function () {
           clearAllWindows();
+          battleOptionsEnabled = 1;
+          battleRoster.style.display = "block";
         }, 1000);
       }, 1000);
       break;
@@ -425,19 +447,38 @@ function enemyTurn () {
 
       setTimeout(function () {
         clearAllWindows();
+        battleOptionsEnabled = 1;
+        battleRoster.style.display = "block";
       }, 1000);
+
+      // setTimeout(function () {
+      //   clearAllWindows();
+      // }, 1000);
       break;
+    // case 2:
+    //   break;
     case 2:
-      // we'll deal with summons later
-      break;
-    case 3:
       let randomSpecialAttack = Math.floor(Math.random() * currentEnemyData.specialAttacks.length);
       createWindow("battleMessage", currentEnemyData.specialAttacks[randomSpecialAttack], 0, 0);
 
       switch (currentEnemyData.specialAttacks[randomSpecialAttack]) {
         case "Psychic":
+          outerShell.style.filter = "saturate(0) brightness(1.5)";
+          playAudio("../Visigoth/battle/dsvilsit.wav");
+          takeDamage(enemyAttackRoll * 1.3, hero_TARGET);
+
+          setTimeout(function () {
+            outerShell.style.filter = "none";
+            setTimeout(function () {
+              battleOptionsEnabled = 1;
+              battleRoster.style.display = "block";
+            }, 500);
+          }, 500);
           break;
       }
+      break;
+    case 3:
+      // summons
       break;
   }
 }

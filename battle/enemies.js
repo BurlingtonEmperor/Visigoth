@@ -52,7 +52,7 @@ const beckettData = {
 // pinehurst
 const hauntedDoll = {
   enemyName : "a Haunted Doll",
-  maxHealth : 12,
+  maxHealth : 18,
   attackForce : 2,
   defenseForce : 1,
   mentalEnergy : 0,
