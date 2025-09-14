@@ -59,5 +59,6 @@ const hauntedDoll = {
   summonArr : [],
   sprite : "../Visigoth/battle/enemy_sprites/pinehurst/doll.png",
   specialY : 125,
-  status : "generic"
+  status : "generic",
+  specialAttacks : ["Psychic"]
 }

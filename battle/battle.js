@@ -2,6 +2,9 @@ let battleBackdropX;
 let enemySpriteX;
 let battleMessage;
 
+let currentEnemyData;
+let currentEnemyData_currentHP;
+
 let playerTurn = 1;
 
 let heroPartyOneHP;
@@ -11,7 +14,7 @@ let heroPartyFourHP;
 
 let currentBattleMusic;
 
-let diceRollFactor = 5; // the higher the number, the more random the damage will be. could result in misses.
+let diceRollFactor = 9; // the higher the number, the more random the damage will be. could result in misses.
 let heroNumber = 1; // this is the hero whose turn it is. starts at 1. 
 
 function initiateBattle (backdrop, enemyData) {
@@ -24,6 +27,8 @@ function initiateBattle (backdrop, enemyData) {
 //   enemySprite.src = enemyData.sprite;
   const enemySprite = enemyData.sprite;
   const specialY = enemyData.specialY;
+  currentEnemyData = enemyData;
+  currentEnemyData_currentHP = enemyData.enemyHealth;
 
   switch (enemyData.status) {
     case "boss":
@@ -60,6 +65,7 @@ function initiateBattle (backdrop, enemyData) {
 
       setTimeout(function () {
         battleMessage = createWindow("battleMessage", "Encountered " + enemyData.enemyName + ".", 0, 0);
+        setBattlePartyHP();
         populateCharacterWindows(heroParty);
 
         switch (playerTurn) {
@@ -140,6 +146,29 @@ function takeDamage (dmgAmount, targetHero) {
   }
 }
 
+function setBattlePartyHP () {
+  switch (true) {
+    case (heroParty.length < 2):
+      heroPartyOneHP = heroParty[0].heroHealth;
+      break;
+    case (heroParty.length < 3):
+      heroPartyOneHP = heroParty[0].heroHealth;
+      heroPartyTwoHP = heroParty[1].heroHealth;
+      break;
+    case (heroParty.length < 4):
+      heroPartyOneHP = heroParty[0].heroHealth;
+      heroPartyTwoHP = heroParty[1].heroHealth;
+      heroPartyThreeHP = heroParty[2].heroHealth;
+      break;
+    case (heroParty.length < 5):
+      heroPartyOneHP = heroParty[0].heroHealth;
+      heroPartyTwoHP = heroParty[1].heroHealth;
+      heroPartyThreeHP = heroParty[2].heroHealth;
+      heroPartyFourHP = heroParty[3].heroHealth;
+      break;
+  }
+}
+
 // start damage functions 
 
 function calculateSpriteLocationForDamage (dmgAmount_gD) {
@@ -168,6 +197,7 @@ function giveDamage () {
   }, 70);
 }
 
+let attackBoost = 1; // future use for power attacks and crit rolls
 function tryAttacking (hero_data) {
   let attackRoll = Math.floor(Math.random() * diceRollFactor);
 
@@ -176,11 +206,24 @@ function tryAttacking (hero_data) {
       createWindow("battleMessage", hero_data.heroName + "'s attack missed!", 0, 0);
       playClonedAudio("../Visigoth/battle/dsskeswg.wav");
       break;
+    case diceRollFactor - 1:
+      attackRoll = attackRoll * 1.5 * attackBoost;
+      attackRoll += (hero_data.attackForce - currentEnemyData.defenseForce);
+      createWindow("battleMessage", "Critical hit! " + hero_data.heroName + " dealt " + attackRoll + " damage!", 0, 0);
+      giveDamage(attackRoll);
+      calculateSpriteLocationForDamage(attackRoll);
+
+      currentEnemyData_currentHP -= attackRoll;
+      checkForDeadEnemy();
+      break;
     default:
-      attackRoll += hero_data.attackForce;
+      attackRoll += (hero_data.attackForce - currentEnemyData.defenseForce);
       createWindow("battleMessage", hero_data.heroName + " dealt " + attackRoll + " damage!", 0, 0);
       giveDamage(attackRoll);
       calculateSpriteLocationForDamage(attackRoll);
+
+      currentEnemyData_currentHP -= attackRoll;
+      checkForDeadEnemy();
       break;
   }
 
@@ -199,6 +242,25 @@ function tryDefending (hero_data) {
   // setTimeout(function () {
   //   clearAllWindows();
   // }, 1000);
+}
+
+function tryRetreating () {
+  let retreatRoll = Math.floor(Math.random() * 9);
+
+  switch (currentEnemyData.status) {
+    case "boss":
+    case "final":
+    case "jenova":
+      createWindow("battleMessage", "Retreat is not an option.", 0, 0);
+      break;
+    case "generic":
+      switch (retreatRoll) {
+        case 0:
+
+          break;
+      }
+      break;
+  }
 }
 
 // end damage functions
@@ -251,12 +313,27 @@ function useTurn (playerAction) {
   }
 }
 
+// check for dead characters/enemies
+
+function checkForDeadEnemy () {
+  if (currentEnemyData_currentHP < 1) {
+    killEnemyAnimation("../Visigoth/battle/backdrops/victory.png");
+    battleOptionsEnabled = 0;
+    battleRoster.style.display = "none";
+    createWindow("battleMessage", "Defeated " + currentEnemyData.enemyName + "!", 0, 0);
+
+    return false;
+  }
+}
+
+// done checking for dead characters/enemies
+
 function executePlayerActions (actionDATA) {
   // a very bad way to do this.
   // but i have no other choice 
   // will this cause a memory leak? probably. Do I care? no.
 
-  playerACTION_LOG = actionDATA;
+  let playerACTION_LOG = actionDATA;
 
   function executeNextAction (i) {
     setTimeout(function () {
@@ -266,6 +343,23 @@ function executePlayerActions (actionDATA) {
           break;
         case "defend":
           tryDefending(heroParty[i]);
+          break;
+        case "item":
+          break;
+        case "power":
+          break;
+        case "retreat":
+          switch (i) {
+            case 0:
+              break;
+            default:
+              createWindow("battleMessage", heroParty[i].heroName + " is not giving orders.", 0, 0);
+
+              setTimeout(function () {
+                clearAllWindows();
+              }, 1000);
+              break;
+          }
           break;
       }
     }, i * 1000);
@@ -280,7 +374,73 @@ function executePlayerActions (actionDATA) {
   }, (1000 * playerACTION_LOG.length) + 1000);
 }
 
-function enemyTurn () {}
+function enemyTurn () {
+  let enemyDiceRoll = Math.floor(Math.random () * 5);
+  /*
+  Dice Roll Outcomes
+  0 - Attack
+  1 - Defend
+  2 - Summon (If available)
+  3 - Special Attack (If available)
+  4 - Power (If available)
+  */
+
+  let isLowHealth = enemyData.enemyHealth * 0.5;
+  if (currentEnemyData_currentHP < isLowHealth) {
+    retreatAttempt = Math.floor(Math.random() * 9);
+    switch (enemyData.status) {
+      case "generic":
+        switch (retreatAttempt) {
+          case 0:
+            createWindow("battleMessage", currentEnemyData.enemyName + " fled the battle!", 0, 0);
+            // we'll deal with ending the battle later
+            return false;
+        }
+        break;
+    }
+  }
+
+  switch (true) {
+    case (currentEnemyData.summonArr.length < 1):
+      enemyDiceRoll = 3;
+      break;
+  }
+  
+  let hero_TARGET = Math.floor(Math.random() * heroParty.length);
+  let enemyAttackRoll = Math.floor(Math.random() * 2) + enemyData.attackForce;
+  switch (enemyDiceRoll) {
+    case 0:
+      createWindow("battleMessage", currentEnemyData.enemyName + " attacks!", 0, 0);
+      setTimeout(function () {
+        takeDamage(enemyAttackRoll, hero_TARGET);
+        createWindow("battleMessage", currentEnemyData.enemyName + " dealt " + enemyAttackRoll + " damage!", 0, 0);
+
+        setTimeout(function () {
+          clearAllWindows();
+        }, 1000);
+      }, 1000);
+      break;
+    case 1:
+      createWindow("battleMessage", currentEnemyData.enemyName + " defends.", 0, 0);
+
+      setTimeout(function () {
+        clearAllWindows();
+      }, 1000);
+      break;
+    case 2:
+      // we'll deal with summons later
+      break;
+    case 3:
+      let randomSpecialAttack = Math.floor(Math.random() * currentEnemyData.specialAttacks.length);
+      createWindow("battleMessage", currentEnemyData.specialAttacks[randomSpecialAttack], 0, 0);
+
+      switch (currentEnemyData.specialAttacks[randomSpecialAttack]) {
+        case "Psychic":
+          break;
+      }
+      break;
+  }
+}
 
 // end turn functions
 
@@ -308,7 +468,7 @@ function killEnemyAnimation (backdropSrc) {
 
 $(document).on("keydown", function (event) {
   switch (battleOptionsEnabled) {
-    case 1:
+    case 1: // case 2, then post battle options
       switch (event.which) {
         case 39:
           playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
