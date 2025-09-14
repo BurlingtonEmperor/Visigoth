@@ -248,6 +248,10 @@ function saveCharacterLastX (whichFrame) {
             pinehurst2_xDATA = [];
             pinehurst2_xDATA.push(travelCharacterObject_1_x);
             break;
+          case 2:
+            pinehurst3_xDATA = [];
+            pinehurst3_xDATA.push(travelCharacterObject_1_x);
+            break;
         }
         break;
       case 2:
@@ -316,6 +320,10 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     case 1:
       dataArr_LOADCHARLASTX = pinehurst2_xDATA;
       dataArray = pinehurstSprite_arr2;
+      break;
+    case 2:
+      dataArr_LOADCHARLASTX = pinehurst3_xDATA;
+      dataArray = pinehurstSprite_arr3;
       break;
   }
 
@@ -566,6 +574,8 @@ function resetDialogue () {
   isFinishedTalking = 0;
 }
 
+let chanceDialogueX = 0; // keep this in mind
+
 function loadCharacterDialogue (whichFrame, whichData) {
   let currDataBank;
   switch (whichFrame) {
@@ -598,9 +608,12 @@ function loadCharacterDialogue (whichFrame, whichData) {
           isTraveling = 0;
           townieMusic.pause();
           initiateBattle("../Visigoth/battle/backdrops/park.jpg", hauntedDoll);
+          specialDialogueCommands = "chance";
           clearAllWindows();
           pinehurstCharData_3.dialogue = pinehurstCharData_3.altDialogue;
-          pinehurstSprite_arr3 = [pinehurstCharData_3];
+          saveCharacterLastX(currentFrame);
+          chanceDialogueX = travelCharacterObject_1_x;
+          // pinehurstSprite_arr3 = [pinehurstCharData_3];
           break;
       }
       break;

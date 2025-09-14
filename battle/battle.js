@@ -19,6 +19,9 @@ let diceRollFactor = 9; // the higher the number, the more random the damage wil
 let heroNumber = 1; // this is the hero whose turn it is. starts at 1. 
 
 let enemyDefeated = 0;
+let enemyDefeatOptions = 0;
+let enemyRetreated = 0;
+let postBattleD_num = 0;
 
 function initiateBattle (backdrop, enemyData) {
   $(gameWindow).fadeOut(1000);
@@ -34,6 +37,13 @@ function initiateBattle (backdrop, enemyData) {
   currentEnemyData_currentHP = enemyData.maxHealth;
 
   currentBackdrop = backdrop;
+
+  enemyDefeated = 0;
+  enemyDefeatOptions = 0;
+  enemyRetreated = 0;
+
+  heroNumber = 1;
+  postBattleD_num = 0;
 
   switch (enemyData.status) {
     case "boss":
@@ -413,7 +423,9 @@ function enemyTurn () {
         switch (retreatAttempt) {
           case 0:
             createWindow("battleMessage", currentEnemyData.enemyName + " fled the battle!", 0, 0);
-            // we'll deal with ending the battle later
+            setTimeout(function () {
+              enemyRetreatAnimation(currentBackdrop);
+            }, 1000);
             return false;
         }
         break;
@@ -465,7 +477,7 @@ function enemyTurn () {
         case "Psychic":
           outerShell.style.filter = "saturate(0) brightness(1.5)";
           playAudio("../Visigoth/battle/dsvilsit.wav");
-          takeDamage(enemyAttackRoll * 1.3, hero_TARGET);
+          takeDamage(Math.floor(enemyAttackRoll * 1.3), hero_TARGET);
 
           setTimeout(function () {
             outerShell.style.filter = "none";
@@ -484,6 +496,8 @@ function enemyTurn () {
 }
 
 // end turn functions
+
+// enemy defeat functions
 
 function killEnemyAnimation (backdropSrc) {
   gameWindow.style.filter = "grayscale(100%) sepia(100%) hue-rotate(350deg) saturate(300%) contrast(150%) brightness(50%)";
@@ -504,8 +518,106 @@ function killEnemyAnimation (backdropSrc) {
     $(gameWindow).fadeIn(3000);
     gameWindow.style.filter = "none";
     gameWindow.classList.remove("shake");
+
+    setTimeout(function () {
+      bringUpPostBattleOptions();
+    }, 3000);
   }, 3000);
 }
+
+function enemyRetreatAnimation (backdropSrc) {
+  $(gameWindow).fadeOut(3000);
+  currentBattleMusic.pause();
+  currentBattleMusic = playLoopedAudio("../Visigoth/battle/music/victory.mp3");
+  battleRoster.style.display = "none";
+
+  setTimeout(function () {
+    clearWindow();
+    renderImage(backdropSrc, -100, 0);
+
+    $(gameWindow).fadeIn(3000);
+
+    setTimeout(function () {
+      bringUpPostBattleOptions();
+    }, 3000);
+  }, 3000);
+}
+
+function bringUpPostBattleOptions () {
+  // enemyDefeatOptions = 1;
+  
+  let postBattleDialogue = "";
+  let postBattleDialogue_len;
+
+  enemyDefeatOptions = 0;
+  clearAllWindows();
+
+  switch (postBattleD_num) {
+    case 0:
+      switch (enemyRetreated) {
+        case 1:
+          postBattleDialogue = "No exp gained. The enemy fled.";
+          break;
+        default:
+          postBattleDialogue = "Gained " + currentEnemyData.expYield + " exp."; 
+          break;
+      }
+      postBattleDialogue_len = postBattleDialogue.length;
+      break;
+    case 1:
+      switch (currentEnemyData.droppedItems.length) {
+        case 0:
+          postBattleDialogue = "No items were found.";
+          break;
+        default:
+          postBattleDialogue = "Found a " + currentEnemyData.droppedItems[0] + ".";
+          currentInventory.push(currentEnemyData.droppedItems[0]);
+          break;
+      }
+      break;
+    case 2:
+      clearAllWindows();
+      currentBattleMusic.pause();
+      
+      battleWindow.style.display = "none";
+      $(gameWindow).fadeOut(2000);
+
+      setTimeout(function () {
+        $(gameWindow).fadeIn(2000);
+        clearWindow();
+        drawFrame();
+        
+        switch (specialDialogueCommands) {
+          case "chance":
+            specialDialogueCommands = "";
+            firstRenderCharacters(pinehurstSprite_arr3);
+            // loadCharacterLastX(); no idea why this function isn't working
+            townieMusic.play();
+            travelCharacterObject_1_x = chanceDialogueX;
+            loadCharacters(pinehurstSprite_arr3);
+
+            resetDialogue();
+            isTalking = 1;
+            loadCharacterDialogue(currentFrame, markedValueCHARD);
+            break;
+        }
+        // loadCharacterLastX();
+        
+        // townieMusic = playLoopedAudio();
+      }, 2000);
+      break;
+  }
+
+  postBattleD_num += 1;
+
+  createWindow("dialogue", postBattleDialogue, 0, 0);
+
+  setTimeout(function () {
+    enemyDefeatOptions = 1;
+  }, (100 * postBattleDialogue_len));
+}
+
+// end enemy defeat functions
 
 $(document).on("keydown", function (event) {
   switch (battleOptionsEnabled) {
@@ -594,6 +706,16 @@ $(document).on("keydown", function (event) {
           break;
       }
       populateBattleCursor(selectedBattleOption);
+      break;
+  }
+
+  switch (enemyDefeatOptions) {
+    case 1:
+      switch (event.which) {
+        case 13:
+          bringUpPostBattleOptions();
+          break;
+      }
       break;
   }
 });

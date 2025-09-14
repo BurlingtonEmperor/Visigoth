@@ -7,7 +7,8 @@ const jaydenData = {
   summonArr : ["minivan"],
   sprite : "../Visigoth/battle/enemy_sprites/jayden/jayden1.png",
   specialY : 62,
-  status : "boss"
+  status : "boss",
+  specialAttacks : ["Bad Gas", "Pond Jump", "Crapshoot"]
 }
 
 const jaydenFinalData = {
@@ -31,7 +32,8 @@ const rohitData = {
   summonArr : ["bateman", "oldai"],
   sprite : "../Visigoth/battle/enemy_sprites/rohit/rohit.png",
   specialY : 65,
-  status : "boss"
+  status : "boss",
+  specialAttacks : ["Psychic"]
 }
 
 const beckettData = {
@@ -51,7 +53,7 @@ const beckettData = {
 
 // pinehurst
 const hauntedDoll = {
-  enemyName : "a Haunted Doll",
+  enemyName : "the Haunted Doll",
   maxHealth : 18,
   attackForce : 2,
   defenseForce : 1,
@@ -60,5 +62,7 @@ const hauntedDoll = {
   sprite : "../Visigoth/battle/enemy_sprites/pinehurst/doll.png",
   specialY : 125,
   status : "generic",
-  specialAttacks : ["Psychic"]
+  specialAttacks : ["Psychic"],
+  expYield : 5,
+  droppedItems : []
 }
