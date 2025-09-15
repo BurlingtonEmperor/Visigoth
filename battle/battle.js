@@ -578,9 +578,11 @@ function bringUpPostBattleOptions () {
     case 2:
       clearAllWindows();
       currentBattleMusic.pause();
+      enemyDefeatOptions = 0;
       
       battleWindow.style.display = "none";
       $(gameWindow).fadeOut(2000);
+      clearAllWindows();
 
       setTimeout(function () {
         $(gameWindow).fadeIn(2000);
@@ -590,16 +592,20 @@ function bringUpPostBattleOptions () {
         switch (specialDialogueCommands) {
           case "chance":
             specialDialogueCommands = "";
+            clearAllWindows();
             firstRenderCharacters(pinehurstSprite_arr3);
             // loadCharacterLastX(); no idea why this function isn't working
             townieMusic.play();
             travelCharacterObject_1_x = chanceDialogueX;
             loadCharacters(pinehurstSprite_arr3);
 
-            resetDialogue();
+            // resetDialogue();
+            current_DA = 0;
             isTalking = 1;
+            enemyDefeatOptions = 0;
+            clearAllWindows();
             loadCharacterDialogue(currentFrame, markedValueCHARD);
-            break;
+            return false;
         }
         // loadCharacterLastX();
         
@@ -609,7 +615,8 @@ function bringUpPostBattleOptions () {
   }
 
   postBattleD_num += 1;
-
+  
+  clearAllWindows();
   createWindow("dialogue", postBattleDialogue, 0, 0);
 
   setTimeout(function () {

@@ -605,15 +605,18 @@ function loadCharacterDialogue (whichFrame, whichData) {
 
       switch (currentFrame) {
         case 2:
-          isTraveling = 0;
-          townieMusic.pause();
-          initiateBattle("../Visigoth/battle/backdrops/park.jpg", hauntedDoll);
-          specialDialogueCommands = "chance";
-          clearAllWindows();
-          pinehurstCharData_3.dialogue = pinehurstCharData_3.altDialogue;
-          saveCharacterLastX(currentFrame);
-          chanceDialogueX = travelCharacterObject_1_x;
-          // pinehurstSprite_arr3 = [pinehurstCharData_3];
+          if (chanceDialogueX == 0) {
+            isTraveling = 0;
+            townieMusic.pause();
+            initiateBattle("../Visigoth/battle/backdrops/park.jpg", hauntedDoll);
+            specialDialogueCommands = "chance";
+            clearAllWindows();
+            pinehurstCharData_3.dialogue = pinehurstCharData_3.altDialogue;
+            saveCharacterLastX(currentFrame);
+            chanceDialogueX = travelCharacterObject_1_x;
+            // pinehurstSprite_arr3 = [pinehurstCharData_3];
+            resetDialogue();
+          }
           break;
       }
       break;
@@ -622,8 +625,8 @@ function loadCharacterDialogue (whichFrame, whichData) {
 
       setTimeout(function () {
         isFinishedTalking = 1;
-        current_DA++;
-      }, (currDataBank[whichData].dialogue[current_DA].length * 25) + 200);
+        current_DA += 1;
+      }, (currDataBank[whichData].dialogue[current_DA].length * 25) + 500);
       break;
   }
 }
