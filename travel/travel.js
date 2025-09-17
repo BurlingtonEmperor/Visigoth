@@ -305,7 +305,11 @@ function saveCharacterLastX (whichFrame) {
     }
   }
 
-  tackleDATACHARLASTX(dataArr_LOADCHARLASTX.length);
+  switch (isUsingCharacters) {
+    case 1:
+      tackleDATACHARLASTX(dataArr_LOADCHARLASTX.length);
+      break;
+  }
 }
 
 function loadCharacterLastX (whichFrame) { // take data from each last x array and set it to default
@@ -756,6 +760,23 @@ function setStage (travelFrame) {
           break;
       }
       break;
+    case 3:
+      currentTown = "fw";
+      frameX = 0;
+      isUsingCharacters = 0; 
+      currentSrc = "../Visigoth/travel/frames/fw_road/fw_road.png";
+      travelFrameObject.src = currentSrc;
+      frameWidth = 10264;
+      frameHeight = 488;
+
+      switch (hasSwitchedFrame) {
+        case 2: // coming from the left
+          frameX = -2500;
+          break;
+      }
+
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      break;
   }
 }
 
@@ -795,6 +816,14 @@ function switchFrame (travelFrame, whichDirection) {
   }, 1000);
 }
 
+/*
+Frame 3 FW Road gate x locations
+-1355 : Peckham Farm
+-3057 : Abandoned Farm
+-6830 : Abandoned Farmhouse
+-7898 : Abandoned Car (Christine)
+*/
+
 function drawFrame (whichDirection) {
   switch (whichDirection) {
     case "right":
@@ -803,13 +832,31 @@ function drawFrame (whichDirection) {
 
       if (frameX < -795) {
         switch (currentFrame) {
+          default:
+            return false;
           case 0:
             frameX += 2.5;
             currentFrame = 1;
             switchFrame(1, "right");
             break;
+          case 1:
+            switch (pinehurstCharData_4.specialCondition) {
+              case 1:
+                frameX += 2.5;
+                currentFrame = 3;
+                switchFrame(3, "right");
+                break;
+            }
+            break;
+          case 3:
+            switch (true) {
+              case (frameX < -9450):
+                // we'll do something here later.
+                frameX += 2.5;
+                return false;
+            }
+            break;
         }
-        return false;
       }
 
       else if (frameX < -550) {

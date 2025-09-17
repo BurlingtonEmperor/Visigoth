@@ -1,0 +1,5 @@
+gameEventLocation = "disabled";
+clearWindow();
+setStage(3);
+currentFrame = 3;
+isTraveling = 1;

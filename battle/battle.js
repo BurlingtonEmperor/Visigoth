@@ -604,6 +604,7 @@ function bringUpPostBattleOptions () {
             isTalking = 1;
             enemyDefeatOptions = 0;
             clearAllWindows();
+            pinehurstCharData_4.specialCondition = 1; 
             loadCharacterDialogue(currentFrame, markedValueCHARD);
             return false;
         }
