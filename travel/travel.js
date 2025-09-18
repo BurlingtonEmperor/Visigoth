@@ -70,7 +70,9 @@ const travelCharacterObject_4 = new Image();
 
 let pinehurst1_xDATA = [];
 let pinehurst2_xDATA = [];
-let pinehurst3_xDATA = [];
+let pinehurst3_xDATA = []; // the park
+
+let fw1_xDATA = [];
 
 let travelCharacterObject_1_x = 0;
 let travelCharacterObject_2_x = 0;
@@ -637,6 +639,36 @@ function loadCharacterDialogue (whichFrame, whichData) {
 
 // end character dialogue functions
 // end character functions
+
+// begin random enemy encounter functions
+
+function initiateRandomEncounter (usingCharacters_condition) {
+  let encounterChance = Math.floor(Math.random () * 30);
+
+  switch (usingCharacters_condition) {
+    case 0:
+      specialDialogueCommands = "not_using_characters";
+      break;
+    case 1:
+      saveCharacterLastX(currentFrame);
+      specialDialogueCommands = "using_characters";
+      break;
+  }
+  
+  let randomEnemiesList = [];
+  switch (currentTown) {
+    case "pinehurst":
+      randomEnemiesList = [hauntedDoll, willOWisp, shadowMan];
+      break;
+  }
+
+  switch (encounterChance) {
+    case 0:
+      break;
+  }
+}
+
+// end random enemy encounter functions
 
 function setStage (travelFrame) {
   stickman.style.display = "block";

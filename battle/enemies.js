@@ -66,3 +66,53 @@ const hauntedDoll = {
   expYield : 5,
   droppedItems : []
 }
+
+const willOWisp = {
+  enemyName : "the Will-O'-Wisp",
+  maxHealth : 17,
+  attackForce : 2,
+  defenseForce : 2,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/pinehurst/wisp.png",
+  specialY : 125,
+  status : "generic",
+  specialAttacks : ["Dazzle"],
+  expYield : 5,
+  droppedItems : []
+}
+
+const shadowMan = {
+  enemyName : "the Shadow Man",
+  maxHealth : 20,
+  attackForce : 4,
+  defenseForce : 1,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/pinehurst/shadow.png",
+  specialY : 65,
+  status : "generic",
+  specialAttacks : ["Strangle"],
+  expYield : 7,
+  droppedItems : []
+}
+
+const movingPicture = {
+  enemyName : "the Moving Picture",
+  maxHealth : 17,
+  attackForce : 3,
+  defenseForce : 1,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/pinehurst/painting.jpg",
+  specialY : 70,
+  status : "generic",
+  specialAttacks : ["Reality Shift"],
+  expYield : 3,
+  droppedItems : []
+}
+
+const magicMirror = {
+  enemyName : "the Magic Mirror",
+  maxHealth : 25
+}
