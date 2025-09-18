@@ -101,6 +101,12 @@ function initiateBattle (backdrop, enemyData) {
 }
 
 function takeDamage (dmgAmount, targetHero) {
+  switch (true) {
+    case (dmgAmount < 1):
+      dmgAmount = 0;
+      return false;
+  }
+
   gameWindow.classList.add("shake");
   battleWindow.classList.add("shake");
   textWindow.classList.add("shake");
@@ -135,20 +141,23 @@ function takeDamage (dmgAmount, targetHero) {
   let selectedHero;
   switch (targetHero) {
     case 0:
+      heroPartyOneHP -= dmgAmount
       selectedHero = heroPartyOneHP;
       break;
     case 1:
+      heroPartyTwoHP -= dmgAmount;
       selectedHero = heroPartyTwoHP;
       break;
     case 2:
+      heroPartyThreeHP -= dmgAmount;
       selectedHero = heroPartyThreeHP;
       break;
     case 3:
+      heroPartyFourHP -= dmgAmount;
       selectedHero = heroPartyFourHP;
       break;
   }
-
-  selectedHero -= dmgAmount; // there's an issue here with NaN. 
+  
   document.getElementById("cw" + String(targetHero + 1) + "-hp").innerText = selectedHero;
 
   if (selectedHero < 1) {
@@ -440,6 +449,10 @@ function enemyTurn () {
   
   let hero_TARGET = Math.floor(Math.random() * heroParty.length);
   let enemyAttackRoll = Math.floor(Math.random() * 2) + currentEnemyData.attackForce;
+  
+  console.log("Targeting hero " + String(hero_TARGET + 1));
+  console.log("Attack roll: " + String(enemyAttackRoll));
+
   switch (enemyDiceRoll) {
     case 0:
       createWindow("battleMessage", currentEnemyData.enemyName + " attacks!", 0, 0);
@@ -607,6 +620,18 @@ function bringUpPostBattleOptions () {
             pinehurstCharData_4.specialCondition = 1; 
             loadCharacterDialogue(currentFrame, markedValueCHARD);
             return false;
+          case "not_using_characters":
+            specialDialogueCommands = "";
+            clearAllWindows();
+            townieMusic.play();
+            break;
+          case "using_characters":
+            specialDialogueCommands = "";
+            clearAllWindows();
+            townieMusic.play();
+            firstRenderCharacters(CURRENT_SPRITE_ARR);
+            loadCharacters(CURRENT_SPRITE_ARR);
+            break;
         }
         // loadCharacterLastX();
         

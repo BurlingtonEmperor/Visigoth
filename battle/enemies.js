@@ -114,5 +114,15 @@ const movingPicture = {
 
 const magicMirror = {
   enemyName : "the Magic Mirror",
-  maxHealth : 25
+  maxHealth : 25,
+  attackForce : 4,
+  defenseForce : 3,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/pinehurst/mirror.png",
+  specialY : 50,
+  status : "generic",
+  specialAttacks : ["Gangstalk"],
+  expYield : 6,
+  droppedItems : []
 }

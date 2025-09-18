@@ -79,6 +79,8 @@ let travelCharacterObject_2_x = 0;
 let travelCharacterObject_3_x = 0;
 let travelCharacterObject_4_x = 0;
 
+let CURRENT_SPRITE_ARR;
+
 function firstRenderCharacters (dataArray) {
   for (let i = 0; i < dataArray.length; i++) {
     let new_char_x;
@@ -415,10 +417,23 @@ function checkCharacterLastX (dataArray) {
   }
 }
 
+function fillSPRITE_ARR (whichFrame) {
+  switch (whichFrame) {
+    case 0:
+      CURRENT_SPRITE_ARR = pinehurstSprite_arr;
+      break;
+    case 1:
+      CURRENT_SPRITE_ARR = pinehurstSprite_arr2;
+      break;
+    case 2:
+      CURRENT_SPRITE_ARR = pinehurstSprite_arr3;
+      break;
+  }
+}
+
 // end character setup functions
 
 // begin gateway checking functions
-
 
 /*
 Gateway numbering
@@ -642,10 +657,10 @@ function loadCharacterDialogue (whichFrame, whichData) {
 
 // begin random enemy encounter functions
 
-function initiateRandomEncounter (usingCharacters_condition) {
-  let encounterChance = Math.floor(Math.random () * 30);
+function initiateRandomEncounter () {
+  let encounterChance = Math.floor(Math.random () * 5);
 
-  switch (usingCharacters_condition) {
+  switch (isUsingCharacters) {
     case 0:
       specialDialogueCommands = "not_using_characters";
       break;
@@ -656,14 +671,34 @@ function initiateRandomEncounter (usingCharacters_condition) {
   }
   
   let randomEnemiesList = [];
+  let backdropToUseFor_RANDOM_ENCOUNTER;
   switch (currentTown) {
     case "pinehurst":
-      randomEnemiesList = [hauntedDoll, willOWisp, shadowMan];
+      randomEnemiesList = [hauntedDoll, willOWisp, shadowMan, movingPicture, magicMirror];
+      backdropToUseFor_RANDOM_ENCOUNTER = "../Visigoth/battle/backdrops/pinehurst.jpg";
+
+      // switch (currentFrame) {
+      //   case 2:
+      //     backdropToUseFor_RANDOM_ENCOUNTER = "../Visigoth/battle/backdrops/park.jpg";
+      //     break;
+      // }
       break;
   }
 
+  let randomEnemyIndex = Math.floor(Math.random() * randomEnemiesList.length);
+  fillSPRITE_ARR(currentFrame);
+  saveCharacterLastX(currentFrame);
+
   switch (encounterChance) {
     case 0:
+      console.log("enemy encountered");
+      isTraveling = 0;
+      switch (false) {
+        case (townieMusic == undefined):
+          townieMusic.pause();
+          break;
+      }
+      initiateBattle(backdropToUseFor_RANDOM_ENCOUNTER, randomEnemiesList[randomEnemyIndex]);
       break;
   }
 }
@@ -857,6 +892,7 @@ Frame 3 FW Road gate x locations
 */
 
 function drawFrame (whichDirection) {
+  let enemyEncounterREADY = 0;
   switch (whichDirection) {
     case "right":
       frameX -= 2.5;
@@ -870,6 +906,7 @@ function drawFrame (whichDirection) {
             frameX += 2.5;
             currentFrame = 1;
             switchFrame(1, "right");
+            enemyEncounterREADY = 1;
             break;
           case 1:
             switch (pinehurstCharData_4.specialCondition) {
@@ -877,6 +914,7 @@ function drawFrame (whichDirection) {
                 frameX += 2.5;
                 currentFrame = 3;
                 switchFrame(3, "right");
+                enemyEncounterREADY = 1;
                 break;
             }
             break;
@@ -919,6 +957,7 @@ function drawFrame (whichDirection) {
           case 1:
             currentFrame = 0;
             switchFrame(0, "left");
+            enemyEncounterREADY = 1;
             break;
           // case 2:
           //   currentFrame = 0;
@@ -962,6 +1001,12 @@ function drawFrame (whichDirection) {
   // }
 
   checkForGateways(currentFrame);
+
+  switch (enemyEncounterREADY) {
+    case 1:
+      initiateRandomEncounter();
+      break;
+  }
 }
 
 const stickmanRight = document.getElementById("stickman-right");
