@@ -3,6 +3,7 @@ const battleWindow = document.getElementById("battle-window");
 
 const characterRoster = document.getElementById("character-roster");
 const battleRoster = document.getElementById("battle-roster");
+const itemRoster = document.getElementById("item-roster");
 
 const cw1 = document.getElementById("cw1");
 const cw2 = document.getElementById("cw2");

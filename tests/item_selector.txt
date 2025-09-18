@@ -1,0 +1,2 @@
+$(battleWindow).show();
+$(itemRoster).show();

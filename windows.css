@@ -62,7 +62,7 @@
   border: 5px solid white;
 }
 
-#battle-roster {
+#battle-roster, #item-roster {
   width: 350px;
   height: 190px;
   padding: 2px;
@@ -77,6 +77,12 @@
   border: 5px solid white;
   text-align: center;
   display: none;
+}
+
+#item-roster {
+  text-align: left;
+  width: 250px;
+  max-width: 250px;
 }
 
 #cw1, #cw2, #cw3, #cw4 {

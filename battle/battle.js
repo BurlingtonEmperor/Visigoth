@@ -23,6 +23,8 @@ let enemyDefeatOptions = 0;
 let enemyRetreated = 0;
 let postBattleD_num = 0;
 
+let isSelectingItem = 0;
+
 function initiateBattle (backdrop, enemyData) {
   $(gameWindow).fadeOut(1000);
   gameEventLocation = "disabled";
@@ -500,6 +502,10 @@ function enemyTurn () {
             }, 500);
           }, 500);
           break;
+        case "Dazzle":
+          break;
+        case "Strangle":
+          break;
       }
       break;
     case 3:
@@ -652,6 +658,23 @@ function bringUpPostBattleOptions () {
 
 // end enemy defeat functions
 
+// item select functions
+
+const ITEM_ONE_SELECT = document.getElementById("item_1_select");
+const ITEM_TWO_SELECT = document.getElementById("item_2_select");
+const ITEM_THREE_SELECT = document.getElementById("item_3_select");
+const ITEM_FOUR_SELECT = document.getElementById("item_4_select");
+
+/*
+Item selector calculations.  
+*/
+
+function MOVE_ITEM_CURSOR (whichDirection) {
+  
+}
+
+// end item select functions
+
 $(document).on("keydown", function (event) {
   switch (battleOptionsEnabled) {
     case 1: // case 2, then post battle options
@@ -749,6 +772,11 @@ $(document).on("keydown", function (event) {
           bringUpPostBattleOptions();
           break;
       }
+      break;
+  }
+
+  switch (isSelectingItem) {
+    case 1:
       break;
   }
 });
