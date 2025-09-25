@@ -1,0 +1,2 @@
+displaySlowCutscene("../Visigoth/cutscenes/becketts_death.mp4", 0.5);
+playSlowAudio("../Visigoth/assets/audio/sfx/dspldeth.wav", 0.25);

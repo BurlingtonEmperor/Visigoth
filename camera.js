@@ -314,4 +314,15 @@ function displayCutscene (cutsceneSrc) {
 
   return cutsceneDisplay.duration;
 }
+
+function displaySlowCutscene (cutsceneSrc, speed) {
+  const cutsceneDisplay = document.createElement("video");
+  cutScenes.style.display = "block";
+
+  cutsceneDisplay.src = cutsceneSrc;
+  cutsceneDisplay.style.width = "100%";
+  cutScenes.appendChild(cutsceneDisplay);
+  cutsceneDisplay.playbackRate = speed;
+  cutsceneDisplay.play();
+} 
 // end

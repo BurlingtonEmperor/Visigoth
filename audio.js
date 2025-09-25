@@ -30,7 +30,7 @@ function playClonedAudio (audioSource) {
   clonedAudioSource.cloneNode(true).play();
 }
 
-function fadeOutAudio(audioElement, duration) {
+function fadeOutAudio (audioElement, duration) {
   const initialVolume = audioElement.volume;
   const fadeInterval = 50; 
   const steps = duration / fadeInterval;
@@ -45,6 +45,12 @@ function fadeOutAudio(audioElement, duration) {
       clearInterval(fadeEffect); 
     }
   }, fadeInterval);
+}
+
+function playSlowAudio (audioSource, speed) {
+  const audioSourceFinal = new Audio(audioSource);
+  audioSourceFinal.playbackRate = speed;
+  audioSourceFinal.play();
 }
 
 let townieMusic;
