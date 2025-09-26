@@ -631,6 +631,7 @@ function loadCharacterDialogue (whichFrame, whichData) {
             townieMusic.pause();
             initiateBattle("../Visigoth/battle/backdrops/park.jpg", hauntedDoll);
             specialDialogueCommands = "chance";
+            encounters = "ON";
             clearAllWindows();
             pinehurstCharData_3.dialogue = pinehurstCharData_3.altDialogue;
             saveCharacterLastX(currentFrame);
@@ -658,7 +659,12 @@ function loadCharacterDialogue (whichFrame, whichData) {
 // begin random enemy encounter functions
 
 function initiateRandomEncounter () {
-  let encounterChance = Math.floor(Math.random () * 5);
+  let encounterChance = Math.floor(Math.random () * 20);
+
+  switch (encounters) {
+    case "OFF":
+      return false;
+  }
 
   switch (isUsingCharacters) {
     case 0:
@@ -698,6 +704,7 @@ function initiateRandomEncounter () {
           townieMusic.pause();
           break;
       }
+      isTraveling = 0;
       initiateBattle(backdropToUseFor_RANDOM_ENCOUNTER, randomEnemiesList[randomEnemyIndex]);
       break;
   }
@@ -934,6 +941,15 @@ function drawFrame (whichDirection) {
           case 2:
             frameX += 2.5;
             return false;
+          case 1:
+            switch (pinehurstCharData_4.specialCondition) {
+              case 1:
+                break;
+              default:
+                frameX += 2.5;
+                return false;
+            }
+            break;
         }
       }
 
@@ -945,6 +961,7 @@ function drawFrame (whichDirection) {
       //     }
       //     break;
       // }
+      enemyEncounterREADY = 1;
       break;
     case "left":
       frameX += 2.5;
@@ -966,6 +983,7 @@ function drawFrame (whichDirection) {
         }
         return false;
       }
+      enemyEncounterREADY = 1;
       break;
     default:
       console.log("Chose to refresh.");
@@ -1004,6 +1022,20 @@ function drawFrame (whichDirection) {
 
   switch (enemyEncounterREADY) {
     case 1:
+      switch (currentFrame) {
+        case 2:
+          return false;
+      }
+      
+      switch (isUsingCharacters) {
+        case 0:
+          specialDialogueCommands = "not_using_characters";
+          break;
+        case 1:
+          specialDialogueCommands = "using_characters";
+          break
+      }
+
       initiateRandomEncounter();
       break;
   }

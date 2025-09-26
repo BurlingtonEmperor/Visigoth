@@ -1,0 +1,9 @@
+pinehurstCharData_3.dialogue = pinehurstCharData_3.altDialogue;
+gameEventLocation = "disabled";
+setStage(0);
+isTraveling = 1;
+currentFrame = 0;
+currentTown = "pinehurst";
+townieMusic = playLoopedAudio("../Visigoth/assets/audio/step.mp3");
+pinehurstCharData_4.specialCondition = 1; 
+encounters = "ON";

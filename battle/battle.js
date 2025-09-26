@@ -129,7 +129,7 @@ function takeDamage (dmgAmount, targetHero) {
         redDmgBGPos = 0;
         break;
     }
-  }, 25);
+  }, 15);
 
   setTimeout(function () {
     gameWindow.classList.remove("shake");
@@ -344,6 +344,28 @@ function useTurn (playerAction) {
 }
 
 // check for dead characters/enemies
+
+function checkForDeadPlayers () {
+  function gameOverAnimation () {
+    createWindow("battleMessage", "Game Over...", 0, 0);
+    currentBattleMusic.pause();
+    currentBattleMusic = playAudio("../Visigoth/battle/music/gameover.mp3");
+    playerTurn = 0;
+    battleWindow.style.display = "none";
+    battleOptionsEnabled = 0;
+    $(gameWindow).fadeOut(3000);
+
+    setTimeout(function () {
+      
+    }, 3000);
+  }
+
+  switch (true) {
+    case (heroPartyOneHP < 0 && heroParty.length < 2):
+      gameOverAnimation();
+      break;
+  }
+}
 
 function checkForDeadEnemy () {
   if (currentEnemyData_currentHP < 1) {
@@ -630,6 +652,7 @@ function bringUpPostBattleOptions () {
             specialDialogueCommands = "";
             clearAllWindows();
             townieMusic.play();
+            isTraveling = 1;
             break;
           case "using_characters":
             specialDialogueCommands = "";
@@ -637,6 +660,7 @@ function bringUpPostBattleOptions () {
             townieMusic.play();
             firstRenderCharacters(CURRENT_SPRITE_ARR);
             loadCharacters(CURRENT_SPRITE_ARR);
+            isTraveling = 1;
             break;
         }
         // loadCharacterLastX();

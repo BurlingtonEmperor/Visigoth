@@ -1,3 +1,6 @@
 gameEventLocation = "disabled";
 setStage(0);
 isTraveling = 1;
+currentFrame = 0;
+currentTown = "pinehurst";
+townieMusic = playLoopedAudio("../Visigoth/assets/audio/step.mp3");
