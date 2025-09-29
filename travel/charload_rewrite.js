@@ -27,4 +27,6 @@ function REWRITE_LOAD_CHAR_DATA () {
   travelCharacterObject_4_x = charSAVEDATA[3];
 }
 
+function REWRITE_LONGTERM_DATA (saveOrLoad) {}
+
 // function SET_CURRENT_SPRITE_ARR () {}

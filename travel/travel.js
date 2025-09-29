@@ -185,6 +185,11 @@ const pinehurstSprite_arr2 = [pinehurstCharData_4];
 const pinehurstSprite_arr3 = [pinehurstCharData_3];
 
 function checkCharacters (travelFrame, whichDirection) {
+  switch (isUsingCharacters) {
+    case 0:
+      return false;
+  }
+
   let arrToUse;
   switch (travelFrame) {
     case 0:
@@ -196,6 +201,8 @@ function checkCharacters (travelFrame, whichDirection) {
     case 2:
       arrToUse = pinehurstSprite_arr3;
       break;
+    default:
+      return false; // this seems redundant, but it's to prevent crashes
   }
   
   let xChangeAmount;
@@ -238,6 +245,8 @@ function saveCharacterLastX (whichFrame) {
     case 2:
       dataArr_LOADCHARLASTX = pinehurstSprite_arr3;
       break;
+    default:
+      return false; // prevent a crash from happening
   }
 
   function tackleDATACHARLASTX (numArrLength) {
@@ -427,6 +436,9 @@ function fillSPRITE_ARR (whichFrame) {
       break;
     case 2:
       CURRENT_SPRITE_ARR = pinehurstSprite_arr3;
+      break;
+    default:
+      CURRENT_SPRITE_ARR = [];
       break;
   }
 }
@@ -716,9 +728,12 @@ function initiateRandomEncounter () {
 
 function setStage (travelFrame) {
   stickman.style.display = "block";
+  fillSPRITE_ARR(travelFrame);
+
   switch (travelFrame) {
     case 0:
       currentTown = "pinehurst";
+      // fillSPRITE_ARR(0);
       frameX = 0;
       isUsingCharacters = 1;
     //   drawImageLeft("../Visigoth/travel/frames/pinehurst/pinehurst.webp", 1601, 487);
@@ -769,6 +784,7 @@ function setStage (travelFrame) {
       break;
     case 1:
       currentTown = "pinehurst";
+      // fillSPRITE_ARR(1);
       frameX = 0;
       isUsingCharacters = 1;
       currentSrc = "../Visigoth/travel/frames/pinehurst/pinehurst2.webp";
@@ -944,6 +960,9 @@ function drawFrame (whichDirection) {
                 return false;
             }
             break;
+          case 4:
+            frameX += 2.5;
+            return false;
         }
       }
 
@@ -991,6 +1010,11 @@ function drawFrame (whichDirection) {
           //   currentFrame = 0;
           //   switchFrame(0, "left");
           //   break;
+          case 4:
+            currentFrame = 1;
+            switchFrame(1, "left");
+            enemyEncounterREADY = 1;
+            break;
         }
         return false;
       }

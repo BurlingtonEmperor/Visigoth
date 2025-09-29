@@ -525,7 +525,10 @@ function enemyTurn () {
           }, 500);
           break;
         case "Dazzle":
-
+          setTimeout(function () {
+            battleOptionsEnabled = 1;
+            battleRoster.style.display = "block";
+          }, 500);
           break;
         case "Strangle":
           let currentDegree = 0;
@@ -540,6 +543,18 @@ function enemyTurn () {
           setTimeout(function () {
             clearInterval(strangleAnimation);
             outerShell.style.transform = "none";
+            battleOptionsEnabled = 1;
+            battleRoster.style.display = "block";
+          }, 500);
+          break;
+        case "Gangstalk":
+          setTimeout(function () {
+            battleOptionsEnabled = 1;
+            battleRoster.style.display = "block";
+          }, 500);
+          break;
+        case "Reality Shift":
+          setTimeout(function () {
             battleOptionsEnabled = 1;
             battleRoster.style.display = "block";
           }, 500);
@@ -674,11 +689,12 @@ function bringUpPostBattleOptions () {
             specialDialogueCommands = "";
             clearAllWindows();
             townieMusic.play();
-            // reRenderCharacters(CURRENT_SPRITE_ARR);
+            REWRITE_LOAD_CHAR_DATA();
+            reRenderCharacters(CURRENT_SPRITE_ARR);
             // // loadCharacters(CURRENT_SPRITE_ARR);
             fillSPRITE_ARR(currentFrame);
-            firstRenderCharacters(CURRENT_SPRITE_ARR);
-            REWRITE_LOAD_CHAR_DATA();
+            // firstRenderCharacters(CURRENT_SPRITE_ARR);
+            loadCharacters(CURRENT_SPRITE_ARR);
             isTraveling = 1;
             break;
         }
