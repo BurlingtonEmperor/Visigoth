@@ -657,14 +657,16 @@ function loadCharacterDialogue (whichFrame, whichData) {
 // end character functions
 
 // begin random enemy encounter functions
-
+let encounterOdds = 350;
 function initiateRandomEncounter () {
-  let encounterChance = Math.floor(Math.random () * 20);
+  let encounterChance = Math.floor(Math.random () * encounterOdds);
 
   switch (encounters) {
     case "OFF":
       return false;
   }
+
+  REWRITE_SAVE_CHAR_DATA();
 
   switch (isUsingCharacters) {
     case 0:
@@ -851,6 +853,15 @@ function setStage (travelFrame) {
 
       renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
       break;
+    case 4:
+      currentTown = "cambridge";
+      frameX = 0;
+      isUsingCharacters = 0;
+      currentSrc = "../Visigoth/travel/frames/cambridge/cambridge.webp";
+      travelFrameObject.src = currentSrc;
+      frameWidth = 1237;
+      frameHeight = 368;
+      break;
   }
 }
 
@@ -920,7 +931,7 @@ function drawFrame (whichDirection) {
               case 1:
                 frameX += 2.5;
                 currentFrame = 3;
-                switchFrame(3, "right");
+                switchFrame(4, "right");
                 enemyEncounterREADY = 1;
                 break;
             }

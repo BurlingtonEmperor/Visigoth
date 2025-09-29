@@ -525,8 +525,24 @@ function enemyTurn () {
           }, 500);
           break;
         case "Dazzle":
+
           break;
         case "Strangle":
+          let currentDegree = 0;
+          playAudio("../Visigoth/battle/dsskeatk.wav");
+          takeDamage(Math.floor(enemyAttackRoll * 2), hero_TARGET);
+
+          const strangleAnimation = setInterval(function () {
+            currentDegree += 10;
+            rotate_3D_XAXIS(currentDegree, outerShell);
+          }, 10);
+
+          setTimeout(function () {
+            clearInterval(strangleAnimation);
+            outerShell.style.transform = "none";
+            battleOptionsEnabled = 1;
+            battleRoster.style.display = "block";
+          }, 500);
           break;
       }
       break;
@@ -658,8 +674,11 @@ function bringUpPostBattleOptions () {
             specialDialogueCommands = "";
             clearAllWindows();
             townieMusic.play();
+            // reRenderCharacters(CURRENT_SPRITE_ARR);
+            // // loadCharacters(CURRENT_SPRITE_ARR);
+            fillSPRITE_ARR(currentFrame);
             firstRenderCharacters(CURRENT_SPRITE_ARR);
-            loadCharacters(CURRENT_SPRITE_ARR);
+            REWRITE_LOAD_CHAR_DATA();
             isTraveling = 1;
             break;
         }

@@ -6,7 +6,38 @@ disabled: denies user interaction
 */
 
 // the very start
-writeCenterText("Loading assets", "white", "FSEX300", 25);
+
+const systemText = [
+  ""
+];
+function checkAllSystems () {
+  function audioTest () {
+    const testAudio = new Audio();
+    switch (true) {
+      case (testAudio.canPlayType("audio/mpeg") && testAudio.canPlayType("audio/ogg") && testAudio.canPlayType("audio/wav")):
+        return 1;
+      default:
+        return 0;
+    }
+  }
+
+  function videoTest () {
+    const videoTestElement = document.createElement("video");
+    const mp4Support = videoElement.canPlayType("video/mp4");
+
+    switch (mp4Support) {
+      case "probably":
+        return 2; // works
+      case "maybe":
+        return 1; // could work (with some issues)
+      default: 
+        return 0;
+    }
+  }
+  // writeDelayedCenterParagraph();
+}
+
+// writeCenterText("Loading assets", "white", "FSEX300", 25);
 setTimeout(function () {
   clearWindow();
   writeCenterText("Press any key to continue", "powderblue", "FSEX300", 25);
