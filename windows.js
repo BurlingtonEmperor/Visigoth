@@ -111,25 +111,42 @@ function populateCharacterWindows (characterDataArray) {
 
   for (let i = 0; i < characterDataArray.length; i++) {
     let characterWindowElement;
+    let characterHealthElement;
     let characterData = characterDataArray[i];
     switch (i) {
       case 0:
         characterWindowElement = cw1;
+        characterHealthElement = heroPartyOneHP;
         break;
       case 1:
         characterWindowElement = cw2;
+        characterHealthElement = heroPartyTwoHP;
         break;
       case 2:
         characterWindowElement = cw3;
+        characterHealthElement = heroPartyThreeHP;
         break;
       case 3:
         characterWindowElement = cw4;
+        characterHealthElement = heroPartyFourHP;
         break;
     }
 
     characterWindowElement.style.display = "block";
     document.getElementById("cw" + (i + 1) + "-name").innerText = characterData.heroName;
     document.getElementById("cw" + (i + 1) + "-hp").innerText = characterData.heroHealth;
+    // switch () {}
+
+    switch (true) {
+      case (characterHealthElement == undefined):
+      case (characterHealthElement == null):
+      case (characterHealthElement == ""):
+        break;
+      default:
+        document.getElementById("cw" + (i + 1) + "-hp").innerText = String(characterHealthElement);
+        break;
+    }
+
     document.getElementById("cw" + (i + 1) + "-pp").innerText = characterData.mentalEnergy;
   }
 }

@@ -85,6 +85,22 @@
   max-width: 250px;
 }
 
+#menu-options {
+  text-align: left;
+  position: absolute;
+  background-color: rgb(107, 54, 54);
+  color: black;
+  border: 5px solid white;
+  display: none;
+  width: 150px;
+  height: 190px;
+  padding: 2px;
+  font-family: "FSEX300";
+  font-size: 20px;
+  left: 0px;
+  top: 0px;
+}
+
 #cw1, #cw2, #cw3, #cw4 {
   display: none;
 }

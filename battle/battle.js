@@ -8,11 +8,6 @@ let currentBackdrop;
 
 let playerTurn = 1;
 
-let heroPartyOneHP;
-let heroPartyTwoHP;
-let heroPartyThreeHP;
-let heroPartyFourHP;
-
 let currentBattleMusic;
 
 let diceRollFactor = 9; // the higher the number, the more random the damage will be. could result in misses.

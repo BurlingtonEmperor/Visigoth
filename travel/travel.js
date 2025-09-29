@@ -1079,6 +1079,8 @@ function drawFrame (whichDirection) {
 const stickmanRight = document.getElementById("stickman-right");
 const stickmanLeft = document.getElementById("stickman-left");
 
+let hasOpenedMenu = 0;
+
 $(document).on("keydown", function (event) {
   switch (isTraveling) {
     case 1:
@@ -1108,6 +1110,24 @@ $(document).on("keydown", function (event) {
               break;
           }
           break;
+        case 13:
+          // switch (hasOpenedMenu) {
+          //   case 1:
+          //     closeMenu();
+          //     isTraveling = 1;
+          //     // playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          //     break;
+          //   case 0:
+          //     openMenu();
+          //     isTraveling = 0;
+          //     // playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          //     break;
+          // }
+          playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          openMenu();
+          isTraveling = 0;
+          hasOpenedMenu = 1;
+          break;
       }
       break;
   }
@@ -1122,6 +1142,19 @@ $(document).on("keydown", function (event) {
               loadCharacterDialogue(currentFrame, markedValueCHARD);
               break;
           }
+          break;
+      }
+      break;
+  }
+
+  switch (hasOpenedMenu) {
+    case 1:
+      switch (event.which) {
+        case 13:
+          playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          closeMenu();
+          isTraveling = 1;
+          hasOpenedMenu = 0;
           break;
       }
       break;
