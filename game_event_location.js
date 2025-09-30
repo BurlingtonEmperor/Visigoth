@@ -4,3 +4,5 @@ let heroPartyOneHP;
 let heroPartyTwoHP;
 let heroPartyThreeHP;
 let heroPartyFourHP;
+
+let hasFilledHPs = 0;

@@ -77,7 +77,19 @@ function initiateBattle (backdrop, enemyData) {
 
       setTimeout(function () {
         battleMessage = createWindow("battleMessage", "Encountered " + enemyData.enemyName + ".", 0, 0);
-        setBattlePartyHP();
+        // setBattlePartyHP();
+        // switch (checkIfHPIsSet()) {
+        //   case 0:
+        //     setBattlePartyHP();
+        //     break;
+        // }
+
+        switch (hasFilledHPs) {
+          case 0:
+            setBattlePartyHP();
+            hasFilledHPs = 1;
+            break;
+        }
         populateCharacterWindows(heroParty);
 
         switch (playerTurn) {
@@ -164,6 +176,17 @@ function takeDamage (dmgAmount, targetHero) {
     setTimeout(function () {
       clearAllWindows();
     }, 2000);
+  }
+}
+
+function checkIfHPIsSet () {
+  switch (true) {
+    case (heroPartyOneHP !== undefined):
+    case (heroPartyOneHP !== null):
+    case (heroPartyOneHP !== ""):
+      return 1;
+    default:
+      return 0;
   }
 }
 

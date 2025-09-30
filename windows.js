@@ -147,6 +147,12 @@ function populateCharacterWindows (characterDataArray) {
         break;
     }
 
+    switch (hasFilledHPs) {
+      case 1:
+        document.getElementById("cw" + (i + 1) + "-hp").innerText = String(characterHealthElement);
+        break;
+    }
+
     document.getElementById("cw" + (i + 1) + "-pp").innerText = characterData.mentalEnergy;
   }
 }
