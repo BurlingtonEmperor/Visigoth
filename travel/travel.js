@@ -1110,7 +1110,7 @@ $(document).on("keydown", function (event) {
               break;
           }
           break;
-        case 13:
+        case 49:
           // switch (hasOpenedMenu) {
           //   case 1:
           //     closeMenu();
@@ -1123,10 +1123,12 @@ $(document).on("keydown", function (event) {
           //     // playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
           //     break;
           // }
-          playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
           openMenu();
           isTraveling = 0;
           hasOpenedMenu = 1;
+          console.log("opened menu");
+          playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          return;
           break;
       }
       break;
@@ -1150,11 +1152,19 @@ $(document).on("keydown", function (event) {
   switch (hasOpenedMenu) {
     case 1:
       switch (event.which) {
-        case 13:
+        case 49:
           playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
           closeMenu();
           isTraveling = 1;
           hasOpenedMenu = 0;
+          break;
+        case 38:
+          playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+          moveUpMenu();
+          break;
+        case 40:
+          playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+          moveDownMenu();
           break;
       }
       break;
