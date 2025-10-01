@@ -100,6 +100,18 @@
   left: 0px;
   top: 0px;
   margin: 0;
+  z-index: 100;
+}
+
+#menu-status {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(107, 54, 54);
+  color: white;
+  display: none;
+  font-family: "FSEX300";
+  font-size: 20px;
 }
 
 #cw1, #cw2, #cw3, #cw4 {
@@ -138,4 +150,9 @@
   font-family: "FSEX300";
   color: white;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.status-row {
+  display: flex;
+  gap: 20px;
 }

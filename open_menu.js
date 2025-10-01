@@ -1,5 +1,6 @@
 const menuOptions = document.getElementById("menu-options");
 let currentMenuPosition = 0; // there are 5 menu positions total
+let hasOpenedMenu = 0;
 
 let spaceChar = "&nbsp;";
 let arrowChar = "►";
@@ -10,11 +11,15 @@ const MENU_3_CURSOR = document.getElementById("menu_3_cursor"); // 2
 const MENU_4_CURSOR = document.getElementById("menu_4_cursor"); // 3
 const MENU_5_CURSOR = document.getElementById("menu_5_cursor"); // 4
 
+const menuStatus = document.getElementById("menu-status");
+let hasOpenedStatus = 0;
+
 function openMenu () {
   menuOptions.style.display = "block";
   battleWindow.style.display = "block";
 
   characterRoster.style.display = "none";
+  textWindow.style.zIndex = "0";
 }
 
 function closeMenu () {
@@ -22,6 +27,7 @@ function closeMenu () {
   battleWindow.style.display = "none";
 
   characterRoster.style.display = "block";
+  textWindow.style.zIndex = "2";
 }
 
 function CLEAR_ALL_MENU_POSITIONS () {
@@ -78,6 +84,33 @@ function moveDownMenu () {
       CLEAR_ALL_MENU_POSITIONS();
       MENU_5_CURSOR.innerText = arrowChar;
       currentMenuPosition = 4;
+      break;
+  }
+}
+
+function openStatusMenu () {
+  $(gameWindow).fadeOut(1000);
+  $(battleWindow).fadeOut(1000);
+  hasOpenedMenu = 0;
+
+  setTimeout(function () {
+    menuOptions.style.display = "none";
+    menuStatus.style.display = "block";
+
+    // $(gameWindow).fadeIn(1000);
+    $(battleWindow).fadeIn(1000);
+
+    setTimeout(function () {
+      hasOpenedStatus = 1;
+    }, 1000);
+  }, 1000);
+}
+
+function selectMenuObject () {
+  switch (currentMenuPosition) {
+    case 0:
+      break;
+    case 1:
       break;
   }
 }

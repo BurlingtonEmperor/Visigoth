@@ -54,3 +54,17 @@ function playSlowAudio (audioSource, speed) {
 }
 
 let townieMusic;
+
+let currentAudio = 0;
+/*
+0 - not playing audio.
+1 - playing pinehurst/cambridge music
+2 - playing fw road music
+*/
+function jukeBoxAudio () {
+  switch (currentAudio) {
+    case 0:
+      
+      break;
+  }
+}

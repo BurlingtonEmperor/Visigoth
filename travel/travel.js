@@ -450,6 +450,7 @@ function fillSPRITE_ARR (whichFrame) {
 /*
 Gateway numbering
 0 - The Park (Pinehurst)
+1 - FW Road
 */
 let currentGateway;
 function checkForGateways (whichFrame) {
@@ -462,6 +463,17 @@ function checkForGateways (whichFrame) {
           return true;
       }
       break;
+    case 4:
+      switch (true) {
+        case (frameX > -100):
+          currentGateway = 1;
+          console.log("gateway fw detected");
+          createWindow("battleMessage", "Press 'E' to enter FW Road.", 0, 0);
+          return true;
+        default:
+          return false;
+      }
+      break;
   }
 }
 
@@ -471,6 +483,14 @@ function enterGateway (whichFrame) {
       switch (currentGateway) {
         case 0:
           switchFrame(2, "right");
+          break;
+      }
+      break;
+    case 4:
+      switch (currentGateway) {
+        case 1:
+          switchFrame(3, "right");
+          console.log("test");
           break;
       }
       break;
@@ -730,6 +750,14 @@ function setStage (travelFrame) {
   stickman.style.display = "block";
   fillSPRITE_ARR(travelFrame);
 
+  // switch (currentTown) {
+  //   case "pinehurst":
+  //     townieMusic = playLoopedAudio("../Visigoth/assets/audio/step.mp3");
+  //     break;
+  //   case "fw":
+  //     break;
+  // }
+
   switch (travelFrame) {
     case 0:
       currentTown = "pinehurst";
@@ -793,6 +821,12 @@ function setStage (travelFrame) {
       frameHeight = 487;
 
       renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+
+      switch (pinehurstCharData_4.specialCondition) {
+        case 1:
+          encounters = "ON";
+          break;
+      }
 
       switch (hasSwitchedFrame) {
         case 1:
@@ -860,6 +894,13 @@ function setStage (travelFrame) {
       travelFrameObject.src = currentSrc;
       frameWidth = 10264;
       frameHeight = 488;
+      // drawFrame();
+
+      switch (pinehurstCharData_4.specialCondition) {
+        case 1:
+          encounters = "ON";
+          break;
+      }
 
       switch (hasSwitchedFrame) {
         case 2: // coming from the left
@@ -877,6 +918,8 @@ function setStage (travelFrame) {
       travelFrameObject.src = currentSrc;
       frameWidth = 1237;
       frameHeight = 368;
+      encounters = "OFF";
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
       break;
   }
 }
@@ -1053,7 +1096,17 @@ function drawFrame (whichDirection) {
   //     break;
   // }
 
-  checkForGateways(currentFrame);
+  let GATEWAY_CHECK_VAR = checkForGateways(currentFrame);
+
+  switch (isUsingCharacters) {
+    case 0:
+      switch (false) {
+        case (GATEWAY_CHECK_VAR):
+          clearAllWindows();
+          break;
+      }
+      break;
+  }
 
   switch (enemyEncounterREADY) {
     case 1:
@@ -1079,8 +1132,6 @@ function drawFrame (whichDirection) {
 const stickmanRight = document.getElementById("stickman-right");
 const stickmanLeft = document.getElementById("stickman-left");
 
-let hasOpenedMenu = 0;
-
 $(document).on("keydown", function (event) {
   switch (isTraveling) {
     case 1:
@@ -1094,6 +1145,7 @@ $(document).on("keydown", function (event) {
           stickmanLeft.style.display = "block";
           break;
         case 69:
+          console.log("player interaction");
           switch (hasMarkedValueCHARD) {
             case 1:
               isTraveling = 0;
