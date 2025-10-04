@@ -566,13 +566,52 @@ function enterGateway (whichFrame) {
 
 // begin sleep functions
 
-function restoreHealthAndME () {}
+function restoreHealthAndME () {
+  switch (heroParty.length) {
+    case 1:
+      heroPartyOneHP = heroParty[0].heroHealth;
+      heroPartyOneME = heroParty[0].mentalEnergy;
+      break;
+    case 2:
+      heroPartyOneHP = heroParty[0].heroHealth;
+      heroPartyOneME = heroParty[0].mentalEnergy;
+
+      heroPartyTwoHP = heroParty[1].heroHealth;
+      heroPartyTwoME = heroParty[1].mentalEnergy;
+      break;
+    case 3:
+      heroPartyOneHP = heroParty[0].heroHealth;
+      heroPartyOneME = heroParty[0].mentalEnergy;
+
+      heroPartyTwoHP = heroParty[1].heroHealth;
+      heroPartyTwoME = heroParty[1].mentalEnergy;
+
+      heroPartyThreeHP = heroParty[2].heroHealth;
+      heroPartyThreeME = heroParty[2].mentalEnergy;
+      break;
+    case 4:
+      heroPartyOneHP = heroParty[0].heroHealth;
+      heroPartyOneME = heroParty[0].mentalEnergy;
+
+      heroPartyTwoHP = heroParty[1].heroHealth;
+      heroPartyTwoME = heroParty[1].mentalEnergy;
+
+      heroPartyThreeHP = heroParty[2].heroHealth;
+      heroPartyThreeME = heroParty[2].mentalEnergy;
+
+      heroPartyFourHP = heroParty[3].heroHealth;
+      heroPartyFourME = heroParty[3].mentalEnergy;
+      break;
+  }
+}
 
 function goToBed () {
   isTraveling = 0;
   townieMusic.pause();
   playAudio("../Visigoth/audio/sfx/glitter.mp3");
   $(gameWindow).fadeOut(3000);
+
+  restoreHealthAndME();
 
   setTimeout(function () {
     $(gameWindow).fadeIn(3000);
@@ -766,6 +805,7 @@ function loadCharacterDialogue (whichFrame, whichData) {
           break;
         case 5:
           isTraveling = 0;
+          yesOrNoEnabled = 1;
           openYesOrNo();
           yesOrNoFunction = "goToBed()";
           yesOrNoFunction_TWO = "isTraveling = 1";
