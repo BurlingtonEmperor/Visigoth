@@ -1,0 +1,6 @@
+gameEventLocation = "disabled";
+clearWindow();
+setStage(6);
+currentFrame = 6;
+isTraveling = 1;
+townieMusic = playLoopedAudio("../Visigoth/assets/audio/fw3.mp3");

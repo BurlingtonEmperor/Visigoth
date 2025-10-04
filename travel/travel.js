@@ -61,6 +61,15 @@ const fwCharData_1 = {
   dialogue : peckhamDialogue
 }
 
+const fwCharData_2 = {
+  sprite : "../Visigoth/travel/characters/chest.png",
+  name : "Chest",
+  ogX : 400,
+  ogY : 300,
+  specialCondition : 0,
+  dialogue : ['{contents},["Wiffleball Bat"]']
+}
+
 // end sprites and dialogue
 
 // begin character setup functions
@@ -82,6 +91,7 @@ let pinehurst2_xDATA = [];
 let pinehurst3_xDATA = []; // the park
 
 let fw1_xDATA = [];
+let fw2_xDATA = [];
 
 let travelCharacterObject_1_x = 0;
 let travelCharacterObject_2_x = 0;
@@ -194,6 +204,7 @@ const pinehurstSprite_arr2 = [pinehurstCharData_4];
 const pinehurstSprite_arr3 = [pinehurstCharData_3];
 
 const fwSprite_arr = [fwCharData_1];
+const fwSprite_arr2 = [fwCharData_2];
 
 function checkCharacters (travelFrame, whichDirection) {
   switch (isUsingCharacters) {
@@ -214,6 +225,9 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 5:
       arrToUse = fwSprite_arr;
+      break;
+    case 6:
+      arrToUse = fwSprite_arr2;
       break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
@@ -262,6 +276,9 @@ function saveCharacterLastX (whichFrame) {
     case 5:
       dataArr_LOADCHARLASTX = fwSprite_arr;
       break;
+    case 6:
+      dataArr_LOADCHARLASTX = fwSprite_arr2;
+      break;
     default:
       return false; // prevent a crash from happening
   }
@@ -285,6 +302,10 @@ function saveCharacterLastX (whichFrame) {
           case 5:
             fw1_xDATA = [];
             fw1_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 6:
+            fw2_xDATA = [];
+            fw2_xDATA.push(travelCharacterObject_1_x);
             break;
         }
         break;
@@ -371,6 +392,10 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     case 5:
       dataArr_LOADCHARLASTX = fw1_xDATA;
       dataArray = fwSprite_arr;
+      break;
+    case 6:
+      dataArr_LOADCHARLASTX = fw2_xDATA;
+      dataArray = fwSprite_arr2;
       break;
   }
 
@@ -470,6 +495,9 @@ function fillSPRITE_ARR (whichFrame) {
     case 5:
       CURRENT_SPRITE_ARR = fwSprite_arr;
       break;
+    case 6:
+      CURRENT_SPRITE_ARR = fwSprite_arr2;
+      break;
     default:
       CURRENT_SPRITE_ARR = [];
       break;
@@ -485,6 +513,7 @@ Gateway numbering
 0 - The Park (Pinehurst)
 1 - FW Road
 2 - Peckham Farm (FW Road)
+3 - Abandoned Farm (FW Road)
 */
 let currentGateway;
 function checkForGateways (whichFrame) {
@@ -502,6 +531,10 @@ function checkForGateways (whichFrame) {
         case (frameX < -1172.5 && frameX > -1372.5):
           currentGateway = 2;
           createWindow("battleMessage", "Press 'E' to enter Peckham Farm", 0, 0);
+          return true;
+        case (frameX < -2825 && frameX > -3025):
+          currentGateway = 3;
+          createWindow("battleMessage", "Press 'E' to enter the Abandoned Farm", 0, 0);
           return true;
       }
       break;
@@ -538,7 +571,15 @@ function enterGateway (whichFrame) {
       switch (currentGateway) {
         case 2:
           SAVE_FRAME_X();
+          townieMusic.pause();
+          townieMusic = playLoopedAudio("../Visigoth/assets/audio/fw3.mp3");
           switchFrame(5, "right");
+          break;
+        case 3:
+          SAVE_FRAME_X();
+          townieMusic.pause();
+          townieMusic = playLoopedAudio("../Visigoth/assets/audio/fw3.mp3");
+          switchFrame(6, "right");
           break;
       }
       break;
@@ -747,6 +788,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 5:
       CHECK_CHAR_D(fwSprite_arr);
       break;
+    case 6:
+      CHECK_CHAR_D(fwSprite_arr2);
+      break;
   }
 }
 
@@ -775,6 +819,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 5:
       currDataBank = fwSprite_arr;
+      break;
+    case 6:
+      currDataBank = fwSprite_arr2;
       break;
   }
   
@@ -820,12 +867,55 @@ function loadCharacterDialogue (whichFrame, whichData) {
       }
       break;
     default:
-      createWindow("dialogue", currDataBank[whichData].name + `: "` + currDataBank[whichData].dialogue[current_DA] + `"`, 0, 0);
+      let checkForChests = currDataBank[whichData].dialogue[current_DA];
+      switch (true) {
+        case (checkForChests.includes("{contents}")): // check for chests
+          let chestContent = checkForChests.split(",");
+          let chestContent_2 = JSON.parse(chestContent[1]);
 
-      setTimeout(function () {
-        isFinishedTalking = 1;
-        current_DA += 1;
-      }, (currDataBank[whichData].dialogue[current_DA].length * 25) + 500);
+          currDataBank[whichData].dialogue = "EMPTY";
+
+          createWindow("dialogue", "Found a " + chestContent_2[0] + "!", 0, 0);
+          currentInventory.push(chestContent_2[0]);
+          current_DA += 1;
+          break;
+        case (currDataBank[whichData].dialogue == "NONE"):
+          createWindow("dialogue", "The chest is empty.");
+          currDataBank[whichData].dialogue = "EMPTY";
+          current_DA += 1;
+          break;
+        case (currDataBank[whichData].dialogue == "EMPTY"):
+          createWindow("dialogue", heroParty[0].heroName + " closes the chest.");
+          currDataBank[whichData].dialogue = "NONE";
+          current_DA += 1;
+          break;
+        default:
+          createWindow("dialogue", currDataBank[whichData].name + `: "` + currDataBank[whichData].dialogue[current_DA] + `"`, 0, 0);
+          break;
+      }
+
+      switch (true) {
+        case (currDataBank[whichData].dialogue[current_DA] == undefined):
+          isFinishedTalking = 1;
+          isTalking = 0;
+          clearAllWindows();
+          isTraveling = 1;
+          break;
+        default:
+          setTimeout(function () {
+            isFinishedTalking = 1;
+            current_DA += 1;
+          }, (currDataBank[whichData].dialogue[current_DA].length * 25) + 500);
+          break;
+      }
+
+      // try {
+      //   const x = currDataBank[whichData].dialogue[current_DA].length * 5;
+      // }
+
+      // catch (error) {
+      //   isFinishedTalking = 1;
+      // }
       break;
   }
 }
@@ -1079,9 +1169,25 @@ function setStage (travelFrame) {
       travelFrameObject.src = currentSrc;
       encounters = "OFF";
       renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      currentFrame = 5;
 
       firstRenderCharacters(fwSprite_arr);
       loadCharacters(fwSprite_arr);
+      break;
+    case 6:
+      currentTown = "fw";
+      frameX = 0;
+      isUsingCharacters = 1;
+      frameWidth = 1474;
+      frameHeight = 400;
+      currentSrc = "../Visigoth/travel/frames/fw_road/farm2.webp";
+      travelFrameObject.src = currentSrc;
+      encounters = "OFF";
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      currentFrame = 6;
+
+      firstRenderCharacters(fwSprite_arr2);
+      loadCharacters(fwSprite_arr2);
       break;
   }
 }
@@ -1175,6 +1281,7 @@ function drawFrame (whichDirection) {
             break;
           case 4:
           case 5:
+          case 6:
             frameX += 2.5;
             return false;
         }
@@ -1232,10 +1339,16 @@ function drawFrame (whichDirection) {
           case 5:
             switchFrame(3, "special_load");
             isUsingCharacters = 0;
+            encounters = "ON";
             // setTimeout(function () {
             //   LOAD_FRAME_X();
             //   drawFrame();
             // }, 1001);
+            break;
+          case 6:
+            switchFrame(3, "special_load");
+            isUsingCharacters = 0;
+            encounters = "ON";
             break;
         }
         return false;
@@ -1268,6 +1381,9 @@ function drawFrame (whichDirection) {
       break;
     case 5:
       loadCharacters(fwSprite_arr);
+      break;
+    case 6:
+      loadCharacters(fwSprite_arr2);
       break;
   }
   saveCharacterLastX(currentFrame);
