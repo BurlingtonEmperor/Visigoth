@@ -1,0 +1,5 @@
+gameEventLocation = "disabled";
+openYesOrNo();
+yesOrNoEnabled = 1;
+yesOrNoFunction = "alert('yes')";
+yesOrNoFunction_TWO = "alert('no')";

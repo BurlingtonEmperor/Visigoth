@@ -52,6 +52,15 @@ const pinehurstCharData_4 = {
   dialogue : workerDialogue_1
 }
 
+const fwCharData_1 = {
+  sprite : "../Visigoth/travel/characters/peckham.png",
+  name : "Farmer Peckham",
+  ogX : 500,
+  ogY : 60,
+  specialCondition : 0,
+  dialogue : peckhamDialogue
+}
+
 // end sprites and dialogue
 
 // begin character setup functions
@@ -184,6 +193,8 @@ const pinehurstSprite_arr = [pinehurstCharData_1, pinehurstCharData_2]; // keep 
 const pinehurstSprite_arr2 = [pinehurstCharData_4];
 const pinehurstSprite_arr3 = [pinehurstCharData_3];
 
+const fwSprite_arr = [fwCharData_1];
+
 function checkCharacters (travelFrame, whichDirection) {
   switch (isUsingCharacters) {
     case 0:
@@ -200,6 +211,9 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 2:
       arrToUse = pinehurstSprite_arr3;
+      break;
+    case 5:
+      arrToUse = fwSprite_arr;
       break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
@@ -245,6 +259,9 @@ function saveCharacterLastX (whichFrame) {
     case 2:
       dataArr_LOADCHARLASTX = pinehurstSprite_arr3;
       break;
+    case 5:
+      dataArr_LOADCHARLASTX = fwSprite_arr;
+      break;
     default:
       return false; // prevent a crash from happening
   }
@@ -264,6 +281,10 @@ function saveCharacterLastX (whichFrame) {
           case 2:
             pinehurst3_xDATA = [];
             pinehurst3_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 5:
+            fw1_xDATA = [];
+            fw1_xDATA.push(travelCharacterObject_1_x);
             break;
         }
         break;
@@ -315,6 +336,11 @@ function saveCharacterLastX (whichFrame) {
             break;
         }
         break;
+      // case 5:
+      //   switch (whichFrame) {
+          
+      //   }
+      //   break;
     }
   }
 
@@ -341,6 +367,10 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     case 2:
       dataArr_LOADCHARLASTX = pinehurst3_xDATA;
       dataArray = pinehurstSprite_arr3;
+      break;
+    case 5:
+      dataArr_LOADCHARLASTX = fw1_xDATA;
+      dataArray = fwSprite_arr;
       break;
   }
 
@@ -437,6 +467,9 @@ function fillSPRITE_ARR (whichFrame) {
     case 2:
       CURRENT_SPRITE_ARR = pinehurstSprite_arr3;
       break;
+    case 5:
+      CURRENT_SPRITE_ARR = fwSprite_arr;
+      break;
     default:
       CURRENT_SPRITE_ARR = [];
       break;
@@ -451,6 +484,7 @@ function fillSPRITE_ARR (whichFrame) {
 Gateway numbering
 0 - The Park (Pinehurst)
 1 - FW Road
+2 - Peckham Farm (FW Road)
 */
 let currentGateway;
 function checkForGateways (whichFrame) {
@@ -463,12 +497,20 @@ function checkForGateways (whichFrame) {
           return true;
       }
       break;
+    case 3:
+      switch (true) {
+        case (frameX < -1172.5 && frameX > -1372.5):
+          currentGateway = 2;
+          createWindow("battleMessage", "Press 'E' to enter Peckham Farm", 0, 0);
+          break;
+      }
+      break;
     case 4:
       switch (true) {
         case (frameX > -100):
           currentGateway = 1;
           console.log("gateway fw detected");
-          createWindow("battleMessage", "Press 'E' to enter FW Road.", 0, 0);
+          createWindow("battleMessage", "Press 'E' to enter FW Road", 0, 0);
           return true;
         default:
           return false;
@@ -477,6 +519,12 @@ function checkForGateways (whichFrame) {
   }
 }
 
+let specialGatewayEvents = 0;
+/*
+Special Gateway Event numbers
+0 - disabled
+1 - fw road fog
+*/
 function enterGateway (whichFrame) {
   switch (whichFrame) {
     case 0:
@@ -486,11 +534,28 @@ function enterGateway (whichFrame) {
           break;
       }
       break;
+    case 3:
+      switch (currentGateway) {
+        case 2:
+
+          break;
+      }
+      break;
     case 4:
       switch (currentGateway) {
         case 1:
           switchFrame(3, "right");
           console.log("test");
+          
+          let fogText = "A thick fog rolls in. No turning back now...";
+          createWindow("dialogue", fogText, 0, 0);
+          setTimeout(function () {
+            isTraveling = 0;
+          }, 300);
+
+          setTimeout(function () {
+            specialGatewayEvents = 1;
+          }, fogText.length * 25 + 200);
           break;
       }
       break;
@@ -498,6 +563,27 @@ function enterGateway (whichFrame) {
 }
 
 // end gateway checking functions
+
+// begin sleep functions
+
+function restoreHealthAndME () {}
+
+function goToBed () {
+  isTraveling = 0;
+  townieMusic.pause();
+  playAudio("../Visigoth/audio/sfx/glitter.mp3");
+  $(gameWindow).fadeOut(3000);
+
+  setTimeout(function () {
+    $(gameWindow).fadeIn(3000);
+    setTimeout(function () {
+      isTraveling = 1;
+      townieMusic.play();
+    }, 3000);
+  }, 3000);
+}
+
+// end sleep functions
 
 // begin character dialogue functions
 
@@ -615,6 +701,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 2:
       CHECK_CHAR_D(pinehurstSprite_arr3);
       break;
+    case 5:
+      CHECK_CHAR_D(fwSprite_arr);
+      break;
   }
 }
 
@@ -640,6 +729,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 2:
       currDataBank = pinehurstSprite_arr3;
+      break;
+    case 5:
+      currDataBank = fwSprite_arr;
       break;
   }
   
@@ -671,6 +763,12 @@ function loadCharacterDialogue (whichFrame, whichData) {
             // pinehurstSprite_arr3 = [pinehurstCharData_3];
             resetDialogue();
           }
+          break;
+        case 5:
+          isTraveling = 0;
+          openYesOrNo();
+          yesOrNoFunction = "goToBed()";
+          yesOrNoFunction_TWO = "isTraveling = 1";
           break;
       }
       break;
@@ -896,6 +994,9 @@ function setStage (travelFrame) {
       frameHeight = 488;
       // drawFrame();
 
+      townieMusic.pause();
+      townieMusic = playLoopedAudio("../Visigoth/assets/audio/fw2.mp3");
+
       switch (pinehurstCharData_4.specialCondition) {
         case 1:
           encounters = "ON";
@@ -920,6 +1021,20 @@ function setStage (travelFrame) {
       frameHeight = 368;
       encounters = "OFF";
       renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      break;
+    case 5:
+      currentTown = "fw";
+      frameX = 0;
+      isUsingCharacters = 1;
+      frameWidth = 1474;
+      frameHeight = 400;
+      currentSrc = "../Visigoth/travel/frames/fw_road/farm1.jpg";
+      travelFrameObject.src = currentSrc;
+      encounters = "OFF";
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+
+      firstRenderCharacters(fwSprite_arr);
+      loadCharacters(fwSprite_arr);
       break;
   }
 }
@@ -1004,6 +1119,7 @@ function drawFrame (whichDirection) {
             }
             break;
           case 4:
+          case 5:
             frameX += 2.5;
             return false;
         }
@@ -1086,6 +1202,9 @@ function drawFrame (whichDirection) {
       break;
     case 2:
       loadCharacters(pinehurstSprite_arr3);
+      break;
+    case 5:
+      loadCharacters(fwSprite_arr);
       break;
   }
   saveCharacterLastX(currentFrame);
@@ -1217,6 +1336,36 @@ $(document).on("keydown", function (event) {
         case 40:
           playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
           moveDownMenu();
+          break;
+      }
+      break;
+  }
+
+  switch (specialGatewayEvents) {
+    case 1:
+      switch (event.which) {
+        case 13:
+          playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+          clearAllWindows();
+          isTraveling = 1;
+          specialGatewayEvents = 0;
+          break;
+      }
+      break;
+  }
+
+  switch (yesOrNoEnabled) {
+    case 1:
+      switch (event.which) {
+        case 39:
+          moveYesOrNoCursor("right");
+          break;
+        case 37:
+          moveYesOrNoCursor("left");
+          break;
+        case 13:
+          console.log("SELECTED");
+          selectYesOrNo();
           break;
       }
       break;

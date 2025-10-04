@@ -69,3 +69,9 @@ body {
   top: 0px;
   left: 0px;
 }
+
+/* Yes or No Window */
+#yes-or-no {
+  display: none;
+  position: absolute;
+}

@@ -5,6 +5,15 @@ const characterRoster = document.getElementById("character-roster");
 const battleRoster = document.getElementById("battle-roster");
 const itemRoster = document.getElementById("item-roster");
 
+const yesOrNoWindow = document.getElementById("yes-or-no");
+const yesCursor = document.getElementById("yes-cursor");
+const noCursor = document.getElementById("no-cursor");
+
+let yesOrNoEnabled = 0;
+let yesOrNoPosition = 0; // left. 1 is right
+let yesOrNoFunction; // function to be executed (when yes)
+let yesOrNoFunction_TWO; // function to be executed (when no)
+
 const cw1 = document.getElementById("cw1");
 const cw2 = document.getElementById("cw2");
 const cw3 = document.getElementById("cw3");
@@ -174,4 +183,54 @@ function populateBattleCursor (selectedItem) {
   retreatCursor.innerText = "";
 
   document.getElementById(selectedItem + "-cursor").innerText = "►";
+}
+
+function moveYesOrNoCursor (whichDirection) {
+  switch (whichDirection) {
+    case "left":
+      switch (yesOrNoPosition) {
+        case 1:
+          yesOrNoPosition = 0;
+          noCursor.innerText = "";
+          yesCursor.innerText = "►";
+          playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+          break;
+      }
+      break;
+    case "right":
+      switch (yesOrNoPosition) {
+        case 0:
+          yesOrNoPosition = 1;
+          noCursor.innerText = "►";
+          yesCursor.innerText = "";
+          playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+          break;
+      }
+      break;
+  }
+}
+
+function selectYesOrNo () {
+  switch (yesOrNoPosition) {
+    case 0:
+      eval(yesOrNoFunction);
+      break;
+    case 1:
+      eval(yesOrNoFunction_TWO);
+      break;
+  }
+  playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+  // eval(yesOrNoFunction);
+  closeYesOrNo();
+}
+
+function openYesOrNo () {
+  yesOrNoPosition = 0;
+  noCursor.innerText = "";
+  yesCursor.innerText = "►";
+  yesOrNoWindow.style.display = "block";
+}
+
+function closeYesOrNo () {
+  yesOrNoWindow.style.display = "none";
 }

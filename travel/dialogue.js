@@ -27,3 +27,12 @@ const workerDialogue_1 = [
   "The road's been blocked off. All the streetlights and traffic lights were affected by the power outage,",
   "so travel isn't safe right now."
 ];
+
+// fw dialogue
+const peckhamDialogue = [
+  "You seem tired. You can rest a while here if you want."
+];
+
+const noraDialogue = [
+  "This whole road is being bought out by developers. Most of the farms that used to be here are now gone."
+];

@@ -54,6 +54,7 @@ function playSlowAudio (audioSource, speed) {
 }
 
 let townieMusic;
+let altMusic;
 
 let currentAudio = 0;
 /*
