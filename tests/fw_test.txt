@@ -1,5 +1,6 @@
 gameEventLocation = "disabled";
 clearWindow();
+townieMusic = playLoopedAudio("../Visigoth/assets/audio/step.mp3");
 setStage(3);
 currentFrame = 3;
 isTraveling = 1;

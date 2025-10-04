@@ -502,7 +502,7 @@ function checkForGateways (whichFrame) {
         case (frameX < -1172.5 && frameX > -1372.5):
           currentGateway = 2;
           createWindow("battleMessage", "Press 'E' to enter Peckham Farm", 0, 0);
-          break;
+          return true;
       }
       break;
     case 4:
@@ -537,7 +537,8 @@ function enterGateway (whichFrame) {
     case 3:
       switch (currentGateway) {
         case 2:
-
+          SAVE_FRAME_X();
+          switchFrame(5, "right");
           break;
       }
       break;
@@ -607,14 +608,17 @@ function restoreHealthAndME () {
 
 function goToBed () {
   isTraveling = 0;
+  yesOrNoEnabled = 0;
   townieMusic.pause();
-  playAudio("../Visigoth/audio/sfx/glitter.mp3");
+  playAudio("../Visigoth/assets/audio/sfx/glitter.mp3");
   $(gameWindow).fadeOut(3000);
+  $(textWindow).fadeOut(3000);
 
   restoreHealthAndME();
 
   setTimeout(function () {
     $(gameWindow).fadeIn(3000);
+    $(textWindow).fadeIn(3000);
     setTimeout(function () {
       isTraveling = 1;
       townieMusic.play();
@@ -805,10 +809,13 @@ function loadCharacterDialogue (whichFrame, whichData) {
           break;
         case 5:
           isTraveling = 0;
-          yesOrNoEnabled = 1;
           openYesOrNo();
           yesOrNoFunction = "goToBed()";
-          yesOrNoFunction_TWO = "isTraveling = 1";
+          yesOrNoFunction_TWO = "isTraveling = 1; yesOrNoEnabled = 0;";
+
+          setTimeout(function () {
+            yesOrNoEnabled = 1;
+          }, 300);
           break;
       }
       break;
@@ -1106,6 +1113,14 @@ function switchFrame (travelFrame, whichDirection) {
             break;
         }
         break;
+      case "special_load":
+        clearWindow();
+        clearAllWindows();
+        LOAD_FRAME_X();
+        renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+        clearWindow();
+        drawFrame();
+        break;
     }
 
     $(gameWindow).fadeIn(1000);
@@ -1214,6 +1229,14 @@ function drawFrame (whichDirection) {
             switchFrame(1, "left");
             enemyEncounterREADY = 1;
             break;
+          case 5:
+            switchFrame(3, "special_load");
+            isUsingCharacters = 0;
+            // setTimeout(function () {
+            //   LOAD_FRAME_X();
+            //   drawFrame();
+            // }, 1001);
+            break;
         }
         return false;
       }
@@ -1261,6 +1284,12 @@ function drawFrame (whichDirection) {
     case 0:
       switch (false) {
         case (GATEWAY_CHECK_VAR):
+          clearAllWindows();
+          break;
+      }
+
+      switch (true) {
+        case (GATEWAY_CHECK_VAR == undefined):
           clearAllWindows();
           break;
       }

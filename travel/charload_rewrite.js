@@ -10,6 +10,7 @@ Not sure why I didn't do this before, but here are the frame numbers and their c
 */
 
 let charSAVEDATA = [];
+let savedFRAMEX;
 
 function REWRITE_SAVE_CHAR_DATA () {
   charSAVEDATA = [];
@@ -28,5 +29,13 @@ function REWRITE_LOAD_CHAR_DATA () {
 }
 
 function REWRITE_LONGTERM_DATA (saveOrLoad) {}
+
+function SAVE_FRAME_X () {
+  savedFRAMEX = frameX;
+}
+
+function LOAD_FRAME_X () {
+  frameX = savedFRAMEX;
+}
 
 // function SET_CURRENT_SPRITE_ARR () {}
