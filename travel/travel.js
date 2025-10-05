@@ -958,6 +958,10 @@ function initiateRandomEncounter () {
       //     break;
       // }
       break;
+    case "fw":
+      randomEnemiesList = [calfKiller, hauntedTractor, crawlingSkin, glowingOrb, facelessVoice];
+      backdropToUseFor_RANDOM_ENCOUNTER = "../Visigoth/battle/backdrops/fw.webp";
+      break;
   }
 
   let randomEnemyIndex = Math.floor(Math.random() * randomEnemiesList.length);

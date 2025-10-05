@@ -126,3 +126,82 @@ const magicMirror = {
   expYield : 6,
   droppedItems : []
 }
+// end pinehurst
+
+// fw
+const calfKiller = {
+  enemyName : "The Calf Killer",
+  maxHealth : 35,
+  attackForce : 6,
+  defenseForce : 2,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/fw/rake.png",
+  specialY : 50,
+  status : "generic",
+  specialAttacks : ["Gangstalk"],
+  expYield : 10,
+  droppedItems : []
+}
+
+const hauntedTractor = {
+  enemyName : "The Haunted Tractor",
+  maxHealth : 29,
+  attackForce : 6,
+  defenseForce : 5,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/fw/tractor.webp",
+  specialY : 20,
+  status : "generic",
+  specialAttacks : ["Strangle"],
+  expYield : 10,
+  droppedItems : []
+}
+
+const crawlingSkin = {
+  enemyName : "The Crawling Skin",
+  maxHealth : 20,
+  attackForce : 3,
+  defenseForce : 2,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/fw/rake.webp",
+  specialY : 50,
+  status : "generic",
+  specialAttacks : ["Psychic"],
+  expYield : 8,
+  droppedItems : []
+}
+
+const glowingOrb = {
+  enemyName : "The Glowing Orb",
+  maxHealth : 20,
+  attackForce : 3,
+  defenseForce : 2,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/fw/orb.webp",
+  specialY : 50,
+  status : "generic",
+  specialAttacks : ["Psychic"],
+  expYield : 8,
+  droppedItems : []
+}
+
+const facelessVoice = {
+  enemyName : "The Faceless Voice",
+  maxHealth : 20,
+  attackForce : 3,
+  defenseForce : 2,
+  mentalEnergy : 0,
+  summonArr : [],
+  sprite : "../Visigoth/battle/enemy_sprites/fw/mask.webp",
+  specialY : 50,
+  status : "generic",
+  specialAttacks : ["Psychic"],
+  expYield : 8,
+  droppedItems : []
+}
+
+// end fw
