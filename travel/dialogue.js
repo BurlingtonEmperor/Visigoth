@@ -37,6 +37,15 @@ const noraDialogue = [
   "This whole road is being bought out by developers. Most of the farms that used to be here are now gone."
 ];
 
+// chestnuthill dialogue
+const missingPosterDialogue = [
+  "MISSING: Jayden Lamoretti. Last seen...don't know."
+];
+
+const liamDialogue = [
+  "Jayden's been missing for a few days now."
+];
+
 // club ivanov dialogue
 const ivanDialogue_1 = [
   "Hey hey hey! Welcome to Club Ivanov, where you can indulge yourself in every pleasure know to man, legal or not.",

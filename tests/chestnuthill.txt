@@ -1,0 +1,7 @@
+gameEventLocation = "disabled";
+townieMusic = playLoopedAudio("../Visigoth/assets/audio/berrylife.mp3");
+setStage(8);
+isTraveling = 1;
+currentFrame = 8;
+currentTown = "chestnuthill";
+turnEncountersOff();

@@ -70,6 +70,24 @@ const fwCharData_2 = {
   dialogue : ['{contents},["Wiffleball Bat"]']
 }
 
+const chestnuthillCharData_1 = {
+  sprite : "../Visigoth/travel/characters/missing.png",
+  name : "Missing Poster",
+  ogX : 500,
+  ogY : 0,
+  specialCondition : 0,
+  dialogue : missingPosterDialogue
+}
+
+const chestnuthillCharData_2 = {
+  sprite : "../Visigoth/travel/characters/liam.png",
+  name : "Liam",
+  ogX : 1100,
+  ogY : 210,
+  specialCondition : 0,
+  dialogue : liamDialogue
+}
+
 const clubIvanovCharData_1 = {
   sprite : "../Visigoth/travel/characters/ivan.png",
   name : "Ivan Ivanov",
@@ -101,6 +119,8 @@ let pinehurst3_xDATA = []; // the park
 
 let fw1_xDATA = [];
 let fw2_xDATA = [];
+
+let chestnuthill1_xDATA = [];
 
 let clubivanov1_xDATA = []; // club ivanov dance floor
 
@@ -217,6 +237,8 @@ const pinehurstSprite_arr3 = [pinehurstCharData_3];
 const fwSprite_arr = [fwCharData_1];
 const fwSprite_arr2 = [fwCharData_2];
 
+const chestnuthillSprite_arr = [chestnuthillCharData_1, chestnuthillCharData_2];
+
 const clubivanovSprite_arr = [clubIvanovCharData_1];
 
 function checkCharacters (travelFrame, whichDirection) {
@@ -244,6 +266,9 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 7:
       arrToUse = clubivanovSprite_arr;
+      break;
+    case 8:
+      arrToUse = chestnuthillSprite_arr;
       break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
@@ -298,6 +323,9 @@ function saveCharacterLastX (whichFrame) {
     case 7:
       dataArr_LOADCHARLASTX = clubivanovSprite_arr;
       break;
+    case 8:
+      dataArr_LOADCHARLASTX = chestnuthillSprite_arr;
+      break;
     default:
       return false; // prevent a crash from happening
   }
@@ -343,6 +371,11 @@ function saveCharacterLastX (whichFrame) {
             pinehurst2_xDATA = [];
             pinehurst2_xDATA.push(travelCharacterObject_1_x);
             pinehurst2_xDATA.push(travelCharacterObject_2_x);
+            break;
+          case 8:
+            chestnuthill1_xDATA = [];
+            chestnuthill1_xDATA.push(travelCharacterObject_1_x);
+            chestnuthill1_xDATA.push(travelCharacterObject_2_x);
             break;
         }
         break;
@@ -423,6 +456,10 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     case 7:
       dataArr_LOADCHARLASTX = clubivanov1_xDATA;
       dataArray = clubivanovSprite_arr;
+      break;
+    case 8:
+      dataArr_LOADCHARLASTX = chestnuthill1_xDATA;
+      dataArray = chestnuthillSprite_arr;
       break;
   }
 
@@ -527,6 +564,9 @@ function fillSPRITE_ARR (whichFrame) {
       break;
     case 7:
       CURRENT_SPRITE_ARR = clubivanovSprite_arr;
+      break;
+    case 8:
+      CURRENT_SPRITE_ARR = chestnuthillSprite_arr;
       break;
     default:
       CURRENT_SPRITE_ARR = [];
@@ -831,6 +871,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 7:
       CHECK_CHAR_D(clubivanovSprite_arr);
       break;
+    case 8:
+      CHECK_CHAR_D(chestnuthillSprite_arr);
+      break;
   }
 }
 
@@ -865,6 +908,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 7:
       currDataBank = clubivanovSprite_arr;
+      break;
+    case 8:
+      currDataBank = chestnuthillSprite_arr;
       break;
   }
   
@@ -1236,6 +1282,21 @@ function setStage (travelFrame) {
       firstRenderCharacters(fwSprite_arr2);
       loadCharacters(fwSprite_arr2);
       break;
+    case 8:
+      currentTown = "chestnuthill";
+      frameX = 0;
+      isUsingCharacters = 1;
+      frameWidth = 1701;
+      frameHeight = 487;
+      currentSrc = "../Visigoth/travel/frames/chestnuthill/chestnuthill.webp";
+      travelFrameObject.src = currentSrc;
+      encounters = "ON";
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      currentFrame = 8;
+
+      firstRenderCharacters(chestnuthillSprite_arr);
+      loadCharacters(chestnuthillSprite_arr);
+      break;
   }
 }
 
@@ -1370,6 +1431,7 @@ function drawFrame (whichDirection) {
           case 4:
           case 5:
           case 6:
+          case 8:
             frameX += 2.5;
             return false;
         }
@@ -1472,6 +1534,9 @@ function drawFrame (whichDirection) {
       break;
     case 6:
       loadCharacters(fwSprite_arr2);
+      break;
+    case 8:
+      loadCharacters(chestnuthillSprite_arr);
       break;
   }
   saveCharacterLastX(currentFrame);
