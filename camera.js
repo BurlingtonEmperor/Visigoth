@@ -301,6 +301,7 @@ const cutScenes = document.getElementById("cutscenes");
 
 function clearTheatre () {
   cutScenes.innerHTML = "";
+  cutScenes.style.display = "none";
 }
 
 function displayCutscene (cutsceneSrc) {
@@ -325,4 +326,27 @@ function displaySlowCutscene (cutsceneSrc, speed) {
   cutsceneDisplay.playbackRate = speed;
   cutsceneDisplay.play();
 } 
+// end
+
+// show an repeated animation
+const animationWindow = document.getElementById("animation-window");
+
+function clearAnimations () {
+  animationWindow.innerHTML = "";
+  animationWindow.style.display = "none";
+}
+
+function resetCanvasBG () {
+  gameWindow.style.backgroundColor = "black";
+}
+
+function displayRepeatedAnimation (animationSrc) {
+  const animationDisplay = document.createElement("img");
+  animationWindow.style.display = "block";
+
+  animationDisplay.src = animationSrc;
+  animationDisplay.style.width = "100%";
+  animationWindow.appendChild(animationDisplay);
+}
+
 // end

@@ -70,6 +70,15 @@ const fwCharData_2 = {
   dialogue : ['{contents},["Wiffleball Bat"]']
 }
 
+const clubIvanovCharData_1 = {
+  sprite : "../Visigoth/travel/characters/ivan.png",
+  name : "Ivan Ivanov",
+  ogX : 180,
+  ogY : -160,
+  specialCondition : 0,
+  dialogue : ivanDialogue_1
+}
+
 // end sprites and dialogue
 
 // begin character setup functions
@@ -92,6 +101,8 @@ let pinehurst3_xDATA = []; // the park
 
 let fw1_xDATA = [];
 let fw2_xDATA = [];
+
+let clubivanov1_xDATA = []; // club ivanov dance floor
 
 let travelCharacterObject_1_x = 0;
 let travelCharacterObject_2_x = 0;
@@ -206,6 +217,8 @@ const pinehurstSprite_arr3 = [pinehurstCharData_3];
 const fwSprite_arr = [fwCharData_1];
 const fwSprite_arr2 = [fwCharData_2];
 
+const clubivanovSprite_arr = [clubIvanovCharData_1];
+
 function checkCharacters (travelFrame, whichDirection) {
   switch (isUsingCharacters) {
     case 0:
@@ -228,6 +241,9 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 6:
       arrToUse = fwSprite_arr2;
+      break;
+    case 7:
+      arrToUse = clubivanovSprite_arr;
       break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
@@ -279,6 +295,9 @@ function saveCharacterLastX (whichFrame) {
     case 6:
       dataArr_LOADCHARLASTX = fwSprite_arr2;
       break;
+    case 7:
+      dataArr_LOADCHARLASTX = clubivanovSprite_arr;
+      break;
     default:
       return false; // prevent a crash from happening
   }
@@ -306,6 +325,10 @@ function saveCharacterLastX (whichFrame) {
           case 6:
             fw2_xDATA = [];
             fw2_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 7:
+            clubivanov1_xDATA = [];
+            clubivanov1_xDATA.push(travelCharacterObject_1_x);
             break;
         }
         break;
@@ -396,6 +419,10 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     case 6:
       dataArr_LOADCHARLASTX = fw2_xDATA;
       dataArray = fwSprite_arr2;
+      break;
+    case 7:
+      dataArr_LOADCHARLASTX = clubivanov1_xDATA;
+      dataArray = clubivanovSprite_arr;
       break;
   }
 
@@ -497,6 +524,9 @@ function fillSPRITE_ARR (whichFrame) {
       break;
     case 6:
       CURRENT_SPRITE_ARR = fwSprite_arr2;
+      break;
+    case 7:
+      CURRENT_SPRITE_ARR = clubivanovSprite_arr;
       break;
     default:
       CURRENT_SPRITE_ARR = [];
@@ -756,12 +786,19 @@ function CHECK_CHAR_D (dataArray) {
     }
 
     switch (true) {
+      case (currentFrame == 7):
       case (usedX > 300 && usedX < 380):
         isAnyD_checked = 1;
         createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
         hasMarkedValueCHARD = 1;
         markedValueCHARD = i;
         break;
+      // case (currentFrame == 7):
+      //   isAnyD_checked = 1;
+      //   createWindow("battleMessage", "Press 'E' to interact.", 0, 0);
+      //   hasMarkedValueCHARD = 1;
+      //   markedValueCHARD = i;
+      //   break;
     }
 
     switch (isAnyD_checked) {
@@ -790,6 +827,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
       break;
     case 6:
       CHECK_CHAR_D(fwSprite_arr2);
+      break;
+    case 7:
+      CHECK_CHAR_D(clubivanovSprite_arr);
       break;
   }
 }
@@ -822,6 +862,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 6:
       currDataBank = fwSprite_arr2;
+      break;
+    case 7:
+      currDataBank = clubivanovSprite_arr;
       break;
   }
   
@@ -1240,6 +1283,41 @@ function switchFrame (travelFrame, whichDirection) {
   }, 1000);
 }
 
+function switchStuckFrame (travelFrame) {
+  $(gameWindow).fadeOut(1000);
+  isTraveling = 0;
+  hasSwitchedFrame = 1;
+  clearAllWindows();
+
+  setTimeout(function () {
+    clearWindow();
+    currentFrame = travelFrame;
+
+    switch (currentFrame) {
+      case 7:
+        displayRepeatedAnimation("../Visigoth/travel/frames/club_ivanov/dance.gif");
+        animationWindow.style.display = "none";
+        firstRenderCharacters(clubivanovSprite_arr);
+        gameWindow.style.backgroundColor = "transparent";
+        break;
+    }
+
+    $(gameWindow).fadeIn(1000);
+    
+    switch (currentFrame) {
+      case 7:
+        $(animationWindow).fadeIn(1000);
+        break;
+    }
+
+    setTimeout(function () {
+      isTraveling = 1;
+      fillSPRITE_ARR(currentFrame);
+      cleanUpCharacterData(currentFrame);
+    }, 1000);
+  }, 1000);
+}
+
 /*
 Frame 3 FW Road gate x locations
 -1355 : Peckham Farm
@@ -1250,6 +1328,12 @@ Frame 3 FW Road gate x locations
 
 function drawFrame (whichDirection) {
   let enemyEncounterREADY = 0;
+  
+  switch (true) {
+    case (currentFrame == 7):
+      return false;
+  }
+
   switch (whichDirection) {
     case "right":
       frameX -= 2.5;

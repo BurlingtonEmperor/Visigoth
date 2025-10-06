@@ -7,6 +7,9 @@ Not sure why I didn't do this before, but here are the frame numbers and their c
 2 -- The Park
 3 -- FW Road
 4 -- Cambridge Street
+5 -- Peckham Farm
+6 -- Abandoned Farm
+7 -- Club Ivanov Dance Floor
 */
 
 let charSAVEDATA = [];

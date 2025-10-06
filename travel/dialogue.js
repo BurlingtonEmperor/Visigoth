@@ -36,3 +36,14 @@ const peckhamDialogue = [
 const noraDialogue = [
   "This whole road is being bought out by developers. Most of the farms that used to be here are now gone."
 ];
+
+// club ivanov dialogue
+const ivanDialogue_1 = [
+  "Hey hey hey! Welcome to Club Ivanov, where you can indulge yourself in every pleasure know to man, legal or not.",
+  "Uh--I mean, it's all legal of course! *murmur* on paper at least... *murmur*"
+];
+
+// closeups
+const graveyardDialogue = [
+  `Roy: ""`
+]

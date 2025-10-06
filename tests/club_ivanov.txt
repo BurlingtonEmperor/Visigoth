@@ -1,0 +1,4 @@
+dance floor
+gameEventLocation = "disabled";
+clearWindow();
+switchStuckFrame(7);
