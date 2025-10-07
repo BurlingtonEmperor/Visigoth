@@ -947,6 +947,12 @@ function loadCharacterDialogue (whichFrame, whichData) {
       currDataBank = chestnuthillSprite_arr2;
       break;
   }
+
+  switch (true) {
+    case (currDataBank[whichData] == undefined):
+      isTraveling = 1;
+      return false;
+  }
   
   // current_DA++;
   dialogueAmountDATA = currDataBank[whichData].dialogue.length;
@@ -1384,6 +1390,7 @@ function switchFrame (travelFrame, whichDirection) {
         REWRITE_LOAD_CHAR_DATA();
         renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
         drawFrame();
+        REWRITE_LOAD_CHAR_DATA();
         break;
       case "special_load":
         clearWindow();
@@ -1499,6 +1506,8 @@ function drawFrame (whichDirection) {
             //   REWRITE_LOAD_CHAR_DATA();
             // }, 1000);
             enemyEncounterREADY = 1;
+            isAnyD_checked = 0;
+            hasMarkedValueCHARD = 0;
             break;
           case 4:
           case 5:
