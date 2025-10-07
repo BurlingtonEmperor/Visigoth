@@ -46,6 +46,11 @@ const liamDialogue = [
   "Jayden's been missing for a few days now."
 ];
 
+const henryDialogue = [
+  "There was a missing poster for the town's embarassment, Jayden.",
+  "You know what I said? I said, 'who cares?'"
+];
+
 // club ivanov dialogue
 const ivanDialogue_1 = [
   "Hey hey hey! Welcome to Club Ivanov, where you can indulge yourself in every pleasure know to man, legal or not.",

@@ -88,6 +88,15 @@ const chestnuthillCharData_2 = {
   dialogue : liamDialogue
 }
 
+const chestnuthillCharData_3 = {
+  sprite : "../Visigoth/travel/characters/henry.png",
+  name : "Henry",
+  ogX : 600,
+  ogY : 0,
+  specialCondition : 0,
+  dialogue : henryDialogue
+}
+
 const clubIvanovCharData_1 = {
   sprite : "../Visigoth/travel/characters/ivan.png",
   name : "Ivan Ivanov",
@@ -121,6 +130,7 @@ let fw1_xDATA = [];
 let fw2_xDATA = [];
 
 let chestnuthill1_xDATA = [];
+let chestnuthill2_xDATA = [];
 
 let clubivanov1_xDATA = []; // club ivanov dance floor
 
@@ -238,6 +248,7 @@ const fwSprite_arr = [fwCharData_1];
 const fwSprite_arr2 = [fwCharData_2];
 
 const chestnuthillSprite_arr = [chestnuthillCharData_1, chestnuthillCharData_2];
+const chestnuthillSprite_arr2 = [chestnuthillCharData_3];
 
 const clubivanovSprite_arr = [clubIvanovCharData_1];
 
@@ -269,6 +280,9 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 8:
       arrToUse = chestnuthillSprite_arr;
+      break;
+    case 9:
+      arrToUse = chestnuthillSprite_arr2;
       break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
@@ -326,6 +340,9 @@ function saveCharacterLastX (whichFrame) {
     case 8:
       dataArr_LOADCHARLASTX = chestnuthillSprite_arr;
       break;
+    case 9:
+      dataArr_LOADCHARLASTX = chestnuthillSprite_arr2;
+      break;
     default:
       return false; // prevent a crash from happening
   }
@@ -357,6 +374,10 @@ function saveCharacterLastX (whichFrame) {
           case 7:
             clubivanov1_xDATA = [];
             clubivanov1_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 9:
+            chestnuthill2_xDATA = [];
+            chestnuthill2_xDATA.push(travelCharacterObject_1_x);
             break;
         }
         break;
@@ -460,6 +481,10 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     case 8:
       dataArr_LOADCHARLASTX = chestnuthill1_xDATA;
       dataArray = chestnuthillSprite_arr;
+      break;
+    case 9:
+      dataArr_LOADCHARLASTX = chestnuthill2_xDATA;
+      dataArray = chestnuthillSprite_arr2;
       break;
   }
 
@@ -567,6 +592,9 @@ function fillSPRITE_ARR (whichFrame) {
       break;
     case 8:
       CURRENT_SPRITE_ARR = chestnuthillSprite_arr;
+      break;
+    case 9:
+      CURRENT_SPRITE_ARR = chestnuthillSprite_arr2;
       break;
     default:
       CURRENT_SPRITE_ARR = [];
@@ -874,6 +902,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 8:
       CHECK_CHAR_D(chestnuthillSprite_arr);
       break;
+    case 9:
+      CHECK_CHAR_D(chestnuthillSprite_arr2);
+      break;
   }
 }
 
@@ -911,6 +942,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 8:
       currDataBank = chestnuthillSprite_arr;
+      break;
+    case 9:
+      currDataBank = chestnuthillSprite_arr2;
       break;
   }
   
@@ -1297,6 +1331,21 @@ function setStage (travelFrame) {
       firstRenderCharacters(chestnuthillSprite_arr);
       loadCharacters(chestnuthillSprite_arr);
       break;
+    case 9:
+      currentTown = "chestnuthill";
+      frameX = 0;
+      isUsingCharacters = 1;
+      frameWidth = 1701;
+      frameHeight = 487;
+      currentSrc = "../Visigoth/travel/frames/chestnuthill/chestnuthill2.webp";
+      travelFrameObject.src = currentSrc;
+      encounters = "ON";
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      currentFrame = 9;
+
+      firstRenderCharacters(chestnuthillSprite_arr2);
+      loadCharacters(chestnuthillSprite_arr2);
+      break;
   }
 }
 
@@ -1314,6 +1363,7 @@ function switchFrame (travelFrame, whichDirection) {
 
     switch (whichDirection) {
       case "right":
+        clearAllWindows();
         break;
       case "left":
         clearWindow();
@@ -1326,6 +1376,14 @@ function switchFrame (travelFrame, whichDirection) {
             loadCharacters(pinehurstSprite_arr);
             break;
         }
+        break;
+      case "left_save":
+        clearWindow();
+        clearAllWindows();
+        frameX = -800;
+        REWRITE_LOAD_CHAR_DATA();
+        renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+        drawFrame();
         break;
       case "special_load":
         clearWindow();
@@ -1422,16 +1480,29 @@ function drawFrame (whichDirection) {
             break;
           case 3:
             switch (true) {
-              case (frameX < -9450):
-                // we'll do something here later.
+              case (frameX < -9420):
                 frameX += 2.5;
-                return false;
+                switchFrame(8, "right");
+                townieMusic.pause();
+                townieMusic = playLoopedAudio("../Visigoth/assets/audio/berrylife.mp3");
+                enemyEncounterREADY = 1;
+                break;
             }
+            break;
+          case 8:
+            frameX += 2.5;
+            REWRITE_SAVE_CHAR_DATA();
+            clearAllWindows();
+            switchFrame(9, "right");
+
+            // setTimeout(function () {
+            //   REWRITE_LOAD_CHAR_DATA();
+            // }, 1000);
+            enemyEncounterREADY = 1;
             break;
           case 4:
           case 5:
           case 6:
-          case 8:
             frameX += 2.5;
             return false;
         }
@@ -1500,6 +1571,15 @@ function drawFrame (whichDirection) {
             isUsingCharacters = 0;
             encounters = "ON";
             break;
+          case 9:
+            switchFrame(8, "left_save");
+            // setTimeout(function () {
+            //   REWRITE_LOAD_CHAR_DATA();
+            //   drawFrame();
+            // }, 1002);
+            isUsingCharacters = 1;
+            encounters = "ON";
+            break;
         }
         return false;
       }
@@ -1537,6 +1617,9 @@ function drawFrame (whichDirection) {
       break;
     case 8:
       loadCharacters(chestnuthillSprite_arr);
+      break;
+    case 9:
+      loadCharacters(chestnuthillSprite_arr2);
       break;
   }
   saveCharacterLastX(currentFrame);
