@@ -1392,6 +1392,12 @@ function switchFrame (travelFrame, whichDirection) {
         drawFrame();
         REWRITE_LOAD_CHAR_DATA();
         break;
+      case "left_fw":
+        clearAllWindows();
+        clearWindow();
+        frameX = -9420;
+        renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+        break;
       case "special_load":
         clearWindow();
         clearAllWindows();
@@ -1579,6 +1585,13 @@ function drawFrame (whichDirection) {
             switchFrame(3, "special_load");
             isUsingCharacters = 0;
             encounters = "ON";
+            break;
+          case 8:
+            switchFrame(3, "left_fw");
+            isUsingCharacters = 0;
+            encounters = "ON";
+            // townieMusic.pause();
+            // townieMusic = playLoopedAudio("../Visigoth/assets/audio/fw2.mp3");
             break;
           case 9:
             switchFrame(8, "left_save");
