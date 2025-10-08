@@ -51,6 +51,18 @@ const henryDialogue = [
   "You know what I said? I said, 'who cares?'"
 ];
 
+const domDialogue_1 = [
+  "Man oh man! You gotta help me find my kid brother, Jayden.",
+  "My parents have been on my case ever since he disappeared.",
+  "Look, I think he said something about an abandoned house on FW Road.",
+  "You should probably look there."
+];
+
+const domDialogue_2 = [
+  "So, he willingly ran away, huh...",
+  "There's a"
+];
+
 // club ivanov dialogue
 const ivanDialogue_1 = [
   "Hey hey hey! Welcome to Club Ivanov, where you can indulge yourself in every pleasure know to man, legal or not.",
