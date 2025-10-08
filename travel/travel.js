@@ -735,6 +735,14 @@ function checkForGateways (whichFrame) {
           return false;
       }
       break;
+    case 9:
+      switch (true) {
+        case (frameX < -770):
+          currentGateway = 6;
+          createWindow("battleMessage", "Press 'E' to enter the cemetery", 0, 0);
+          return true;
+      }
+      break;
     case 11:
       switch (true) {
         case (frameX < -770):
@@ -798,6 +806,19 @@ function enterGateway (whichFrame) {
           setTimeout(function () {
             specialGatewayEvents = 1;
           }, fogText.length * 25 + 200);
+          break;
+      }
+      break;
+    case 9:
+      switch (currentGateway) {
+        case 6:
+          switch (true) {
+            case (currentInventory.includes("Graveyard Key")):
+              break;
+            default:
+              createWindow("battleMessage", "The gate is locked. You need a key.", 0, 0);
+              break;
+          }
           break;
       }
       break;
