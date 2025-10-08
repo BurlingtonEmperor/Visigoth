@@ -10,6 +10,9 @@ Not sure why I didn't do this before, but here are the frame numbers and their c
 5 -- Peckham Farm
 6 -- Abandoned Farm
 7 -- Club Ivanov Dance Floor
+8 -- Chestnut Hill Frame 1
+9 -- Chestnut Hill Frame 2 
+10 -- Chestnut Hill Frame 3
 */
 
 let charSAVEDATA = [];

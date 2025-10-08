@@ -48,3 +48,4 @@ let testData = {
 }
 
 let heroParty = [playerData];
+let heroMoney = 25;

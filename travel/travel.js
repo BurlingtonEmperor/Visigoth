@@ -70,6 +70,24 @@ const fwCharData_2 = {
   dialogue : ['{contents},["Wiffleball Bat"]']
 }
 
+const fwCharData_3 = {
+  sprite : "../Visigoth/travel/characters/chest.png",
+  name : "Chest",
+  ogX : 350,
+  ogY : 300,
+  specialCondition : 0,
+  dialogue : ['{contents},["50 Dollars"]']
+}
+
+const fwCharData_4 = {
+  sprite : "../Visigoth/travel/characters/chest.png",
+  name : "Chest",
+  ogX : 650,
+  ogY : 300,
+  specialCondition : 0,
+  dialogue : ['{contents},["Graveyard Key"]']
+}
+
 const chestnuthillCharData_1 = {
   sprite : "../Visigoth/travel/characters/missing.png",
   name : "Missing Poster",
@@ -137,6 +155,8 @@ let pinehurst3_xDATA = []; // the park
 
 let fw1_xDATA = [];
 let fw2_xDATA = [];
+let fw3_xDATA = [];
+let fw4_xDATA = [];
 
 let chestnuthill1_xDATA = [];
 let chestnuthill2_xDATA = [];
@@ -256,6 +276,8 @@ const pinehurstSprite_arr3 = [pinehurstCharData_3];
 
 const fwSprite_arr = [fwCharData_1];
 const fwSprite_arr2 = [fwCharData_2];
+const fwSprite_arr3 = [fwCharData_3];
+const fwSprite_arr4 = [fwCharData_4];
 
 const chestnuthillSprite_arr = [chestnuthillCharData_1, chestnuthillCharData_2];
 const chestnuthillSprite_arr2 = [chestnuthillCharData_3];
@@ -297,6 +319,12 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 10:
       arrToUse = chestnuthillSprite_arr3;
+      break;
+    case 11:
+      arrToUse = fwSprite_arr3;
+      break;
+    case 12:
+      arrToUse = fwSprite_arr4;
       break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
@@ -360,6 +388,12 @@ function saveCharacterLastX (whichFrame) {
     case 10:
       dataArr_LOADCHARLASTX = chestnuthillSprite_arr3;
       break;
+    case 11:
+      dataArr_LOADCHARLASTX = fwSprite_arr3;
+      break;
+    case 12:
+      dataArr_LOADCHARLASTX = fwSprite_arr4;
+      break;
     default:
       return false; // prevent a crash from happening
   }
@@ -399,6 +433,14 @@ function saveCharacterLastX (whichFrame) {
           case 10:
             chestnuthill3_xDATA = [];
             chestnuthill3_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 11:
+            fw3_xDATA = [];
+            fw3_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 12:
+            fw4_xDATA = [];
+            fw4_xDATA.push(travelCharacterObject_1_x);
             break;
         }
         break;
@@ -510,6 +552,14 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
     case 10:
       dataArr_LOADCHARLASTX = chestnuthill3_xDATA;
       dataArray = chestnuthillSprite_arr3;
+      break;
+    case 11:
+      dataArr_LOADCHARLASTX = fw3_xDATA;
+      dataArray = fwSprite_arr3;
+      break;
+    case 12:
+      dataArr_LOADCHARLASTX = fw4_xDATA;
+      dataArray = fwSprite_arr4;
       break;
   }
 
@@ -624,6 +674,12 @@ function fillSPRITE_ARR (whichFrame) {
     case 10:
       CURRENT_SPRITE_ARR = chestnuthillSprite_arr3;
       break;
+    case 11:
+      CURRENT_SPRITE_ARR = fwSprite_arr3;
+      break;
+    case 12:
+      CURRENT_SPRITE_ARR = fwSprite_arr4;
+      break;
     default:
       CURRENT_SPRITE_ARR = [];
       break;
@@ -662,6 +718,10 @@ function checkForGateways (whichFrame) {
           currentGateway = 3;
           createWindow("battleMessage", "Press 'E' to enter the Abandoned Farm", 0, 0);
           return true;
+        case (frameX < -6610 && frameX > -6810):
+          currentGateway = 4;
+          createWindow("battleMessage", "Press 'E' to enter the Abandoned House", 0, 0);
+          return true;
       }
       break;
     case 4:
@@ -673,6 +733,14 @@ function checkForGateways (whichFrame) {
           return true;
         default:
           return false;
+      }
+      break;
+    case 11:
+      switch (true) {
+        case (frameX < -770):
+          currentGateway = 5;
+          createWindow("battleMessage", "Press 'E' to go upstairs", 0, 0);
+          return true;
       }
       break;
   }
@@ -707,6 +775,12 @@ function enterGateway (whichFrame) {
           townieMusic = playLoopedAudio("../Visigoth/assets/audio/fw3.mp3");
           switchFrame(6, "right");
           break;
+        case 4:
+          SAVE_FRAME_X();
+          townieMusic.pause();
+          townieMusic = playLoopedAudio("../Visigoth/assets/audio/fw4.mp3");
+          switchFrame(11, "right");
+          break;
       }
       break;
     case 4:
@@ -724,6 +798,14 @@ function enterGateway (whichFrame) {
           setTimeout(function () {
             specialGatewayEvents = 1;
           }, fogText.length * 25 + 200);
+          break;
+      }
+      break;
+    case 11:
+      switch (currentGateway) {
+        case 5:
+          REWRITE_SAVE_CHAR_DATA();
+          switchFrame(12, "right");
           break;
       }
       break;
@@ -936,6 +1018,12 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 10:
       CHECK_CHAR_D(chestnuthillSprite_arr3);
       break;
+    case 11:
+      CHECK_CHAR_D(fwSprite_arr3);
+      break;
+    case 12:
+      CHECK_CHAR_D(fwSprite_arr4);
+      break;
   }
 }
 
@@ -979,6 +1067,12 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 10:
       currDataBank = chestnuthillSprite_arr3;
+      break;
+    case 11:
+      currDataBank = fwSprite_arr3;
+      break;
+    case 12:
+      currDataBank = fwSprite_arr4;
       break;
   }
 
@@ -1037,9 +1131,26 @@ function loadCharacterDialogue (whichFrame, whichData) {
           let chestContent_2 = JSON.parse(chestContent[1]);
 
           currDataBank[whichData].dialogue = "EMPTY";
+          let aChar = "a ";
 
-          createWindow("dialogue", "Found a " + chestContent_2[0] + "!", 0, 0);
-          currentInventory.push(chestContent_2[0]);
+          switch (true) {
+            case (chestContent_2[0].includes("Dollars")):
+              aChar = "";
+              break;
+          }
+
+          createWindow("dialogue", "Found " + aChar + chestContent_2[0] + "!", 0, 0);
+          switch (true) {
+            case (chestContent_2[0].includes("Dollars")):
+              let dollarArray = chestContent_2[0].split(" ");
+              let dollarAmountFound = parseInt(dollarArray);
+
+              heroMoney += dollarAmountFound;
+              break;
+            default:
+              currentInventory.push(chestContent_2[0]);
+              break;
+          }
           current_DA += 1;
           break;
         case (currDataBank[whichData].dialogue == "NONE"):
@@ -1401,6 +1512,36 @@ function setStage (travelFrame) {
       firstRenderCharacters(chestnuthillSprite_arr3);
       loadCharacters(chestnuthillSprite_arr3);
       break;
+    case 11:
+      currentTown = "fw";
+      frameX = 0;
+      isUsingCharacters = 1;
+      frameWidth = 1474;
+      frameHeight = 400;
+      currentSrc = "../Visigoth/travel/frames/fw_road/housefloor1.webp";
+      travelFrameObject.src = currentSrc;
+      encounters = "OFF";
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      currentFrame = 11;
+
+      firstRenderCharacters(fwSprite_arr3);
+      loadCharacters(fwSprite_arr3);
+      break;
+    case 12:
+      currentTown = "fw";
+      frameX = 0;
+      isUsingCharacters = 1;
+      frameWidth = 1474;
+      frameHeight = 400;
+      currentSrc = "../Visigoth/travel/frames/fw_road/housefloor2.webp";
+      travelFrameObject.src = currentSrc;
+      encounters = "OFF";
+      renderImage(currentSrc, frameX, 0, frameWidth, frameHeight);
+      currentFrame = 12;
+
+      firstRenderCharacters(fwSprite_arr4);
+      loadCharacters(fwSprite_arr4);
+      break;
   }
 }
 
@@ -1570,10 +1711,18 @@ function drawFrame (whichDirection) {
             clearAllWindows();
             switchFrame(10, "right");
             break;
+          // case 12:
+          //   frameX += 2.5;
+          //   REWRITE_SAVE_CHAR_DATA();
+          //   clearAllWindows();
+          //   switchFrame(11, "right");
+          //   break;
           case 4:
           case 5:
           case 6:
           case 10:
+          case 11:
+          case 12:
             frameX += 2.5;
             return false;
         }
@@ -1663,6 +1812,17 @@ function drawFrame (whichDirection) {
             isUsingCharacters = 1;
             encounters = "ON";
             break;
+          case 11:
+            switchFrame(3, "left_fw");
+            isUsingCharacters = 0;
+            encounters = "ON";
+            break;
+           case 12:
+            clearAllWindows();
+            clearWindow();
+            switchFrame(11, "left_save");
+            isUsingCharacters = 1;
+            break;
         }
         return false;
       }
@@ -1706,6 +1866,12 @@ function drawFrame (whichDirection) {
       break;
     case 10:
       loadCharacters(chestnuthillSprite_arr3);
+      break;
+    case 11:
+      loadCharacters(fwSprite_arr3);
+      break;
+    case 12:
+      loadCharacters(fwSprite_arr4);
       break;
   }
   saveCharacterLastX(currentFrame);
