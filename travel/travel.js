@@ -133,6 +133,15 @@ const clubIvanovCharData_1 = {
   dialogue : ivanDialogue_1
 }
 
+const graveyardCharData_1 = {
+  sprite : "../Visigoth/travel/characters/zesty.png",
+  name : "Jayden",
+  ogX : 301,
+  ogY : 250,
+  specialCondition : 0,
+  dialogue : graveyardDialogue
+}
+
 // end sprites and dialogue
 
 // begin character setup functions
@@ -161,6 +170,7 @@ let fw4_xDATA = [];
 let chestnuthill1_xDATA = [];
 let chestnuthill2_xDATA = [];
 let chestnuthill3_xDATA = [];
+let chestnuthill4_xDATA = [];
 
 let clubivanov1_xDATA = []; // club ivanov dance floor
 
@@ -282,6 +292,7 @@ const fwSprite_arr4 = [fwCharData_4];
 const chestnuthillSprite_arr = [chestnuthillCharData_1, chestnuthillCharData_2];
 const chestnuthillSprite_arr2 = [chestnuthillCharData_3];
 const chestnuthillSprite_arr3 = [chestnuthillCharData_4];
+const chestnuthillSprite_arr4 = [graveyardCharData_1];
 
 const clubivanovSprite_arr = [clubIvanovCharData_1];
 
@@ -325,6 +336,9 @@ function checkCharacters (travelFrame, whichDirection) {
       break;
     case 12:
       arrToUse = fwSprite_arr4;
+      break;
+    case 13:
+      arrToUse = chestnuthillSprite_arr4;
       break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
@@ -393,6 +407,9 @@ function saveCharacterLastX (whichFrame) {
       break;
     case 12:
       dataArr_LOADCHARLASTX = fwSprite_arr4;
+      break;
+    case 13:
+      dataArr_LOADCHARLASTX = chestnuthillSprite_arr4;
       break;
     default:
       return false; // prevent a crash from happening
@@ -561,6 +578,10 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
       dataArr_LOADCHARLASTX = fw4_xDATA;
       dataArray = fwSprite_arr4;
       break;
+    case 13:
+      dataArr_LOADCHARLASTX = chestnuthill4_xDATA;
+      dataArray = chestnuthillSprite_arr4;
+      break;
   }
 
   function tackleDATACHARLASTX (numArrLength) {
@@ -679,6 +700,9 @@ function fillSPRITE_ARR (whichFrame) {
       break;
     case 12:
       CURRENT_SPRITE_ARR = fwSprite_arr4;
+      break;
+    case 13:
+      CURRENT_SPRITE_ARR = chestnuthillSprite_arr4;
       break;
     default:
       CURRENT_SPRITE_ARR = [];
@@ -1045,6 +1069,9 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 12:
       CHECK_CHAR_D(fwSprite_arr4);
       break;
+    case 13:
+      CHECK_CHAR_D(chestnuthillSprite_arr4);
+      break;
   }
 }
 
@@ -1094,6 +1121,9 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 12:
       currDataBank = fwSprite_arr4;
+      break;
+    case 13:
+      currDataBank = chestnuthillSprite_arr4;
       break;
   }
 
@@ -1643,12 +1673,19 @@ function switchStuckFrame (travelFrame) {
         firstRenderCharacters(clubivanovSprite_arr);
         gameWindow.style.backgroundColor = "transparent";
         break;
+      case 13:
+        displayRepeatedAnimation("../Visigoth/travel/frames/closeups/graveyard.jpg");
+        animationWindow.style.display = "none";
+        firstRenderCharacters(chestnuthillSprite_arr4);
+        gameWindow.style.backgroundColor = "transparent";
+        break;
     }
 
     $(gameWindow).fadeIn(1000);
     
     switch (currentFrame) {
       case 7:
+      case 13:
         $(animationWindow).fadeIn(1000);
         break;
     }
