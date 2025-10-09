@@ -133,6 +133,11 @@ const clubIvanovCharData_1 = {
   dialogue : ivanDialogue_1
 }
 
+const clubIvanovCharData_2 = {
+  sprite : "",
+  name : ""
+}
+
 const graveyardCharData_1 = {
   sprite : "../Visigoth/travel/characters/zesty.png",
   name : "Jayden",
@@ -340,6 +345,8 @@ function checkCharacters (travelFrame, whichDirection) {
     case 13:
       arrToUse = chestnuthillSprite_arr4;
       break;
+    case 14:
+      break;
     default:
       return false; // this seems redundant, but it's to prevent crashes
   }
@@ -411,6 +418,8 @@ function saveCharacterLastX (whichFrame) {
     case 13:
       dataArr_LOADCHARLASTX = chestnuthillSprite_arr4;
       break;
+    case 14:
+      break;
     default:
       return false; // prevent a crash from happening
   }
@@ -458,6 +467,12 @@ function saveCharacterLastX (whichFrame) {
           case 12:
             fw4_xDATA = [];
             fw4_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 13:
+            chestnuthill4_xDATA = [];
+            chestnuthill4_xDATA.push(travelCharacterObject_1_x);
+            break;
+          case 14:
             break;
         }
         break;
@@ -582,6 +597,8 @@ function loadCharacterLastX (whichFrame) { // take data from each last x array a
       dataArr_LOADCHARLASTX = chestnuthill4_xDATA;
       dataArray = chestnuthillSprite_arr4;
       break;
+    case 14:
+      break;
   }
 
   function tackleDATACHARLASTX (numArrLength) {
@@ -703,6 +720,8 @@ function fillSPRITE_ARR (whichFrame) {
       break;
     case 13:
       CURRENT_SPRITE_ARR = chestnuthillSprite_arr4;
+      break;
+    case 14:
       break;
     default:
       CURRENT_SPRITE_ARR = [];
@@ -1072,6 +1091,8 @@ function cleanUpCharacterData (whichFrame) { // only for dialogue!
     case 13:
       CHECK_CHAR_D(chestnuthillSprite_arr4);
       break;
+    case 14:
+      break;
   }
 }
 
@@ -1124,6 +1145,8 @@ function loadCharacterDialogue (whichFrame, whichData) {
       break;
     case 13:
       currDataBank = chestnuthillSprite_arr4;
+      break;
+    case 14:
       break;
   }
 
