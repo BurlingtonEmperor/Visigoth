@@ -73,6 +73,7 @@ function initiateBattle (backdrop, enemyData) {
     $(gameWindow).fadeIn(1000);
     
     clearWindow();
+    clearAllWindows();
     drawImageLeft(backdrop);
     renderImage(enemySprite, 500, specialY);
     // renderPreloadedImage(enemySprite, 500, enemyData.specialY);
