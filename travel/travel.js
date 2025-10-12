@@ -857,6 +857,8 @@ function enterGateway (whichFrame) {
         case 6:
           switch (true) {
             case (currentInventory.includes("Graveyard Key")):
+              SAVE_FRAME_X();
+              switchStuckFrame(13);
               break;
             default:
               createWindow("battleMessage", "The gate is locked. You need a key.", 0, 0);
@@ -1194,6 +1196,11 @@ function loadCharacterDialogue (whichFrame, whichData) {
           setTimeout(function () {
             yesOrNoEnabled = 1;
           }, 300);
+          break;
+        case 13:
+          isTraveling = 0;
+          townieMusic.pause();
+          initiateBattle("../Visigoth/battle/backdrops/cemetery.webp", jaydenData);
           break;
       }
       break;

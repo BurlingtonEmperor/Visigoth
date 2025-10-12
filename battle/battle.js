@@ -22,6 +22,12 @@ let isSelectingItem = 0;
 
 function initiateBattle (backdrop, enemyData) {
   $(gameWindow).fadeOut(1000);
+
+  switch (true) {
+    case (animationWindow.style.display == "block"):
+      $(animationWindow).fadeOut(1000);
+      break;
+  }
   gameEventLocation = "disabled";
   playAudio("../Visigoth/battle/dstelept.wav");
   gameWindow.style.filter = "none";
@@ -320,6 +326,15 @@ function summonBeing (summonName) {
       setTimeout(function () {
         clearTheatre();
       }, 7000);
+      summonTimer = 7000;
+      break;
+    case "minivan":
+      displayCutscene("../Visigoth/battle/summons/minivan.mp4");
+
+      setTimeout(function () {
+        clearTheatre();
+      }, 2800);
+      summonTimer = 2800;
       break;
   }
 
@@ -450,8 +465,9 @@ function executePlayerActions (actionDATA) {
   }, (1000 * playerACTION_LOG.length) + 1000);
 }
 
+let summonTimer;
 function enemyTurn () {
-  let enemyDiceRoll = Math.floor(Math.random () * 5);
+  let enemyDiceRoll = Math.floor(Math.random () * 4);
   switch (enemyDefeated) {
     case 1:
       return false;
@@ -581,6 +597,17 @@ function enemyTurn () {
       break;
     case 3:
       // summons
+      let randomSummon = Math.floor(Math.random() * currentEnemyData.summonArr.length);
+      createWindow("battleMessage", currentEnemyData.summonArr[randomSummon], 0, 0);
+      summonBeing(currentEnemyData.summonArr[randomSummon], 0, 0);
+
+      setTimeout(function () {
+        takeDamage(Math.floor(enemyAttackRoll * 2.3), hero_TARGET);
+        setTimeout(function () {
+          battleOptionsEnabled = 1;
+          battleRoster.style.display = "block";
+        }, 1000);
+      }, summonTimer);
       break;
   }
 }
