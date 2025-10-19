@@ -55,3 +55,8 @@ let heroExp_2 = 0;
 let heroExp_3 = 0;
 let heroExp_4 = 0;
 let heroExp_5 = 0;
+
+let heroLevel_1 = 1;
+let heroLevel_2 = 1;
+let heroLevel_3 = 1;
+let heroLevel_4 = 1;
