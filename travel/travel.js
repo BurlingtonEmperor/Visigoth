@@ -1281,7 +1281,7 @@ function loadCharacterDialogue (whichFrame, whichData) {
 // end character functions
 
 // begin random enemy encounter functions
-let encounterOdds = 350;
+let encounterOdds = 150;
 function initiateRandomEncounter () {
   let encounterChance = Math.floor(Math.random () * encounterOdds);
 

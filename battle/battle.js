@@ -715,7 +715,29 @@ function bringUpPostBattleOptions () {
           break;
         default:
           postBattleDialogue = "Gained " + currentEnemyData.expYield + " exp."; 
-          
+          switch (false) {
+            case (heroPartyOneHP < 1):
+              heroExp_1 += currentEnemyData.expYield;
+              break;
+          }
+
+          switch (false) {
+            case (heroPartyTwoHP < 1):
+              heroExp_2 += currentEnemyData.expYield;
+              break;
+          }
+
+          switch (false) {
+            case (heroPartyThreeHP < 1):
+              heroExp_3 += currentEnemyData.expYield;
+              break;
+          }
+
+          switch (false) {
+            case (heroPartyFourHP < 1):
+              heroExp_4 += currentEnemyData.expYield;
+              break;
+          }
           break;
       }
       postBattleDialogue_len = postBattleDialogue.length;
@@ -735,6 +757,7 @@ function bringUpPostBattleOptions () {
       clearAllWindows();
       currentBattleMusic.pause();
       enemyDefeatOptions = 0;
+      postBattleD_num = 0;
       
       battleWindow.style.display = "none";
       $(gameWindow).fadeOut(2000);
@@ -786,7 +809,7 @@ function bringUpPostBattleOptions () {
         
         // townieMusic = playLoopedAudio();
       }, 2000);
-      break;
+      return false;
   }
 
   postBattleD_num += 1;
