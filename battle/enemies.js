@@ -8,7 +8,7 @@ const jaydenData = {
   sprite : "../Visigoth/battle/enemy_sprites/jayden/jayden1.png",
   specialY : 62,
   status : "boss",
-  specialAttacks : ["Bad Gas", "Pond Jump", "Crapshoot"]
+  specialAttacks : ["Bad Gas"]
 }
 
 const jaydenFinalData = {

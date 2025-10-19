@@ -180,9 +180,7 @@ function takeDamage (dmgAmount, targetHero) {
     document.getElementById("cw" + String(targetHero + 1)).style.backgroundColor = "black";
     createWindow("battleMessage", heroParty[targetHero].heroName + " was slain!", 0, 0);
 
-    setTimeout(function () {
-      clearAllWindows();
-    }, 2000);
+    checkForDeadPlayers();
   }
 }
 
@@ -443,6 +441,12 @@ function executePlayerActions (actionDATA) {
         case "retreat":
           switch (i) {
             case 0:
+              switch (currentEnemyData.status) {
+                case "boss":
+                case "jenova":
+                  createWindow("");
+                  break;
+              }
               break;
             default:
               createWindow("battleMessage", heroParty[i].heroName + " is not giving orders.", 0, 0);
@@ -594,13 +598,46 @@ function enemyTurn () {
             battleRoster.style.display = "block";
           }, 500);
           break;
+        case "Bad Gas":
+          const newWindowElement = document.createElement("div");
+
+          newWindowElement.style.zIndex = "150";
+          newWindowElement.style.backgroundColor = "green";
+          newWindowElement.style.position = "absolute";
+          newWindowElement.style.width = "800px";
+          newWindowElement.style.height = "600px";
+          newWindowElement.style.display = "none";
+
+          outerShell.appendChild(newWindowElement);
+          $(newWindowElement).fadeIn(1000);
+          setTimeout(function () {
+            $(newWindowElement).fadeOut(1000);
+            setTimeout(function () {
+              battleOptionsEnabled = 1;
+              battleRoster.style.display = "block";
+              newWindowElement.remove();
+            }, 1000);
+          }, 1000);
+          break;
+        case "Pond Jump":
+          
+          break;
       }
       break;
     case 3:
       // summons
       let randomSummon = Math.floor(Math.random() * currentEnemyData.summonArr.length);
-      createWindow("battleMessage", currentEnemyData.summonArr[randomSummon], 0, 0);
+      let summonName = "Unknown";
+
+      switch (currentEnemyData.summonArr[randomSummon]) {
+        case "minivan":
+          summonName = "Minivan";
+          break;
+      }
+
+      createWindow("battleMessage", summonName, 0, 0);
       summonBeing(currentEnemyData.summonArr[randomSummon], 0, 0);
+      removeFromArray(currentEnemyData.summonArr, currentEnemyData.summonArr[randomSummon]);
 
       setTimeout(function () {
         takeDamage(Math.floor(enemyAttackRoll * 2.3), hero_TARGET);
@@ -678,6 +715,7 @@ function bringUpPostBattleOptions () {
           break;
         default:
           postBattleDialogue = "Gained " + currentEnemyData.expYield + " exp."; 
+          
           break;
       }
       postBattleDialogue_len = postBattleDialogue.length;

@@ -859,6 +859,8 @@ function enterGateway (whichFrame) {
             case (currentInventory.includes("Graveyard Key")):
               SAVE_FRAME_X();
               switchStuckFrame(13);
+              townieMusic.pause();
+              townieMusic = playLoopedAudio("../Visigoth/assets/audio/wcp.mp3");
               break;
             default:
               createWindow("battleMessage", "The gate is locked. You need a key.", 0, 0);
