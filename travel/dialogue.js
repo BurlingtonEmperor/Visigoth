@@ -72,7 +72,7 @@ const ivanDialogue_1 = [
 // closeups
 const graveyardDialogue = [
   "Oh, you've found me.",
-  "Do I want to go back? Hahaha. HAHAHAha. HAHAHAHA!!!!",
+  "Do I want to go back? Hahaha. HAHAHAHA. HAHAHAHA!!!!",
   "The answer is NOO! Does anybody want to go back to a miserable life? Nobody back *there* respects me. NOBODY!",
   "I HATE THEM ALL! The dead treat me better. The dead don't just see me as a pest.",
   "Master Beckett will make me a warlord. An instrument of destruction.",

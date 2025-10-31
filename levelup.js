@@ -103,6 +103,6 @@ function levelUp (characterNumber) {
   }
 }
 
-function addExp () {
+function distributeExp () {
   
 }

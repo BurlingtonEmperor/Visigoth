@@ -393,7 +393,7 @@ function checkForDeadPlayers () {
   }
 
   switch (true) {
-    case (heroPartyOneHP < 0 && heroParty.length < 2):
+    case (heroPartyOneHP < 1 && heroParty.length < 2):
       gameOverAnimation();
       break;
   }
@@ -616,6 +616,7 @@ function enemyTurn () {
               battleOptionsEnabled = 1;
               battleRoster.style.display = "block";
               newWindowElement.remove();
+              takeDamage(Math.floor(enemyAttackRoll * 1.1), hero_TARGET);
             }, 1000);
           }, 1000);
           break;
@@ -715,15 +716,36 @@ function bringUpPostBattleOptions () {
           break;
         default:
           postBattleDialogue = "Gained " + currentEnemyData.expYield + " exp."; 
+          let hasLeveledUp = 0;
+          let oldLevel = 0;
+          let newLevel = 0;
+
+          function checkIfLevelIncreased () {
+            switch (false) {
+              case (oldLevel == newLevel):
+                hasLeveledUp = 1;
+                break;
+            }
+          }
+
           switch (false) {
             case (heroPartyOneHP < 1):
               heroExp_1 += currentEnemyData.expYield;
+              playerData.currentExp += currentEnemyData.expYield;
+              oldLevel = playerData.currentLevel;
+              levelUp(1);
+              newLevel = playerData.currentLevel;
+              checkIfLevelIncreased();
               break;
           }
 
           switch (false) {
             case (heroPartyTwoHP < 1):
               heroExp_2 += currentEnemyData.expYield;
+              // colinData.currentExp += currentEnemyData.expYield;
+              // oldLevel = colinData.currentLevel;
+              // levelUp(2);
+
               break;
           }
 
@@ -736,6 +758,11 @@ function bringUpPostBattleOptions () {
           switch (false) {
             case (heroPartyFourHP < 1):
               heroExp_4 += currentEnemyData.expYield;
+              break;
+          }
+
+          switch (hasLeveledUp) {
+            case 1:
               break;
           }
           break;
