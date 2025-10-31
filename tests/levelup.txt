@@ -1,0 +1,10 @@
+// we need 10 exp to go to level 2
+console.log("Player level should be 1 (Player level: " + playerData.currentLevel + ")");
+console.log("And player exp starts at 0.");
+console.log("We'll add 10 exp.");
+
+playerData.currentExp += 10;
+levelUp(1);
+
+console.log("Now the player level should be 2.");
+console.log("Player level: " + playerData.currentLevel);

@@ -1,3 +1,51 @@
+function giveRandomAttributesRoll () {
+  return Math.floor(Math.random() * 5) + 1;
+}
+
+function giveRandomHealthRoll (levelNum) {
+  switch (true) {
+    case (levelNum % 2 == 0):
+      return Math.floor(Math.random() * 3) + 10;
+    default:
+      return Math.floor(Math.random() * 2) + 5;
+  }
+}
+
+function giveRandomMERoll () {
+  switch (false) {
+    case (levelNum % 2 == 0):
+      return Math.floor(Math.random() * 3) + 3;
+    default:
+      return Math.floor(Math.random() * 2) + 1;
+  }
+}
+
+function giveRandomAtrributes (characterNumber_u) {
+  let attributeRollHistory = [];
+  for (let i = 0; i < 4; i++) {
+    switch (i) {
+      case 0:
+        attributeRollHistory.push(giveRandomHealthRoll());
+        break;
+      case 1:
+        attributeRollHistory.push(giveRandomMERoll());
+        break;
+      default:
+        attributeRollHistory.push(giveRandomAttributesRoll());
+        break;
+    }
+  }
+
+  switch (characterNumber_u) {
+    case 1:
+      playerData.heroHealth += attributeRollHistory[0];
+      playerData.mentalEnergy += attributeRollHistory[1];
+      playerData.attackForce += attributeRollHistory[2];
+      playerData.defenseForce += attributeRollHistory[3];
+      break;
+  }
+}
+
 function levelUp (characterNumber) {
   let characterLevel;
   let characterExp;
@@ -7,12 +55,26 @@ function levelUp (characterNumber) {
       switch (false) {
         case (level_exp > levelUpExp[i]):
           if (characterExp == levelUpExp[i]) {
+            console.log("Player level is equivalent to desired level");
             level_char = (i + 2);
+            characterLevel = level_char;
           }
 
-          else {
-            level_char = (i + 1);
-          }
+        //   else {
+        //     level_char = (i + 1);
+        //     characterLevel = level_char;
+        //   }
+          break;
+        default:
+          console.log("Player's current level is greater than level slot");
+          break;
+      }
+
+      switch (true) {
+        case (level_exp > levelUpExp[i]):
+          level_char = i + 2;
+          characterLevel = level_char;
+          console.log("Gave player level greater than previous");
           break;
       }
     }
@@ -22,10 +84,23 @@ function levelUp (characterNumber) {
     default:
       return "forbidden";
     case 1:
-      characterLevel = heroLevel_1;
-      characterExp = heroExp_1;
+      characterLevel = playerData.currentLevel;
+      characterExp = playerData.currentExp;
       break;
   }
 
   checkExpLevels(characterLevel, characterExp);
+
+  switch (characterNumber) {
+    default:
+      return "forbidden";
+    case 1:
+      playerData.currentLevel = characterLevel;
+      giveRandomAtrributes(characterNumber);
+      break;
+  }
+}
+
+function addExp () {
+  
 }
