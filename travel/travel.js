@@ -859,8 +859,11 @@ function enterGateway (whichFrame) {
             case (currentInventory.includes("Graveyard Key")):
               SAVE_FRAME_X();
               switchStuckFrame(13);
+              isTraveling = 0;
               townieMusic.pause();
               townieMusic = playLoopedAudio("../Visigoth/assets/audio/wcp.mp3");
+              isTraveling = 0;
+              isTraveling = 0;
               break;
             default:
               createWindow("battleMessage", "The gate is locked. You need a key.", 0, 0);
@@ -1723,7 +1726,14 @@ function switchStuckFrame (travelFrame) {
     }
 
     setTimeout(function () {
-      isTraveling = 1;
+      switch (currentFrame) {
+        // case 13:
+        //   isTraveling = 0;
+        //   break;
+        default:
+          isTraveling = 1;
+          break;
+      }
       fillSPRITE_ARR(currentFrame);
       cleanUpCharacterData(currentFrame);
     }, 1000);
@@ -2019,10 +2029,18 @@ $(document).on("keydown", function (event) {
     case 1:
       switch (event.which) {
         case 39:
+          switch (currentFrame) {
+            case 13:
+              return false;
+          }
           drawFrame("right");
           stickmanRight.style.display = "block";
           break;
         case 37:
+          switch (currentFrame) {
+            case 13:
+              return false;
+          }
           drawFrame("left");
           stickmanLeft.style.display = "block";
           break;

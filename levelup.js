@@ -11,7 +11,7 @@ function giveRandomHealthRoll (levelNum) {
   }
 }
 
-function giveRandomMERoll () {
+function giveRandomMERoll (levelNum) {
   switch (false) {
     case (levelNum % 2 == 0):
       return Math.floor(Math.random() * 3) + 3;
@@ -20,15 +20,15 @@ function giveRandomMERoll () {
   }
 }
 
-function giveRandomAtrributes (characterNumber_u) {
+function giveRandomAtrributes (characterNumber_u, current_lev) {
   let attributeRollHistory = [];
   for (let i = 0; i < 4; i++) {
     switch (i) {
       case 0:
-        attributeRollHistory.push(giveRandomHealthRoll());
+        attributeRollHistory.push(giveRandomHealthRoll(current_lev));
         break;
       case 1:
-        attributeRollHistory.push(giveRandomMERoll());
+        attributeRollHistory.push(giveRandomMERoll(current_lev));
         break;
       default:
         attributeRollHistory.push(giveRandomAttributesRoll());
@@ -58,6 +58,7 @@ function levelUp (characterNumber) {
             console.log("Player level is equivalent to desired level");
             level_char = (i + 2);
             characterLevel = level_char;
+            giveRandomAtrributes(characterNumber, characterLevel);
           }
 
         //   else {
@@ -75,6 +76,7 @@ function levelUp (characterNumber) {
           level_char = i + 2;
           characterLevel = level_char;
           console.log("Gave player level greater than previous");
+          giveRandomAtrributes(characterNumber, characterLevel);
           break;
       }
     }
@@ -96,7 +98,7 @@ function levelUp (characterNumber) {
       return "forbidden";
     case 1:
       playerData.currentLevel = characterLevel;
-      giveRandomAtrributes(characterNumber);
+    //   giveRandomAtrributes(characterNumber, playerData.currentLevel);
       break;
   }
 }
