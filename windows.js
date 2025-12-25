@@ -56,7 +56,8 @@ function createWindow (windowType, windowText, x, y) {
   const newWindowElement = document.createElement("div");
 //   newWindowElement.textContent = windowText;
   newWindowElement.classList.add("window");
-
+ 
+  newWindowElement.style.position = "absolute";
   newWindowElement.style.left = x;
   newWindowElement.style.top = y;
 
