@@ -38,11 +38,11 @@ function checkAllSystems () {
 }
 
 // writeCenterText("Loading assets", "white", "FSEX300", 25);
-setTimeout(function () {
-  clearWindow();
-  writeCenterText("Press any key to continue", "powderblue", "FSEX300", 25);
-  gameEventLocation = 0;
-}, 3000);
+// setTimeout(function () {
+//   clearWindow();
+//   writeCenterText("Press any key to continue", "powderblue", "FSEX300", 25);
+//   gameEventLocation = 0;
+// }, 3000);
 
 function secondLoadingScreen () {
   $(gameWindow).fadeOut(2000);
@@ -111,7 +111,22 @@ function flickerStartFrames () {
   }, 1500);
 }
 
+let firstTime = null;
+let menuItemColors = "white";
+
 function loadMenuItems (arrowWhich) {
+  switch (firstTime) {
+    case 0:
+      playAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+      firstTime = 1;
+      break;
+    case null:
+      break;
+    default:
+      playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+      break;
+  }
+
   switch (arrowWhich) {
     case 0:
       writeManualCenterParagraph(
@@ -119,7 +134,7 @@ function loadMenuItems (arrowWhich) {
         "►Start a new game.\nContinue.",
         30,
         "24px FSEX300",
-        "white"
+        menuItemColors
       );
       break;
     case 1:
@@ -128,7 +143,7 @@ function loadMenuItems (arrowWhich) {
         "Start a new game.\n►Continue.",
         30,
         "24px FSEX300",
-        "white"
+        menuItemColors
       );
       break;
   }

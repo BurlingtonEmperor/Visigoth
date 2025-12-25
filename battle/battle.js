@@ -720,11 +720,22 @@ function bringUpPostBattleOptions () {
           let oldLevel = 0;
           let newLevel = 0;
 
+          let levelUp_history = [];
+
           function checkIfLevelIncreased () {
             switch (false) {
               case (oldLevel == newLevel):
                 hasLeveledUp = 1;
                 break;
+            }
+          }
+
+          function checkIfLevelIncreased__ind () {
+            switch (false) {
+              case (oldLevel == newLevel):
+                return true;
+              default:
+                return false;
             }
           }
 
@@ -736,6 +747,12 @@ function bringUpPostBattleOptions () {
               levelUp(1);
               newLevel = playerData.currentLevel;
               checkIfLevelIncreased();
+
+              switch (true) {
+                case (checkIfLevelIncreased__ind()):
+                  levelUp_history.push("Roy");
+                  break;
+              }
               break;
           }
 
@@ -763,6 +780,21 @@ function bringUpPostBattleOptions () {
 
           switch (hasLeveledUp) {
             case 1:
+              postBattleDialogue = "";
+              for (let i = 0; i < levelUp_history.length; i++) {
+                // let semicolonCheck = "";
+                // switch (false) {
+                //   case (i == (levelUp_history.length - 1)):
+                //     semicolonCheck = "";
+                //     break;
+                //   default:
+                //     semicolonCheck = ";";
+                //     break;
+                // }
+
+                postBattleDialogue += levelUp_history[i] + " level increased! ";
+              }
+              postBattleDialogue_len = postBattleDialogue.length;
               break;
           }
           break;
