@@ -1,0 +1,21 @@
+#pointer {
+  position: absolute;
+  width: 70px;
+  display: none;
+}
+
+#alpha-bat-options {
+  position: absolute;
+  display: none;
+  bottom: 0px;
+  left: 0px;
+  margin: 0;
+}
+
+#alpha-bat-status {
+  position: absolute;
+  display: none;
+  bottom: 0px;
+  right: 0px;
+  margin: 0;
+}

@@ -18,6 +18,10 @@ body {
   margin: 0;
 }
 
+.no-margin {
+  margin: 0;
+}
+
 /* .window-inner {
   position: relative;  
   width: 100%;
@@ -39,6 +43,15 @@ body {
 }
 
 #battle-window {
+  width: 800px;
+  height: 500px;
+  position: absolute;
+  z-index: 1;
+  display: none;
+  overflow: hidden;
+}
+
+#alpha-window {
   width: 800px;
   height: 500px;
   position: absolute;
