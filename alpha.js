@@ -20,8 +20,10 @@ let battleMenuOption_alpha = 0;
 const alphaBatAtk = document.getElementById("alpha-bat-atk");
 const alphaBatHeal = document.getElementById("alpha-bat-heal");
 const alphaBatEsc = document.getElementById("alpha-bat-esc");
+const alphaHp = document.getElementById("alpha-hp");
 
 let alpha_hp = 30;
+let max_alpha_hp = 30;
 let alpha_atk_range = 5;
 
 let drawEnemy = "";
@@ -29,6 +31,135 @@ let drawEnemy_src = "";
 let battleFrame = "";
 let enemyAtkRange = 0;
 let enemyHp = 0;
+let alphaPrize = "";
+
+let healItems_alpha = 0;
+
+function resetDoorways () {
+  setTimeout(function () {
+    clearWindow();
+    pointerWindow.style.display = "block";
+
+    switch (current_path_loc) {
+      case "forest":
+        drawImageLeft("../Visigoth/prequel/forest.jpg", 800, 500);
+        break;
+    }
+
+    $(gameWindow).slideDown(2000);
+    setTimeout(function () {
+      drawCenterImage("../Visigoth/prequel/doors1.png", 556, 186);
+      pointer.style.display = "block";
+      playAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+      alpha_pos = 3;
+      createWindow("battleMessage", "Select the pathway you wish to travel down.", 0, 0);
+    }, 2000);
+  }, 2000);
+}
+
+function doorwayBoobytrapInit () {
+  alpha_pos = null;
+  setTimeout(function () {
+    clearWindow();
+    clearAllWindows();
+
+    switch (current_path_loc) {
+      case "forest":
+        battleFrame = "../Visigoth/prequel/frame6.jpg";
+        break;
+    }
+
+    drawImageLeft(battleFrame, 800, 500);
+
+    $(gameWindow).slideDown(2000);
+
+    setTimeout(function () {
+      drawCenterImage("../Visigoth/prequel/chest.png", 254, 254);
+
+      createWindow("battleMessage", "Press 'E' to open the chest.", 0, 0);
+      alpha_pos = 6;
+    }, 2000);
+  }, 2000);
+}
+
+function boobyTreasure_alpha () {
+  let tres_chance = Math.floor(Math.random() * 3);
+  clearAllWindows();
+  let tres_dialogue;
+
+  alpha_pos = null;
+
+  if (tres_chance == 0) {
+    tres_dialogue = "The chest is empty.";
+  }
+
+  else {
+    tres_dialogue = "It's a boobytrap! Lost 30% of your HP.";
+    perc_booby = Math.floor(0.3 * alpha_hp);
+    alpha_hp -= perc_booby;
+
+    if (alpha_hp - perc_booby < 5) {
+      alpha_hp = 5;
+    }
+
+    alphaHp.innerText = alpha_hp;
+    playAudio("../Visigoth/battle/dsskeatk.wav");
+  }
+
+  createWindow("dialogue", tres_dialogue, 0, 0);
+  setTimeout(function () {
+    alpha_pos = 2;
+    alpha_dpos = 13;
+  }, getWaitTextTime(tres_dialogue));
+}
+
+function doorwayTreasureInit () {
+  alpha_pos = null;
+  setTimeout(function () {
+    clearWindow();
+    clearAllWindows();
+
+    switch (current_path_loc) {
+      case "forest":
+        battleFrame = "../Visigoth/prequel/frame6.jpg";
+        break;
+    }
+
+    drawImageLeft(battleFrame, 800, 500);
+
+    $(gameWindow).slideDown(2000);
+
+    setTimeout(function () {
+      drawCenterImage("../Visigoth/prequel/chest.png", 254, 254);
+
+      createWindow("battleMessage", "Press 'E' to open the chest.", 0, 0);
+      alpha_pos = 5;
+    }, 2000);
+  }, 2000);
+}
+
+function openTreasure_alpha () {
+  let tres_chance = Math.floor(Math.random() * 3);
+  clearAllWindows();
+  let tres_dialogue;
+
+  alpha_pos = null;
+
+  if (tres_chance == 0) {
+    tres_dialogue = "The chest is empty.";
+  }
+
+  else {
+    tres_dialogue = "Found " + tres_chance + " healing items.";
+    healItems_alpha += tres_chance;
+  }
+
+  createWindow("dialogue", tres_dialogue, 0, 0);
+  setTimeout(function () {
+    alpha_pos = 2;
+    alpha_dpos = 12;
+  }, getWaitTextTime(tres_dialogue));
+}
 
 function doorwayBattleInit () {
   current_alpha_audio.pause();
@@ -49,6 +180,7 @@ function doorwayBattleInit () {
         drawEnemy = "Rabid Fox";
         drawEnemy_src = "../Visigoth/prequel/rabidfox.png";
         enemyAtkRange = 3;
+        enemyHp = 10;
         break;
     }
     drawImageLeft(battleFrame, 800, 500);
@@ -72,6 +204,37 @@ function doorwayBattleInit () {
   }, 2000);
 }
 
+function enemyAttack_alpha () {
+  alpha_pos = null;
+  alphaBatOptions.style.display = "none";
+
+  setTimeout(function () {
+    playClonedAudio("../Visigoth/battle/dsskepch.wav");
+    gameWindow.classList.add("shake");
+    let enemyDealtDMG = Math.floor(Math.random() * enemyAtkRange);
+    alpha_hp -= enemyDealtDMG;
+
+    clearAllWindows();
+    createWindow("battleMessage", "The " + drawEnemy + " dealt " + enemyDealtDMG + " DMG.", 0, 0);
+
+    setTimeout(function () {
+      gameWindow.classList.remove("shake");
+      if (alpha_hp < 1) {
+        gameOver_alpha();
+        alphaHp.innerText = "0";
+        alpha_pos = null;
+        return false;
+      }
+      alphaHp.innerText = alpha_hp;
+    }, 100);
+  }, 1000);
+
+  setTimeout(function () {
+    alphaBatOptions.style.display = "block";
+    alpha_pos = 4;
+  }, 1400);
+}
+
 function attackSelect_alpha () {
   const attackAnim_interval = setInterval(function () {
     drawImageLeft(battleFrame, 800, 500);
@@ -79,20 +242,78 @@ function attackSelect_alpha () {
       drawCenterImage(drawEnemy_src, 341, 341);
     }, 125);
   }, 150);
+  
+  let enemyLostHP = Math.floor(Math.random() * alpha_atk_range);
+  enemyHp -= enemyLostHP;
+  clearAllWindows();
+  createWindow("battleMessage", "Dealt " + enemyLostHP + " DMG.", 0, 0);
 
   setTimeout(function () {
     clearInterval(attackAnim_interval);
-  }, 300);
 
-  playClonedAudio("../Visigoth/battle/dspistol.wav");
+    if (enemyHp < 1) {
+      drawImageLeft(battleFrame, 800, 500);
+      endBattle_alpha();
+      return false;
+    }
+
+    playClonedAudio("../Visigoth/battle/dspistol.wav");
+    enemyAttack_alpha();
+  }, 300);
+}
+
+function healSelect_alpha () {
+  if (healItems_alpha < 1) {
+    clearAllWindows();
+    createWindow("battleMessage", "You have no healing items.", 0, 0);
+  }
+
+  else {
+    let perc_alpha_heal = Math.floor(0.30 * max_alpha_hp);
+    alpha_hp = perc_alpha_heal + alpha_hp;
+
+    if (alpha_hp > max_alpha_hp) {
+      alpha_hp = max_alpha_hp;
+    }
+
+    alphaHp.innerText = alpha_hp;
+    clearAllWindows();
+    createWindow("battleMessage", "Restored " + perc_alpha_heal + " HP.", 0, 0);
+
+    enemyAttack_alpha();
+  }
+}
+
+function endBattle_alpha () {
+  clearAllWindows();
+  alphaBatOptions.style.display = "none";
+  alphaBatStatus.style.display = "none";
+  pointerWindow.style.display = "none";
 
   alpha_pos = null;
-  alphaBatOptions.style.display = "none";
+  current_battle_alpha_audio.pause();
+  current_alpha_audio.play();
 
-  setTimeout(function () {
-    
-  }, 1000);
+  $(gameWindow).slideUp(2000);
+  resetDoorways();
 }
+
+let escapeChances = 10;
+function escapeSelect_alpha () {
+  let did_escape = Math.floor(Math.random() * escapeChances);
+
+  if (did_escape == 0) {
+    endBattle_alpha();
+  }
+
+  else {
+    enemyAttack_alpha();
+    clearAllWindows();
+    createWindow("battleMessage", "Failed to escape.");
+  }
+}
+
+function gameOver_alpha () {}
 
 function doorwaySelect () {
   $(gameWindow).slideUp(2000);
@@ -107,6 +328,12 @@ function doorwaySelect () {
   switch (railwaySpike) {
     case 0:
       doorwayBattleInit();
+      break;
+    case 1:
+      doorwayTreasureInit();
+      break;
+    case 2:
+      doorwayBoobytrapInit();
       break;
   }
 }
@@ -525,6 +752,18 @@ $(document).on("keydown", function (event) {
               forestDialogue_a3();
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               break;
+            case 12:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              $(gameWindow).slideUp();
+              resetDoorways();
+              clearAllWindows();
+              break;
+            case 13:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              $(gameWindow).slideUp();
+              resetDoorways();
+              clearAllWindows();
+              break;
           }
           break;
         case 3:
@@ -533,8 +772,25 @@ $(document).on("keydown", function (event) {
         case 4:
           switch (battleMenuOption_alpha) {
             case 0:
+              attackSelect_alpha();
+              break;
+            case 1:
+              healSelect_alpha();
+              break;
+            case 2:
+              escapeSelect_alpha();
               break;
           }
+          break;
+      }
+      break;
+    case 69:
+      switch (alpha_pos) {
+        case 5:
+          openTreasure_alpha();
+          break;
+        case 6:
+          boobyTreasure_alpha();
           break;
       }
       break;
