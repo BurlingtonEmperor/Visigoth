@@ -240,6 +240,13 @@ function doorwayBattleInit () {
         enemyAtkRange = 5;
         enemyHp = 12;
         break;
+      case "lake":
+        battleFrame = "../Visigoth/prequel/frame17.jpg";
+        drawEnemy = "Feral Catfish";
+        drawEnemy_src = "../Visigoth/prequel/feralcatfish.png";
+        enemyAtkRange = 7;
+        enemyHp = 15;
+        break;
     }
     drawImageLeft(battleFrame, 800, 500);
     
@@ -1427,6 +1434,7 @@ $(document).on("keydown", function (event) {
               break;
             case 39:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              pointer.style.bottom = "100px";
               jaydenEncounter3_a9();
               break;
           }
