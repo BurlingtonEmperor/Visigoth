@@ -62,6 +62,9 @@ function resetDoorways () {
       case "road":
         drawImageLeft("../Visigoth/prequel/road.jpg", 800, 500);
         break;
+      case "lake":
+        drawImageLeft("../Visigoth/prequel/lake.jpg", 800, 500);
+        break;
     }
 
     $(gameWindow).slideDown(2000);
@@ -87,6 +90,9 @@ function doorwayBoobytrapInit () {
         break;
       case "road":
         battleFrame = "../Visigoth/prequel/frame12.jpg";
+        break;
+      case "lake":
+        battleFrame = "../Visigoth/prequel/frame17.jpg";
         break;
     }
 
@@ -164,6 +170,9 @@ function doorwayTreasureInit () {
         break;
       case "road":
         battleFrame = "../Visigoth/prequel/frame12.jpg";
+        break;
+      case "lake":
+        battleFrame = "../Visigoth/prequel/frame17.jpg";
         break;
     }
 
@@ -1040,6 +1049,97 @@ function jaydenEncounter3_a4 () {
 
   setTimeout(function () {
     clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame13.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "I won't even try to bother going into Jack's house."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 35;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "I won't even try to bother going into Jack's house."`));
+    }, 2000);
+  }, 2000);
+}
+
+function jaydenEncounter3_a5 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "I think I'll try to go to the police station instead."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 36;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "I think I'll try to go to the police station instead."`));
+}
+
+function jaydenEncounter3_a6 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame15.jpg");
+
+    $(gameWindow).fadeIn(2000);
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "Since it's on the other side of the lake, I'll have to use Anthony's fishing boat to get there...forgive me old friend."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 37;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "Since it's on the other side of the lake, I'll have to use Anthony's fishing boat to get there...forgive me old friend."`));
+    }, 2000);
+  }, 2000);
+}
+
+function jaydenEncounter3_a7 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+  setTimeout(function () {
+    $(gameWindow).fadeIn(2000);
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "A hunting knife. I don't think it'll do me much good against that creature, but it's better than my bare hands."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 38;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "A hunting knife. I don't think it'll do me much good against that creature, but it's better than my bare hands."`));
+    }, 2000);
+  }, 2000);
+}
+
+function jaydenEncounter3_a8 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  alpha_atk_range = 8;
+
+  createWindow("dialogue", `Attack range has increased by 3!"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 39;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Attack range has increased by 3!"`));
+}
+
+function jaydenEncounter3_a9 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  current_path_loc = "lake";
+  path_alpha_lim = 16;
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    resetDoorways();
   }, 2000);
 }
 
@@ -1304,6 +1404,30 @@ $(document).on("keydown", function (event) {
             case 33:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               jaydenEncounter3_a3();
+              break;
+            case 34:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a4();
+              break;
+            case 35:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a5();
+              break;
+            case 36:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a6();
+              break;
+            case 37:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a7();
+              break;
+            case 38:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a8();
+              break;
+            case 39:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a9();
               break;
           }
           break;
