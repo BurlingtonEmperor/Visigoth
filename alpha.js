@@ -47,6 +47,9 @@ function resetDoorways () {
       case "road":
         jaydenEncounter3_a1();
         break;
+      case "lake":
+        policeStationScene_a1();
+        break;
     }
     return false;
   }
@@ -64,6 +67,9 @@ function resetDoorways () {
         break;
       case "lake":
         drawImageLeft("../Visigoth/prequel/lake.jpg", 800, 500);
+        break;
+      case "tunnels":
+        drawImageLeft("../Visigoth/prequel/tunnels.jpg", 800, 500);
         break;
     }
 
@@ -93,6 +99,9 @@ function doorwayBoobytrapInit () {
         break;
       case "lake":
         battleFrame = "../Visigoth/prequel/frame17.jpg";
+        break;
+      case "tunnels":
+        battleFrame = "../Visigoth/prequel/frame21.jpg";
         break;
     }
 
@@ -174,6 +183,9 @@ function doorwayTreasureInit () {
       case "lake":
         battleFrame = "../Visigoth/prequel/frame17.jpg";
         break;
+      case "tunnels":
+        battleFrame = "../Visigoth/prequel/frame21.jpg";
+        break;
     }
 
     drawImageLeft(battleFrame, 800, 500);
@@ -246,6 +258,13 @@ function doorwayBattleInit () {
         drawEnemy_src = "../Visigoth/prequel/feralcatfish.png";
         enemyAtkRange = 7;
         enemyHp = 15;
+        break;
+      case "tunnels":
+        battleFrame = "../Visigoth/prequel/frame21.jpg";
+        drawEnemy = "Giant Worm";
+        drawEnemy_src = "../Visigoth/prequel/giantworm.png";
+        enemyAtkRange = 9;
+        enemyHp = 18;
         break;
     }
     drawImageLeft(battleFrame, 800, 500);
@@ -1087,10 +1106,16 @@ function jaydenEncounter3_a6 () {
   alpha_pos = null;
   clearAllWindows();
 
+  fadeOutAudio(current_alpha_audio, 1000);
+
+  setTimeout(function () {
+    current_alpha_audio = playLoopedAudio("../Visigoth/prequel/darker.mp3");
+  }, 1000);
+
   $(gameWindow).fadeOut(2000);
   setTimeout(function () {
     clearWindow();
-    drawImageLeft("../Visigoth/prequel/frame15.jpg");
+    drawImageLeft("../Visigoth/prequel/frame16.jpg");
 
     $(gameWindow).fadeIn(2000);
     setTimeout(function () {
@@ -1151,6 +1176,264 @@ function jaydenEncounter3_a9 () {
 }
 
 // end jayden encounter 3
+
+// start police station scenes
+
+function policeStationScene_a1 () {
+  alpha_pos = null;
+  clearAllWindows();
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame18.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+  
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "Finally, I'm here. I really hope that--thing--didn't get to them before I did.."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 40;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "Finally, I'm here. I really hope that--thing--didn't get to them before I did.."`));
+    }, 2000);
+  }, 2000);
+}
+
+function policeStationScene_a2 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame19.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "Another massacre. Our entire town is screwed if this is what that creature did to the police force!"`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 41;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "Another massacre. Our entire town is screwed if this is what that creature did to the police force!"`));
+    }, 2000);
+  }, 2000);
+}
+
+function policeStationScene_a3 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `A noise is coming from one of the backrooms of the police station...`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 42;
+    alpha_pos = 2;
+  }, getWaitTextTime(`A noise is coming from one of the backrooms of the police station...`));
+}
+
+function policeStationScene_a4 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame20.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+    setTimeout(function () {
+      createWindow("dialogue", `Mihir: "AHHHHH--Oh, thank goodness, it's not the monster!"`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 43;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Mihir: "AHHHHH--Oh, thank goodness, it's not the monster!"`));
+    }, 2000);
+  }, 2000);
+}
+
+function policeStationScene_a5 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "Maybe it's a good thing I ran out of ammo a while ago."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 44;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "Maybe it's a good thing I ran out of ammo a while ago."`));
+}
+
+function policeStationScene_a6 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "Are you the only officer left on the force now?"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 45;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "Are you the only officer left on the force now?"`));
+}
+
+function policeStationScene_a7 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "It looks like it, right now. This...d*@!3--pale white thing--came into the office and killed pretty much everyone here. I hid in this back office towards the end of it all."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 46;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "It looks like it, right now. This...d*@!3--pale white thing--came into the office and killed pretty much everyone here. I hid in this back office towards the end of it all."`));
+}
+
+function policeStationScene_a8 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "You said you ran out of bullets earlier. Don't tell me this thing is immune to gunfire!"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 47;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "You said you ran out of bullets earlier. Don't tell me this thing is immune to gunfire!"`));
+}
+
+function policeStationScene_a9 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "Well that's the thing. I don't really know. It moved so fast that nobody could get a clean shot at it. Someone did clip it in the leg and it bled,"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 48;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "Well that's the thing. I don't really know. It moved so fast that nobody could get a clean shot at it. Someone did clip it in the leg and it bled,"`));
+}
+
+function policeStationScene_a10 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "...so I assume that bullets will at least hurt the thing. I think I do remember it slowing down after the round it took."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 49;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "...so I assume that bullets will at least hurt the thing. I think I do remember it slowing down after the round it took."`));
+}
+
+function policeStationScene_a11 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "Is there any way that we can call for help? We need all the firepower we can get."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 50;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "Is there any way that we can call for help? We need all the firepower we can get."`));
+}
+
+function policeStationScene_a12 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "The dang thing cut all our power lines, and the only broadband radio we had was destroyed during the chaos."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 51;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "The dang thing cut all our power lines, and the only broadband radio we had was destroyed during the chaos."`));
+}
+
+function policeStationScene_a13 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 52;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`));
+}
+
+function policeStationScene_a14 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 52;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`));
+}
+
+function policeStationScene_a15 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "There's a set of old tunnels underneath this town dating back to the Civil War. You might be able to get to the junkyard faster that way."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 53;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "There's a set of old tunnels underneath this town dating back to the Civil War. You might be able to get to the junkyard faster that way."`));
+}
+
+function policeStationScene_a16 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "The entrance is in the basement. Take one of the guns that are outside...I have a feeling you'll need it."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 54;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "The entrance is in the basement. Take one of the guns that are outside...I have a feeling you'll need it."`));
+}
+
+function policeStationScene_a17 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  max_alpha_hp += 10;
+  alpha_hp += 10;
+
+  createWindow("dialogue", "Attack range increased by 5! Maximum HP increased by 10!", 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 55;
+    alpha_pos = 2;
+  }, getWaitTextTime("Attack range increased by 5! Maximum HP increased by 10!"));
+}
+
+function policeStationScene_a18 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  fadeOutAudio(current_alpha_audio, 1000);
+  setTimeout(function () {
+    current_alpha_audio = playLoopedAudio("../Visigoth/prequel/city.mp3");
+  }, 1000);
+
+  current_path_loc = "tunnels";
+  path_alpha_lim = 21;
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    resetDoorways();
+  }, 2000);
+}
+
+// end police station scenes
 
 function getWaitTextTime (text) {
   return (text.length * 50 - 1280);
