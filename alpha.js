@@ -44,6 +44,9 @@ function resetDoorways () {
       case "forest":
         jaydenEncounter2_a1();
         break;
+      case "road":
+        jaydenEncounter3_a1();
+        break;
     }
     return false;
   }
@@ -55,6 +58,9 @@ function resetDoorways () {
     switch (current_path_loc) {
       case "forest":
         drawImageLeft("../Visigoth/prequel/forest.jpg", 800, 500);
+        break;
+      case "road":
+        drawImageLeft("../Visigoth/prequel/road.jpg", 800, 500);
         break;
     }
 
@@ -79,6 +85,9 @@ function doorwayBoobytrapInit () {
       case "forest":
         battleFrame = "../Visigoth/prequel/frame6.jpg";
         break;
+      case "road":
+        battleFrame = "../Visigoth/prequel/frame12.jpg";
+        break;
     }
 
     drawImageLeft(battleFrame, 800, 500);
@@ -101,11 +110,33 @@ function boobyTreasure_alpha () {
 
   alpha_pos = null;
 
+  function moveOn_dialogue () {
+    createWindow("dialogue", tres_dialogue, 0, 0);
+    setTimeout(function () {
+      alpha_pos = 2;
+      alpha_dpos = 13;
+    }, getWaitTextTime(tres_dialogue));
+  }
+
   if (tres_chance == 0) {
     tres_dialogue = "The chest is empty.";
   }
 
   else {
+    switch (current_path_loc) {
+      case "road":
+        switch (tres_chance) {
+          case 1:
+            tres_dialogue = "Found some strange blood. Max HP increased by 5!";
+            max_alpha_hp += 5;
+            alpha_hp += 5;
+
+            moveOn_dialogue();
+            return false;
+        }
+        break;
+    }
+
     tres_dialogue = "It's a boobytrap! Lost 30% of your HP.";
     perc_booby = Math.floor(0.3 * alpha_hp);
     alpha_hp -= perc_booby;
@@ -118,11 +149,7 @@ function boobyTreasure_alpha () {
     playAudio("../Visigoth/battle/dsskeatk.wav");
   }
 
-  createWindow("dialogue", tres_dialogue, 0, 0);
-  setTimeout(function () {
-    alpha_pos = 2;
-    alpha_dpos = 13;
-  }, getWaitTextTime(tres_dialogue));
+  moveOn_dialogue();
 }
 
 function doorwayTreasureInit () {
@@ -134,6 +161,9 @@ function doorwayTreasureInit () {
     switch (current_path_loc) {
       case "forest":
         battleFrame = "../Visigoth/prequel/frame6.jpg";
+        break;
+      case "road":
+        battleFrame = "../Visigoth/prequel/frame12.jpg";
         break;
     }
 
@@ -194,6 +224,13 @@ function doorwayBattleInit () {
         enemyAtkRange = 3;
         enemyHp = 10;
         break;
+      case "road":
+        battleFrame = "../Visigoth/prequel/frame12.jpg";
+        drawEnemy = "Zombie Deer";
+        drawEnemy_src = "../Visigoth/prequel/zombiedeer.png";
+        enemyAtkRange = 5;
+        enemyHp = 12;
+        break;
     }
     drawImageLeft(battleFrame, 800, 500);
     
@@ -235,6 +272,8 @@ function enemyAttack_alpha () {
         gameOver_alpha();
         alphaHp.innerText = "0";
         alpha_pos = null;
+
+        gameOver_alpha();
         return false;
       }
       alphaHp.innerText = alpha_hp;
@@ -265,6 +304,7 @@ function attackSelect_alpha () {
     clearInterval(attackAnim_interval);
 
     if (enemyHp < 1) {
+      clearWindow();
       drawImageLeft(battleFrame, 800, 500);
       endBattle_alpha();
       return false;
@@ -280,6 +320,8 @@ function healSelect_alpha () {
   if (healItems_alpha < 1) {
     clearAllWindows();
     createWindow("battleMessage", "You have no healing items.", 0, 0);
+
+    alpha_pos = 4;
   }
 
   else {
@@ -424,11 +466,11 @@ function loadInIntro () {
 function introText_a1 () {
   clearAllWindows();
   alpha_dpos = null;
-  createWindow("dialogue", "More specifically, it's the story of its death.", 0, 0);
+  createWindow("dialogue", "Or rather, it's the story of its death.", 0, 0);
 
   setTimeout(function () {
     alpha_dpos = 1;
-  }, getWaitTextTime("More specifically, it's the story of its death."));
+  }, getWaitTextTime("Or rather, it's the story of its death."));
 }
 
 function introText_a2 () {
@@ -603,6 +645,7 @@ function forestDialogue_a3 () {
 // start jayden encounter 2
 
 function jaydenEncounter2_a1 () {
+  alpha_pos = null;
   setTimeout(function () {
     clearWindow();
     drawImageLeft("../Visigoth/prequel/frame7.jpg", 800, 500);
@@ -650,12 +693,12 @@ function jaydenEncounter2_a3 () {
   alpha_pos = null;
   clearAllWindows();
 
-  createWindow("dialogue", `Pale Crawler: "Hello again, Colin. We meet again. HAAHAHHAHAHAHAHAH!!!"`, 0, 0);
+  createWindow("dialogue", `Pale Crawler: "Hello, Colin. We meet again. HAAHAHHAHAHAHAHAH!!!"`, 0, 0);
 
   setTimeout(function () {
     alpha_dpos = 16;
     alpha_pos = 2;
-  }, getWaitTextTime(`Pale Crawler: "Hello again, Colin. We meet again. HAAHAHHAHAHAHAHAH!!!"`));
+  }, getWaitTextTime(`Pale Crawler: "Hello, Colin. We meet again. HAAHAHHAHAHAHAHAH!!!"`));
 }
 
 function jaydenEncounter2_a4 () {
@@ -795,13 +838,220 @@ function colinSelftalk_a3 () {
   }, getWaitTextTime(`Colin: "Looks like I'm close to town hall."`));
 }
 
+function colinSelftalk_a4 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(pointerWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    pointerWindow.style.backgroundImage = "none";
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame9.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "I hope everyone's alright in there."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 25;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "I hope everyone's alright in there."`));
+    }, 2300);
+  }, 2000);
+}
+
+function colinSelftalk_a5 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame10.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "I'm going to be sick...my heart...I can't bear to see this!"`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 26;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "I'm going to be sick...my heart...I can't bear to see this!"`));
+    }, 700);
+  }, 2000);
+}
+
+function colinSelftalk_a6 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "He--Jayden, or whatever that thing is--he really killed everyone--"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 27;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "He--Jayden, or whatever that thing is--he really killed everyone--"`));
+}
+
+function colinSelftalk_a7 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "I don't see Anthony or Jack anywhere amongst the...carnage. They don't live too far from here...maybe they're at home."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 28;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "I don't see Anthony or Jack anywhere amongst the...carnage. They don't live too far from here...maybe they're at home."`));
+}
+
+function colinSelftalk_a8 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame11.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "S*^&! Out of gas...I'll have to walk."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 29;
+        alpha_pos = 2;
+
+        current_path_loc = "road";
+        alphaBatName.innerText = "Colin";
+        path_alpha_lim = 13;
+
+      }, getWaitTextTime(`Colin: "S*^&! Out of gas...I'll have to walk."`));
+    }, 2000);
+  }, 2000);
+}
+
+function colinSelftalk_a9 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "I should rest a little bit before that though."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 30;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "I should rest a little bit before that though."`));
+}
+
+function colinSelftalk_a10 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  alpha_hp = Math.floor(max_alpha_hp * 0.75) + alpha_hp;
+  if (alpha_hp > 30) {
+    alpha_hp = 30;
+  }
+
+  createWindow("dialogue", `Restored HP by 75 percent. Game data has been saved up to this point.`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 31;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Restored HP by 75 percent. Game data has been saved up to this point.`));
+}
+
+function colinSelftalk_a11 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    resetDoorways();
+  }, 2000);
+}
+
 // end colin monologue
+
+// start jayden encounter 3
+
+function jaydenEncounter3_a1 () {
+  alpha_pos = null;
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame13.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+  
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "Anthony's house. The lights are on, but why is the front door slightly ajar?"`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 32;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "Anthony's house. The lights are on, but why is the front door slightly ajar?"`));
+    }, 2000);
+  }, 2000);
+}
+
+function jaydenEncounter3_a2 () {
+  alpha_pos = null;
+  clearAllWindows();
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame14.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "He really...he really killed Anthony's entire..."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 33;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "He really...he really killed Anthony's entire..."`));
+    }, 2000);
+  }, 2000);
+}
+
+function jaydenEncounter3_a3 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "For once, I'm glad that I don't have a family of my own."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 34;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "For once, I'm glad that I don't have a family of my own."`));
+}
+
+function jaydenEncounter3_a4 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    clearWindow();
+  }, 2000);
+}
+
+// end jayden encounter 3
 
 function getWaitTextTime (text) {
   return (text.length * 50 - 1280);
 }
 
 $(document).on("keydown", function (event) {
+  if (event.repeat) return;
+
   switch (event.which) {
     case 39:
       switch (alpha_pos) {
@@ -1017,7 +1267,43 @@ $(document).on("keydown", function (event) {
               break;
             case 24:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              
+              colinSelftalk_a4();
+              break;
+            case 25:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              colinSelftalk_a5();
+              break;
+            case 26:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              colinSelftalk_a6();
+              break;
+            case 27:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              colinSelftalk_a7();
+              break;
+            case 28:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              colinSelftalk_a8();
+              break;
+            case 29:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              colinSelftalk_a9();
+              break;
+            case 30:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              colinSelftalk_a10();
+              break;
+            case 31:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              colinSelftalk_a11();
+              break;
+            case 32:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a2();
+              break;
+            case 33:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              jaydenEncounter3_a3();
               break;
           }
           break;
@@ -1051,3 +1337,8 @@ $(document).on("keydown", function (event) {
       break;
   }
 });
+
+const alphaHealingItems = document.getElementById("alpha-hi");
+setInterval(function () {
+  alphaHealingItems.innerText = healItems_alpha;
+}, 500);
