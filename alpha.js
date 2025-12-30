@@ -35,6 +35,26 @@ let alphaPrize = "";
 
 let healItems_alpha = 0;
 
+const firstSaveCheck = localStorage.getItem("alpha_firstsave");
+function saveGame_alpha () {
+  localStorage.setItem("alpha_firstsave", current_path_loc + "||" + alpha_hp + "||" + max_alpha_hp + "||" + alpha_atk_range + "||" + healItems_alpha + "||" + path_alpha_lim);
+}
+
+function loadGame_alpha () {
+  let saveData_alpha = String(localStorage.getItem("alpha_firstsave"));
+  saveData_alpha = saveData_alpha.split("||");
+
+  current_path_loc = saveData_alpha[0];
+  alpha_hp = parseInt(saveData_alpha[1]);
+  alphaHp.innerText = parseInt(alpha_hp);
+  max_alpha_hp = parseInt(saveData_alpha[2]);
+  alpha_atk_range = parseInt(saveData_alpha[3]);
+  healItems_alpha = parseInt(saveData_alpha[4]);
+  path_alpha_lim = parseInt(saveData_alpha[5]);
+
+  alphaHealingItems.innerText = healItems_alpha;
+}
+
 function resetDoorways () {
   path_alpha_lim -= 1;
   
@@ -370,6 +390,13 @@ function enemyAttack_alpha () {
 
     clearAllWindows();
     createWindow("battleMessage", "The " + drawEnemy + " dealt " + enemyDealtDMG + " DMG.", 0, 0);
+    switch (isFightingBoss) {
+      case 1:
+      case 2:
+        clearAllWindows();
+        createWindow("battleMessage", drawEnemy + " dealt " + enemyDealtDMG + " DMG.", 0, 0);
+        break;
+    }
 
     setTimeout(function () {
       gameWindow.classList.remove("shake");
@@ -465,6 +492,9 @@ function endBattle_alpha () {
     case 1:
       junkyardDialogue_a14();
       return false;
+    case 2:
+      junkyardDialogue_a22();
+      return false;
   }
 
   $(gameWindow).slideUp(2000);
@@ -479,6 +509,13 @@ let escapeChances = 10;
 function escapeSelect_alpha () {
   alpha_pos = null;  
   let did_escape = Math.floor(Math.random() * escapeChances);
+
+  switch (isFightingBoss) {
+    case 1:
+    case 2:
+      did_escape = 100;
+      break;
+  }
 
   if (did_escape == 0) {
     endBattle_alpha();
@@ -556,7 +593,7 @@ setTimeout(function () {
   gameWindow.style.display = "none";
   gameWindow.style.backgroundColor = "white";
 
-  writeCenterText("Programmed by Alexander Chang", "black", "FSEX300", 25);
+  writeCenterText("Visigoth 1: Programmed by Alexander Chang", "black", "FSEX300", 25);
   $(gameWindow).fadeIn(3000);
 
   setTimeout(function () {
@@ -1114,6 +1151,8 @@ function colinSelftalk_a10 () {
 
   createWindow("dialogue", `Restored HP by 75 percent. Game data has been saved up to this point.`, 0, 0);
 
+  saveGame_alpha();
+
   setTimeout(function () {
     alpha_dpos = 31;
     alpha_pos = 2;
@@ -1272,7 +1311,11 @@ function jaydenEncounter3_a8 () {
   alpha_pos = null;
   clearAllWindows();
 
+  current_path_loc = "lake";
+  path_alpha_lim = 16;
+
   alpha_atk_range = 8;
+  saveGame_alpha();
 
   createWindow("dialogue", `Attack range has increased by 3! Game data has been saved up to this point."`, 0, 0);
 
@@ -1488,12 +1531,12 @@ function policeStationScene_a14 () {
   alpha_pos = null;
   clearAllWindows();
 
-  createWindow("dialogue", `Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`, 0, 0);
+  createWindow("dialogue", `Colin: "Then I'll go there. Is there any way I can get to the junkyard without being seen?"`, 0, 0);
 
   setTimeout(function () {
     alpha_dpos = 53;
     alpha_pos = 2;
-  }, getWaitTextTime(`Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`));
+  }, getWaitTextTime(`Colin: "Then I'll go there. Is there any way I can get to the junkyard without being seen?"`));
 }
 
 function policeStationScene_a15 () {
@@ -1526,6 +1569,11 @@ function policeStationScene_a17 () {
 
   max_alpha_hp += 10;
   alpha_hp += 10;
+
+  current_path_loc = "tunnels";
+  path_alpha_lim = 21;
+
+  saveGame_alpha();
 
   alphaHp.innerText = alpha_hp;
 
@@ -1587,7 +1635,11 @@ function junkyardDialogue_a2 () {
   max_alpha_hp += 10;
   alpha_hp += 10;
 
+  current_path_loc = "junkyard";
+  path_alpha_lim = 25;
+
   alphaHp.innerText = alpha_hp;
+  saveGame_alpha();
 
   createWindow("dialogue", `Added 10 points to total HP! Game data has been saved up to this point.`, 0, 0);
 
@@ -1836,6 +1888,177 @@ function junkyardDialogue_a21 () {
   doorwayBattleInit();
 }
 
+function junkyardDialogue_a22 () {
+  $(gameWindow).slideUp(2000);
+  alpha_pos = null;
+  fadeOutAudio(current_battle_alpha_audio, 1000);
+
+  setTimeout(function () {
+    current_alpha_audio = playLoopedAudio("../Visigoth/prequel/camping.mp3");
+  }, 1000);
+
+  setTimeout(function () {
+    $(gameWindow).fadeIn(2000);
+
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame26.jpg", 800, 500);
+
+    setTimeout(function () {
+      createWindow("dialogue", `Mihir: "Well, I guess everything worked out in the end after all, mostly thanks to you, Colin."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 75;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Mihir: "Well, I guess everything worked out in the end after all, mostly thanks to you, Colin."`));
+    }, 2000);
+  }, 2000);
+}
+
+function junkyardDialogue_a23 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "I can't believe someone would kill innocent families just for some vague notion of revenge..."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 76;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "I can't believe someone would kill innocent families just for some vague notion of revenge..."`));
+}
+
+function junkyardDialogue_a24 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "You knew 'Jayden', right? It turns out he was the one buying up homes AND killing the families that left!"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 77;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "You knew 'Jayden', right? It turns out he was the one buying up homes AND killing the families that left!"`));
+}
+
+function junkyardDialogue_a25 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "It's cliche, but I guess you could say I always felt that something was wrong with him."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 78;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "It's cliche, but I guess you could say I always felt that something was wrong with him."`));
+}
+
+function junkyardDialogue_a26 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "He had a lot of problems...he was quick to anger, and seemed to be ridden with paranoia."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 79;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "He had a lot of problems...he was quick to anger, and seemed to be ridden with paranoia."`));
+}
+
+function junkyardDialogue_a27 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "A little after you left, I stopped by your friends' houses. About Anthony--I'm sorry..."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 80;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "A little after you left, I stopped by your friends' houses. About Anthony--I'm sorry..."`));
+}
+
+function junkyardDialogue_a28 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "I know. He had a beautiful family--a wife and three kids. Taken by that monster."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 81;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "I know. He had a beautiful family--a wife and three kids. Taken by that monster."`));
+}
+
+function junkyardDialogue_a29 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "As for Jack and his family: they're safe and sound."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 82;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "As for Jack and his family: they're safe and sound."`));
+}
+
+function junkyardDialogue_a30 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "Ah--I'm so happy that I could cry...I thought Jayden had gotten to them too so I didn't even bother to look..."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 83;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "Ah--I'm so happy that I could cry...I thought Jayden had gotten to them too so I didn't even bother to look..."`));
+}
+
+function junkyardDialogue_a31 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "They were hiding in Jack's storm shelter. Jayden ransacked the house trying to find them, but I guess he gave up."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 84;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "They were hiding in Jack's storm shelter. Jayden ransacked the house trying to find them, but I guess he gave up."`));
+}
+
+function junkyardDialogue_a32 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "Heh, it's a real good thing that Jayden wasn't the sharpest tool in the shed, even back then."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 85;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "Heh, it's a real good thing that Jayden wasn't the sharpest tool in the shed, even back then."`));
+}
+
+function junkyardDialogue_a33 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Mihir: "You're a hero, Colin. When the state police arrive, I'm going to personally vouch for you."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 86;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Mihir: "You're a hero, Colin. When the state police arrive, I'm going to personally vouch for you."`));
+}
+
+function junkyardDialogue_a34 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+  setTimeout(function () {
+    clearWindow();
+    writeCenterText("The End", "black", "FSEX300", 25);
+
+    $(gameWindow).fadeIn(2000);
+  }, 2000);
+}
+
 // end junkyard dialogue
 
 function getWaitTextTime (text) {
@@ -1885,6 +2108,7 @@ $(document).on("keydown", function (event) {
             case 1:
               loadAlphaMenu(0);
               alpha_keypos = 0;
+              clearAllWindows();
               break;
           }
           break;
@@ -1961,7 +2185,23 @@ $(document).on("keydown", function (event) {
     case 13:
       switch (alpha_pos) {
         case 0:
-          loadInIntro();
+          switch (alpha_keypos) {
+            case 0:
+              loadInIntro();
+              break;
+            case 1:
+              if (firstSaveCheck == null || firstSaveCheck == undefined || firstSaveCheck == "") {
+                createWindow("battleMessage", "No save data recorded.", 0, 0);
+              }
+
+              else {
+                $(gameWindow).fadeOut(2000);
+                alpha_pos = null;
+                loadGame_alpha();
+                resetDoorways();
+              }
+              break;
+          }
           break;
         case 2:
           switch (alpha_dpos) {
@@ -2268,6 +2508,58 @@ $(document).on("keydown", function (event) {
             case 74:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               junkyardDialogue_a21();
+              break;
+            case 75:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a22();
+              break;
+            case 76:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a23();
+              break;
+            case 77:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a24();
+              break;
+            case 78:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a25();
+              break;
+            case 79:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a26();
+              break;
+            case 80:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a27();
+              break;
+            case 81:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a28();
+              break;
+            case 82:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a29();
+              break;
+            case 83:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a30();
+              break;
+            case 84:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a31();
+              break;
+            case 85:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a32();
+              break;
+            case 86:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a33();
+              break;
+            case 87:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a34();
               break;
           }
           break;
