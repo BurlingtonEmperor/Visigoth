@@ -52,6 +52,24 @@ function loadGame_alpha () {
   healItems_alpha = parseInt(saveData_alpha[4]);
   path_alpha_lim = parseInt(saveData_alpha[5]);
 
+  pointer.style.bottom = "100px";
+  pointer.style.left = "180px";
+
+  switch (current_path_loc) {
+    case "road":
+      current_alpha_audio = playLoopedAudio("../Visigoth/assets/audio/fw4.mp3");
+      break;
+    case "lake":
+      current_alpha_audio = playLoopedAudio("../Visigoth/prequel/darker.mp3");
+      break;
+    case "tunnels":
+      current_alpha_audio = playLoopedAudio("../Visigoth/prequel/city.mp3");
+      break;
+    case "junkyard":
+      current_alpha_audio = playLoopedAudio("../Visigoth/prequel/punk.mp3");
+      break;
+  }
+
   alphaHealingItems.innerText = healItems_alpha;
 }
 
@@ -449,6 +467,10 @@ function attackSelect_alpha () {
       clearWindow();
       drawImageLeft(battleFrame, 800, 500);
       endBattle_alpha();
+      if (current_path_loc == "junkyard" || current_path_loc == "tunnels") {
+        healItems_alpha += 1;
+        alphaHealingItems.innerText = healItems_alpha;
+      }
       return false;
     }
 
@@ -1572,6 +1594,9 @@ function policeStationScene_a17 () {
   max_alpha_hp += 10;
   alpha_hp += 10;
 
+  healItems_alpha += 10;
+  alphaHealingItems.innerText = healItems_alpha;
+
   current_path_loc = "tunnels";
   path_alpha_lim = 21;
 
@@ -1776,6 +1801,12 @@ function junkyardDialogue_a11 () {
   alpha_pos = null;
   clearAllWindows();
 
+  alpha_hp = max_alpha_hp;
+  alphaHp.innerText = alpha_hp;
+
+  healItems_alpha += 15;
+  alphaHealingItems.innerText = healItems_alpha;
+
   createWindow("dialogue", `Jayden: "Turn around, Colin."`, 0, 0);
 
   setTimeout(function () {
@@ -1873,6 +1904,12 @@ function junkyardDialogue_a19 () {
 function junkyardDialogue_a20 () {
   alpha_pos = null;
   clearAllWindows();
+
+  alpha_hp = max_alpha_hp;
+  alphaHp.innerText = alpha_hp;
+
+  healItems_alpha += 23;
+  alphaHealingItems.innerText = healItems_alpha;
 
   createWindow("battleMessage", `Jayden: "Because I find killing people fun."`, 0, 0);
   setTimeout(function () {
@@ -2513,53 +2550,49 @@ $(document).on("keydown", function (event) {
               break;
             case 75:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a22();
+              junkyardDialogue_a23();
               break;
             case 76:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a23();
+              junkyardDialogue_a24();
               break;
             case 77:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a24();
+              junkyardDialogue_a25();
               break;
             case 78:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a25();
+              junkyardDialogue_a26();
               break;
             case 79:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a26();
+              junkyardDialogue_a27();
               break;
             case 80:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a27();
+              junkyardDialogue_a28();
               break;
             case 81:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a28();
+              junkyardDialogue_a29();
               break;
             case 82:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a29();
+              junkyardDialogue_a30();
               break;
             case 83:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a30();
+              junkyardDialogue_a31();
               break;
             case 84:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a31();
+              junkyardDialogue_a32();
               break;
             case 85:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
-              junkyardDialogue_a32();
-              break;
-            case 86:
-              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               junkyardDialogue_a33();
               break;
-            case 87:
+            case 86:
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               junkyardDialogue_a34();
               break;
