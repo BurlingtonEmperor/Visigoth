@@ -298,6 +298,15 @@ function enemyAttack_alpha () {
     let enemyDealtDMG = Math.floor(Math.random() * enemyAtkRange);
     alpha_hp -= enemyDealtDMG;
 
+    if (alpha_hp < 1) {
+      gameOver_alpha();
+      alphaHp.innerText = "0";
+      alpha_pos = null;
+      createWindow("battleMessage", "Game over...", 0, 0);
+      gameWindow.classList.remove("shake");
+      return false;
+    }
+
     clearAllWindows();
     createWindow("battleMessage", "The " + drawEnemy + " dealt " + enemyDealtDMG + " DMG.", 0, 0);
 
@@ -307,8 +316,6 @@ function enemyAttack_alpha () {
         gameOver_alpha();
         alphaHp.innerText = "0";
         alpha_pos = null;
-
-        gameOver_alpha();
         return false;
       }
       alphaHp.innerText = alpha_hp;
@@ -405,7 +412,42 @@ function escapeSelect_alpha () {
   }
 }
 
-function gameOver_alpha () {}
+function gameOver_alpha () {
+  $(gameWindow).fadeOut(2000);
+  switch (false) {
+    case (current_battle_alpha_audio == 0):
+      current_battle_alpha_audio.pause();
+      break;
+  }
+  current_battle_alpha_audio = playLoopedAudio("../Visigoth/battle/music/gameover.mp3");
+
+  setTimeout(function () {
+    clearWindow();
+    writeCenterText("> Try again? || Quit", "black", "FSEX300", 25);
+
+    $(gameWindow).fadeIn(2000);
+    setTimeout(function () {
+      alpha_pos = 7;
+    }, 2000);
+  }, 2000);
+}
+
+let gameOver_alpha_option = 0;
+function loadGameOverMenuAlpha () {
+  playClonedAudio("../Visigoth/assets/audio/sfx/vgmenuselect.ogg");
+  switch (gameOver_alpha_option) {
+    case 0:
+      clearWindow();
+      writeCenterText("Try again? || > Quit", "black", "FSEX300", 25);
+      gameOver_alpha_option = 1;
+      break;
+    case 1:
+      clearWindow();
+      writeCenterText("> Try again? || Quit", "black", "FSEX300", 25);
+      gameOver_alpha_option = 0;
+      break;
+  }
+}
 
 function doorwaySelect () {
   $(gameWindow).slideUp(2000);
@@ -435,7 +477,7 @@ setTimeout(function () {
   gameWindow.style.display = "none";
   gameWindow.style.backgroundColor = "white";
 
-  writeCenterText("Programmed by Alexander Chang", "black", "FSEX300", 25)
+  writeCenterText("Programmed by Alexander Chang", "black", "FSEX300", 25);
   $(gameWindow).fadeIn(3000);
 
   setTimeout(function () {
@@ -1153,12 +1195,12 @@ function jaydenEncounter3_a8 () {
 
   alpha_atk_range = 8;
 
-  createWindow("dialogue", `Attack range has increased by 3!"`, 0, 0);
+  createWindow("dialogue", `Attack range has increased by 3! Game data has been saved up to this point."`, 0, 0);
 
   setTimeout(function () {
     alpha_dpos = 39;
     alpha_pos = 2;
-  }, getWaitTextTime(`Attack range has increased by 3!"`));
+  }, getWaitTextTime(`Attack range has increased by 3! Game data has been saved up to this point."`));
 }
 
 function jaydenEncounter3_a9 () {
@@ -1370,7 +1412,7 @@ function policeStationScene_a14 () {
   createWindow("dialogue", `Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`, 0, 0);
 
   setTimeout(function () {
-    alpha_dpos = 52;
+    alpha_dpos = 53;
     alpha_pos = 2;
   }, getWaitTextTime(`Mihir: "Although...I do remember seeing a real old one in a camper at the junkyard. It's a far shot, but it may be the only one we have."`));
 }
@@ -1382,7 +1424,7 @@ function policeStationScene_a15 () {
   createWindow("dialogue", `Mihir: "There's a set of old tunnels underneath this town dating back to the Civil War. You might be able to get to the junkyard faster that way."`, 0, 0);
 
   setTimeout(function () {
-    alpha_dpos = 53;
+    alpha_dpos = 54;
     alpha_pos = 2;
   }, getWaitTextTime(`Mihir: "There's a set of old tunnels underneath this town dating back to the Civil War. You might be able to get to the junkyard faster that way."`));
 }
@@ -1394,7 +1436,7 @@ function policeStationScene_a16 () {
   createWindow("dialogue", `Mihir: "The entrance is in the basement. Take one of the guns that are outside...I have a feeling you'll need it."`, 0, 0);
 
   setTimeout(function () {
-    alpha_dpos = 54;
+    alpha_dpos = 55;
     alpha_pos = 2;
   }, getWaitTextTime(`Mihir: "The entrance is in the basement. Take one of the guns that are outside...I have a feeling you'll need it."`));
 }
@@ -1406,12 +1448,14 @@ function policeStationScene_a17 () {
   max_alpha_hp += 10;
   alpha_hp += 10;
 
-  createWindow("dialogue", "Attack range increased by 5! Maximum HP increased by 10!", 0, 0);
+  alphaHp.innerText = alpha_hp;
+
+  createWindow("dialogue", "Attack range increased by 5! Maximum HP increased by 10! Game data has been saved up to this point.", 0, 0);
 
   setTimeout(function () {
-    alpha_dpos = 55;
+    alpha_dpos = 56;
     alpha_pos = 2;
-  }, getWaitTextTime("Attack range increased by 5! Maximum HP increased by 10!"));
+  }, getWaitTextTime("Attack range increased by 5! Maximum HP increased by 10! Game data has been saved up to this point."));
 }
 
 function policeStationScene_a18 () {
@@ -1470,6 +1514,9 @@ $(document).on("keydown", function (event) {
               break;
           }
           break;
+        case 7:
+          loadGameOverMenuAlpha();
+          break;
       }
       break;
     case 37:
@@ -1498,6 +1545,9 @@ $(document).on("keydown", function (event) {
               pointer.style.left = "360px";
               break;
           }
+          break;
+        case 7:
+          loadGameOverMenuAlpha();
           break;
       }
       break;
@@ -1719,6 +1769,74 @@ $(document).on("keydown", function (event) {
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               pointer.style.bottom = "100px";
               jaydenEncounter3_a9();
+              break;
+            case 40:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a2();
+              break;
+            case 41:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a3();
+              break;
+            case 42:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a4();
+              break;
+            case 43:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a5();
+              break;
+            case 44:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a6();
+              break;
+            case 45:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a7();
+              break;
+            case 46:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a8();
+              break;
+            case 47:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a9();
+              break;
+            case 48:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a10();
+              break;
+            case 49:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a11();
+              break;
+            case 50:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a12();
+              break;
+            case 51:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a13();
+              break;
+            case 52:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a14();
+              break;
+            case 53:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a15();
+              break;
+            case 54:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a16();
+              break;
+            case 55:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a17();
+              break;
+            case 56:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              policeStationScene_a18();
               break;
           }
           break;
