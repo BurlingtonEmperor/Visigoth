@@ -478,6 +478,8 @@ function healSelect_alpha () {
     clearAllWindows();
     createWindow("battleMessage", "Restored " + perc_alpha_heal + " HP.", 0, 0);
 
+    healItems_alpha -= 1;
+
     enemyAttack_alpha();
   }
 }
