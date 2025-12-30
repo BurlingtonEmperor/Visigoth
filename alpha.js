@@ -291,6 +291,7 @@ function doorwayBattleInit () {
 function enemyAttack_alpha () {
   alpha_pos = null;
   alphaBatOptions.style.display = "none";
+  let gameOver = 0;
 
   setTimeout(function () {
     playClonedAudio("../Visigoth/battle/dsskepch.wav");
@@ -302,6 +303,7 @@ function enemyAttack_alpha () {
       gameOver_alpha();
       alphaHp.innerText = "0";
       alpha_pos = null;
+      gameOver = 1;
       createWindow("battleMessage", "Game over...", 0, 0);
       gameWindow.classList.remove("shake");
       return false;
@@ -323,8 +325,12 @@ function enemyAttack_alpha () {
   }, 1000);
 
   setTimeout(function () {
-    alphaBatOptions.style.display = "block";
-    alpha_pos = 4;
+    switch (gameOver) {
+      case 0:
+        alphaBatOptions.style.display = "block";
+        alpha_pos = 4;
+        break;
+    }
   }, 1400);
 }
 
@@ -1853,6 +1859,24 @@ $(document).on("keydown", function (event) {
               break;
             case 2:
               escapeSelect_alpha();
+              break;
+          }
+          break;
+        case 7:
+          switch (gameOver_alpha_option) {
+            case 0:
+              fadeOutAudio(current_battle_alpha_audio, 1000);
+              userTitleMenuSelectPosition = 1;
+
+              $(gameWindow).fadeOut(2000);
+              setTimeout(function () {
+                loadAlphaMenu(0);
+                $(gameWindow).fadeIn(2000);
+
+                setTimeout(function () {
+                  alpha_pos = 0;
+                }, 2000);
+              }, 2000);
               break;
           }
           break;
