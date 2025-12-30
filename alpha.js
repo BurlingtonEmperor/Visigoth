@@ -975,7 +975,7 @@ function jaydenEncounter2_a8 () {
   setTimeout(function () {
     alpha_dpos = 21;
     alpha_pos = 2;
-  }, getWaitTextTime(`Colin: "You're...you're....Jayden. Jayden Lamoretti..."`));
+  }, getWaitTextTime(`Colin: "You're...you're....Jayden. Jayden Lamoretti..."`) + 4000);
 }
 
 function jaydenEncounter2_a9 () {
@@ -1011,7 +1011,7 @@ function jaydenEncounter2_a9 () {
 
         setTimeout(function () {
           colinSelftalk_a1();
-        }, 2000);
+        }, 3000);
       }, 2000);
     }, 600);
   }, 1200);
