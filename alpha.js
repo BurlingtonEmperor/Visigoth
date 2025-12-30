@@ -50,6 +50,12 @@ function resetDoorways () {
       case "lake":
         policeStationScene_a1();
         break;
+      case "tunnels":
+        junkyardDialogue_a1();
+        break;
+      case "junkyard":
+        junkyardDialogue_a4();
+        break;
     }
     return false;
   }
@@ -70,6 +76,9 @@ function resetDoorways () {
         break;
       case "tunnels":
         drawImageLeft("../Visigoth/prequel/tunnels.jpg", 800, 500);
+        break;
+      case "junkyard":
+        drawImageLeft("../Visigoth/prequel/junkyard.jpg", 800, 500);
         break;
     }
 
@@ -102,6 +111,9 @@ function doorwayBoobytrapInit () {
         break;
       case "tunnels":
         battleFrame = "../Visigoth/prequel/frame21.jpg";
+        break;
+      case "junkyard":
+        battleFrame = "../Visigoth/prequel/frame23.jpg";
         break;
     }
 
@@ -186,6 +198,9 @@ function doorwayTreasureInit () {
       case "tunnels":
         battleFrame = "../Visigoth/prequel/frame21.jpg";
         break;
+      case "junkyard":
+        battleFrame = "../Visigoth/prequel/frame23.jpg";
+        break;
     }
 
     drawImageLeft(battleFrame, 800, 500);
@@ -224,9 +239,20 @@ function openTreasure_alpha () {
   }, getWaitTextTime(tres_dialogue));
 }
 
+let isFightingBoss = 0;
 function doorwayBattleInit () {
   current_alpha_audio.pause();
-  current_battle_alpha_audio = playLoopedAudio("../Visigoth/battle/music/alpha.mp3");
+  switch (isFightingBoss) {
+    case 1:
+      current_battle_alpha_audio = playLoopedAudio("../Visigoth/battle/music/final.mp3");
+      break;
+    case 2:
+      current_battle_alpha_audio = playLoopedAudio("../Visigoth/battle/music/boss_fight.mp3");
+      break;
+    default:
+      current_battle_alpha_audio = playLoopedAudio("../Visigoth/battle/music/alpha.mp3");
+      break;
+  }
 
   setTimeout(function () {
     clearWindow();
@@ -266,12 +292,45 @@ function doorwayBattleInit () {
         enemyAtkRange = 9;
         enemyHp = 18;
         break;
+      case "junkyard":
+        battleFrame = "../Visigoth/prequel/frame23.jpg";
+        drawEnemy = "Lure Cat";
+        drawEnemy_src = "../Visigoth/prequel/lurecat.png";
+        enemyAtkRange = 11;
+        enemyHp = 21;
+        break;
+      case "jayden":
+        battleFrame = "../Visigoth/prequel/frame24.jpg";
+        drawEnemy = "Jayden";
+        drawEnemy_src = "../Visigoth/battle/enemy_sprites/jayden/jayden1.png";
+        enemyAtkRange = 12;
+        enemyHp = 115;
+        break;
+      case "jayden2":
+        battleFrame = "../Visigoth/prequel/frame24.jpg";
+        drawEnemy = "J A Y D E N";
+        drawEnemy_src = "../Visigoth/prequel/jayden.png";
+        enemyAtkRange = 15;
+        enemyHp = 210;
+        break;
     }
     drawImageLeft(battleFrame, 800, 500);
     
     setTimeout(function () {
-      createWindow("battleMessage", "A " + drawEnemy + " appears!", 0, 0);
-      drawCenterImage(drawEnemy_src, 341, 341);
+      switch (isFightingBoss) {
+        case 1:
+          createWindow("battleMessage", drawEnemy + " appears!", 0, 0);
+          drawCenterImage(drawEnemy_src, 149, 356);
+          break;
+        default:
+          createWindow("battleMessage", "A " + drawEnemy + " appears!", 0, 0);
+          drawCenterImage(drawEnemy_src, 341, 341);
+          break;
+        case 2:
+          createWindow("battleMessage", drawEnemy + " appears!", 0, 0);
+          drawCenterImage(drawEnemy_src, 341, 341);
+          break;
+      }
 
       pointerWindow.style.display = "block";
       alphaBatOptions.style.display = "block";
@@ -339,7 +398,15 @@ function attackSelect_alpha () {
   const attackAnim_interval = setInterval(function () {
     drawImageLeft(battleFrame, 800, 500);
     setTimeout(function () {
-      drawCenterImage(drawEnemy_src, 341, 341);
+      switch (isFightingBoss) {
+        default:
+        case 0:
+          drawCenterImage(drawEnemy_src, 341, 341);
+          break;
+        case 1:
+          drawCenterImage(drawEnemy_src, 149, 356);
+          break;
+      }
     }, 125);
   }, 150);
   
@@ -394,12 +461,18 @@ function endBattle_alpha () {
   alphaBatStatus.style.display = "none";
   pointerWindow.style.display = "none";
 
-  alpha_pos = null;
-  current_battle_alpha_audio.pause();
-  current_alpha_audio.play();
+  switch (isFightingBoss) {
+    case 1:
+      junkyardDialogue_a14();
+      return false;
+  }
 
   $(gameWindow).slideUp(2000);
   resetDoorways();
+
+  alpha_pos = null;
+  current_battle_alpha_audio.pause();
+  current_alpha_audio.play();
 }
 
 let escapeChances = 10;
@@ -1485,6 +1558,286 @@ function policeStationScene_a18 () {
 
 // end police station scenes
 
+// start junkyard dialogue
+
+function junkyardDialogue_a1 () {
+  alpha_pos = null;
+  clearAllWindows();
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame22.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+  
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "Now, to find that camper van. Where could it be..."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 57;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "Now, to find that camper van. Where could it be..."`));
+    }, 2000);
+  }, 2000);
+}
+
+function junkyardDialogue_a2 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  max_alpha_hp += 10;
+  alpha_hp += 10;
+
+  alphaHp.innerText = alpha_hp;
+
+  createWindow("dialogue", `Added 10 points to total HP! Game data has been saved up to this point.`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 58;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Added 10 points to total HP! Game data has been saved up to this point.`));
+}
+
+function junkyardDialogue_a3 () {
+  alpha_pos = null;
+  clearAllWindows();
+  
+  fadeOutAudio(current_alpha_audio, 1000);
+  setTimeout(function () {
+    current_alpha_audio = playLoopedAudio("../Visigoth/prequel/punk.mp3");
+  }, 1000);
+
+  current_path_loc = "junkyard";
+  path_alpha_lim = 25;
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    resetDoorways();
+  }, 2000);
+}
+
+function junkyardDialogue_a4 () {
+  alpha_pos = null;
+  clearAllWindows();
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame24.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+  
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "Moment of truth...it better be there."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 59;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "Moment of truth...it better be there."`));
+    }, 2000);
+  }, 2000);
+}
+
+function junkyardDialogue_a5 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  $(gameWindow).fadeOut(2000);
+
+  setTimeout(function () {
+    clearWindow();
+    drawImageLeft("../Visigoth/prequel/frame25.jpg", 800, 500);
+
+    $(gameWindow).fadeIn(2000);
+    setTimeout(function () {
+      createWindow("dialogue", `Colin: "Yes! It's here and it has POWER! I'll have to broadcast an SOS message on all channels."`, 0, 0);
+
+      setTimeout(function () {
+        alpha_dpos = 60;
+        alpha_pos = 2;
+      }, getWaitTextTime(`Colin: "Yes! It's here and it has POWER! I'll have to broadcast an SOS message on all channels."`));
+    }, 2000);
+  }, 2000);
+}
+
+function junkyardDialogue_a6 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "Hello? Hello? This is the town of French Lake. We need immediate assistance. There is a possibly armed and dangerous man in our town."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 61;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "Hello? Hello? This is the town of French Lake. We need immediate assistance. There is a possibly armed and dangerous man in our town."`));
+}
+
+function junkyardDialogue_a7 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Colin: "Our police force is wiped out. Please send help!"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 62;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "Our police force is wiped out. Please send help!"`));
+}
+
+function junkyardDialogue_a8 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `..... .... ...... ...... ....... ......... ....... ........... ..... .......`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 63;
+    alpha_pos = 2;
+  }, getWaitTextTime(`...................................................................`));
+}
+
+function junkyardDialogue_a9 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `..... ...... ...... ...... ........ ....... ....... ....... ....... ........`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 64;
+    alpha_pos = 2;
+  }, getWaitTextTime(`...................................................................`));
+}
+
+function junkyardDialogue_a10 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `"..............We hear you loud and clear, French Lake. We're sending over a few patrol units now."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 65;
+    alpha_pos = 2;
+  }, getWaitTextTime(`"..............We hear you loud and clear, French Lake. We're sending over a few patrol units now."`));
+}
+
+function junkyardDialogue_a11 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Jayden: "Turn around, Colin."`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 66;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Jayden: "Turn around, Colin."`));
+}
+
+function junkyardDialogue_a12 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("dialogue", `Jayden: "Perhaps you'll like this form better. HAAHAHAHAHAHAHAHHHHAAH!!!"`, 0, 0);
+
+  setTimeout(function () {
+    alpha_dpos = 67;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Jayden: "Perhaps you'll like this form better. HAAHAHAHAHAHAHAHHHHAAH!!!"`));
+}
+
+function junkyardDialogue_a13 () {
+  alpha_pos = null;
+  $(gameWindow).slideUp(2000);
+  current_path_loc = "jayden";
+  isFightingBoss = 1;
+  doorwayBattleInit();
+}
+
+function junkyardDialogue_a14 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("battleMessage", `Colin: "Jayden, stop this madness!"`, 0, 0);
+  setTimeout(function () {
+    alpha_dpos = 68;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "Jayden, stop this madness!"`));
+}
+
+function junkyardDialogue_a15 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("battleMessage", `Jayden: "What are you going to tell me? That I can be redeemed?"`, 0, 0);
+  setTimeout(function () {
+    alpha_dpos = 69;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Jayden: "What are you going to tell me? That I can be redeemed?"`));
+}
+
+function junkyardDialogue_a16 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("battleMessage", `Jayden: "Well I can't. I've killed at least 9 families so far."`, 0, 0);
+  setTimeout(function () {
+    alpha_dpos = 70;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Jayden: "Well I can't. I've killed at least 9 families so far."`));
+}
+
+function junkyardDialogue_a17 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("battleMessage", `Jayden: "Those families that were paid to move? I killed them."`, 0, 0);
+  setTimeout(function () {
+    alpha_dpos = 71;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Jayden: "Those families that were paid to move? I killed them."`));
+}
+
+function junkyardDialogue_a18 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("battleMessage", `Colin: "I knew it. But why? Why kill them?"`, 0, 0);
+  setTimeout(function () {
+    alpha_dpos = 72;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Colin: "I knew it. But why? Why kill them?"`));
+}
+
+function junkyardDialogue_a19 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("battleMessage", `Jayden: "Plain and simple. For one, revenge. But moreso because..."`, 0, 0);
+  setTimeout(function () {
+    alpha_dpos = 73;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Jayden: "Plain and simple. For one, revenge. But moreso because..."`));
+}
+
+function junkyardDialogue_a20 () {
+  alpha_pos = null;
+  clearAllWindows();
+
+  createWindow("battleMessage", `Jayden: "Because I find killing people fun."`, 0, 0);
+  setTimeout(function () {
+    alpha_dpos = 74;
+    alpha_pos = 2;
+  }, getWaitTextTime(`Jayden: "Because I find killing people fun."`));
+}
+
+function junkyardDialogue_a21 () {
+  alpha_pos = null;
+  $(gameWindow).slideUp(2000);
+  current_path_loc = "jayden2";
+  isFightingBoss = 2;
+  current_battle_alpha_audio.pause();
+  doorwayBattleInit();
+}
+
+// end junkyard dialogue
+
 function getWaitTextTime (text) {
   return (text.length * 50 - 1280);
 }
@@ -1844,6 +2197,78 @@ $(document).on("keydown", function (event) {
               playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
               policeStationScene_a18();
               break;
+            case 57:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a2();
+              break;
+            case 58:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a3();
+              break;
+            case 59:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a5();
+              break;
+            case 60:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a6();
+              break;
+            case 61:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a7();
+              break;
+            case 62:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a8();
+              break;
+            case 63:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a9();
+              break;
+            case 64:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a10();
+              break;
+            case 65:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a11();
+              break;
+            case 66:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a12();
+              break;
+            case 67:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a13();
+              break;
+            case 68:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a15();
+              break;
+            case 69:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a16();
+              break;
+            case 70:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a17();
+              break;
+            case 71:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a18();
+              break;
+            case 72:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a19();
+              break;
+            case 73:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a20();
+              break;
+            case 74:
+              playClonedAudio("../Visigoth/assets/audio/sfx/coin7.wav");
+              junkyardDialogue_a21();
+              break;
           }
           break;
         case 3:
@@ -1877,6 +2302,9 @@ $(document).on("keydown", function (event) {
                   alpha_pos = 0;
                 }, 2000);
               }, 2000);
+              break;
+            case 1:
+              location = "";
               break;
           }
           break;
